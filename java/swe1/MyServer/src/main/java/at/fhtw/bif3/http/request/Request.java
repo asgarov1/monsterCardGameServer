@@ -1,4 +1,6 @@
-package at.fhtw.bif3.http;
+package at.fhtw.bif3.http.request;
+
+import at.fhtw.bif3.http.url.Url;
 
 import java.io.InputStream;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package at.fhtw.bif3.http;
+package at.fhtw.bif3.http.request;
 
 public enum Method {
     GET,

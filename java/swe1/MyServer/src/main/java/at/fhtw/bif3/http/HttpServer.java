@@ -1,4 +1,4 @@
-package at.fhtw.bif3.implementation;
+package at.fhtw.bif3.http;
 
 import at.fhtw.bif3.http.request.HttpRequest;
 

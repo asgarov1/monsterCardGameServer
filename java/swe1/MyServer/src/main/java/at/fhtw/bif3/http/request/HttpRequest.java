@@ -1,81 +1,92 @@
-package at.fhtw.bif3.http;
+package at.fhtw.bif3.http.request;
 
+import at.fhtw.bif3.http.url.HttpUrl;
+import at.fhtw.bif3.http.url.Url;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.SneakyThrows;
 
 import java.io.*;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
+import static at.fhtw.bif3.http.request.RequestHeader.*;
+import static java.lang.System.lineSeparator;
+
 @Getter
-@Setter
 public class HttpRequest implements Request, Runnable {
 
     private final Socket socket;
-
-    boolean isValid;
     private Method method;
     private Url url;
     private final Map<String, String> headers = new HashMap<>();
+    private String messageBody;
 
+    @SneakyThrows
     public HttpRequest(Socket socket) {
         this.socket = socket;
     }
 
     @Override
     public boolean isValid() {
-        return isValid;
+        return url != null;
     }
 
     @Override
     public String getMethod() {
-        return null;
+        return method.name();
     }
 
     @Override
     public Url getUrl() {
-        return null;
+        return url;
     }
 
     @Override
-    public Map<String, String> getHeaders() {
-        return headers;
-    }
+    public Map<String, String> getHeaders() { return headers; }
 
     @Override
     public int getHeaderCount() {
-        return 0;
+        return getHeaders().size();
     }
 
     @Override
     public String getUserAgent() {
-        return null;
+        return getHeaders().get(USER_AGENT.getName());
     }
 
     @Override
     public int getContentLength() {
-        return 0;
+        return getHeaders().containsKey(CONTENT_LENGTH.getName()) ? Integer.parseInt(getHeaders().get(CONTENT_LENGTH.getName())) : 0;
     }
 
     @Override
     public String getContentType() {
-        return null;
+        return getHeaders().getOrDefault(CONTENT_TYPE.getName(), "");
     }
 
     @Override
+    @SneakyThrows
     public InputStream getContentStream() {
+        if (getHeaders().containsKey(CONTENT_LENGTH.getName())) {
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            String line;
+            while ((line = in.readLine()) != null && !line.isEmpty()) {
+                //skipping to content;
+            }
+            return socket.getInputStream();
+        }
         return null;
     }
 
     @Override
     public String getContentString() {
-        return null;
+        return messageBody;
     }
 
     @Override
     public byte[] getContentBytes() {
-        return new byte[0];
+        return messageBody.getBytes();
     }
 
     @Override
@@ -83,67 +94,60 @@ public class HttpRequest implements Request, Runnable {
         processRequest();
     }
 
+    @SneakyThrows
     private void processRequest() {
         try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
              PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
-            StringBuilder requestBuilder = new StringBuilder();
+            var requestBuilder = new StringBuilder();
 
             String headerLine = skipToHeaderLine(in);
-            if(headerLine == null){ setValid(false); return; }
+            if (headerLine == null) {
+                return;
+            }
 
             readMethodAndUrl(headerLine);
 
-            requestBuilder.append(headerLine).append(System.lineSeparator());
-            requestBuilder.append(readHeaders(in));
+            requestBuilder.append(headerLine).append(lineSeparator());
+            requestBuilder.append(setHeaders(in));
 
-            String content = readAdditionalContent(in);
-            requestBuilder.append(content);
+            this.messageBody = readMessageBody(in);
+            requestBuilder.append(messageBody).append(lineSeparator());
             out.write("HTTP/1.0 200 OK\r\n");
             System.out.println(requestBuilder.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
         } finally {
-            try {
-                socket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            socket.close();
         }
     }
 
     private void readMethodAndUrl(String headerLine) {
         setHttpMethod(headerLine);
-        url = new UrlImpl(headerLine);
-        setValid(true);
+        url = HttpUrl.valueOf(headerLine);
     }
 
-    private String readAdditionalContent(BufferedReader in) {
+    @SneakyThrows
+    private String readMessageBody(BufferedReader in) {
         StringBuilder stringBuilder = new StringBuilder();
-        if(!method.equals(Method.GET) && getHeaders().containsKey("Content-Length")){
-            int contentLength = Integer.parseInt(getHeaders().get("Content-Length"));
-            for (int i = 0; i < contentLength; i++) {
-                try {
-                    stringBuilder.append((char) in.read());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        if (!method.equals(Method.GET) && getHeaders().containsKey(CONTENT_LENGTH.getName())) {
+            for (int i = 0; i < getContentLength(); i++) {
+                int read = in.read();
+                stringBuilder.append((char) read);
             }
         }
         return stringBuilder.toString();
     }
 
-    private StringBuilder readHeaders(BufferedReader in) throws IOException {
+    private StringBuilder setHeaders(BufferedReader in) throws IOException {
         StringBuilder requestBuilder = new StringBuilder();
         String line;
         while ((line = in.readLine()) != null && !line.isEmpty()) {
-            requestBuilder.append(line).append(System.lineSeparator());
+            requestBuilder.append(line).append(lineSeparator());
             headers.put(line.split(": ")[0], line.split(": ")[1]);
         }
         return requestBuilder;
     }
 
     private void setHttpMethod(String headerLine) {
-        if(headerLine.contains(Method.GET.name())){
+        if (headerLine.contains(Method.GET.name())) {
             method = Method.GET;
         } else if (headerLine.contains(Method.POST.name())) {
             method = Method.POST;
