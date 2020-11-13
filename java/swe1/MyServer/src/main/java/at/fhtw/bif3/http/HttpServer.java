@@ -1,6 +1,6 @@
 package at.fhtw.bif3.implementation;
 
-import at.fhtw.bif3.http.HttpRequest;
+import at.fhtw.bif3.http.request.HttpRequest;
 
 import java.io.IOException;
 import java.net.ServerSocket;

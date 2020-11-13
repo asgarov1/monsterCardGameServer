@@ -1,14 +1,22 @@
 package at.fhtw.bif3.http;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
+@Getter
+@Setter
 public class HttpRequest implements Request, Runnable {
 
     private final Socket socket;
+
+    boolean isValid;
     private Method method;
+    private Url url;
     private final Map<String, String> headers = new HashMap<>();
 
     public HttpRequest(Socket socket) {
@@ -17,7 +25,7 @@ public class HttpRequest implements Request, Runnable {
 
     @Override
     public boolean isValid() {
-        return false;
+        return isValid;
     }
 
     @Override
@@ -81,14 +89,16 @@ public class HttpRequest implements Request, Runnable {
             StringBuilder requestBuilder = new StringBuilder();
 
             String headerLine = skipToHeaderLine(in);
-            if(headerLine == null){ return; }
-            setHttpMethod(headerLine);
+            if(headerLine == null){ setValid(false); return; }
+
+            readMethodAndUrl(headerLine);
 
             requestBuilder.append(headerLine).append(System.lineSeparator());
             requestBuilder.append(readHeaders(in));
 
-            requestBuilder.append(readAdditionalContent(in));
-//            out.write("HTTP/1.0 200 OK\r\n");
+            String content = readAdditionalContent(in);
+            requestBuilder.append(content);
+            out.write("HTTP/1.0 200 OK\r\n");
             System.out.println(requestBuilder.toString());
         } catch (IOException e) {
             e.printStackTrace();
@@ -101,7 +111,13 @@ public class HttpRequest implements Request, Runnable {
         }
     }
 
-    private StringBuilder readAdditionalContent(BufferedReader in) {
+    private void readMethodAndUrl(String headerLine) {
+        setHttpMethod(headerLine);
+        url = new UrlImpl(headerLine);
+        setValid(true);
+    }
+
+    private String readAdditionalContent(BufferedReader in) {
         StringBuilder stringBuilder = new StringBuilder();
         if(!method.equals(Method.GET) && getHeaders().containsKey("Content-Length")){
             int contentLength = Integer.parseInt(getHeaders().get("Content-Length"));
@@ -113,7 +129,7 @@ public class HttpRequest implements Request, Runnable {
                 }
             }
         }
-        return stringBuilder;
+        return stringBuilder.toString();
     }
 
     private StringBuilder readHeaders(BufferedReader in) throws IOException {
