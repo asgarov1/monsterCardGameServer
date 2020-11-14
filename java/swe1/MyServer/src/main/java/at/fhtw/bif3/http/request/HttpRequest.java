@@ -6,44 +6,72 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 
 import java.io.*;
-import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-import static at.fhtw.bif3.http.request.RequestHeader.*;
+import static at.fhtw.bif3.http.request.HttpHeader.*;
 import static java.lang.System.lineSeparator;
 
 @Getter
-public class HttpRequest implements Request, Runnable {
+public class HttpRequest implements Request{
 
-    private final Socket socket;
-    private Method method;
-    private Url url;
-    private final Map<String, String> headers = new HashMap<>();
-    private String messageBody;
+    private final String receivedRequest;
 
-    @SneakyThrows
-    public HttpRequest(Socket socket) {
-        this.socket = socket;
+    private HttpRequest(InputStream inputStream) throws IOException {
+        BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
+        StringBuilder requestBuilder = new StringBuilder();
+        String line;
+        while ((line = in.readLine()) != null && !line.isEmpty()) {
+            requestBuilder.append(line).append(lineSeparator());
+        }
+        if (requestBuilder.toString().contains(CONTENT_LENGTH.getName())) {
+            String contentLengthLine = requestBuilder.substring(requestBuilder.indexOf(CONTENT_LENGTH.getName()));
+            int start = contentLengthLine.indexOf(": ") + ": ".length();
+            int end = contentLengthLine.indexOf("\r");
+            int numberOfCharacters = Integer.parseInt(contentLengthLine.substring(start, end));
+            for (int i = 0; i < numberOfCharacters; i++) {
+                int read = in.read();
+                requestBuilder.append((char) read);
+            }
+        }
+        this.receivedRequest = requestBuilder.toString();
+        System.out.println(receivedRequest + "\n");
+    }
+
+    public static HttpRequest valueOf(InputStream inputStream) throws IOException {
+        return new HttpRequest(inputStream);
+    }
+
+    private ByteArrayInputStream getInputStream() {
+        return new ByteArrayInputStream(receivedRequest.getBytes(StandardCharsets.UTF_8));
     }
 
     @Override
     public boolean isValid() {
-        return url != null;
+        try {
+            HttpUrl.valueOf(getHeaderLine());
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 
     @Override
     public String getMethod() {
-        return method.name();
+        String headerLine = getHeaderLine();
+        return headerLine.substring(0, headerLine.indexOf(" /"));
     }
 
     @Override
     public Url getUrl() {
-        return url;
+        return HttpUrl.valueOf(getHeaderLine());
     }
 
     @Override
-    public Map<String, String> getHeaders() { return headers; }
+    public Map<String, String> getHeaders() {
+        return readHeaders();
+    }
 
     @Override
     public int getHeaderCount() {
@@ -68,100 +96,48 @@ public class HttpRequest implements Request, Runnable {
     @Override
     @SneakyThrows
     public InputStream getContentStream() {
-        if (getHeaders().containsKey(CONTENT_LENGTH.getName())) {
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            String line;
-            while ((line = in.readLine()) != null && !line.isEmpty()) {
-                //skipping to content;
-            }
-            return socket.getInputStream();
-        }
-        return null;
+        return new ByteArrayInputStream(getContentString().getBytes(StandardCharsets.UTF_8));
     }
 
     @Override
     public String getContentString() {
-        return messageBody;
+        String line = "";
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(getInputStream()))) {
+            if (getContentLength() > 0) {
+                while ((line = in.readLine()) != null && !line.contains("{")) { /* skipping to the content line */ }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return line;
     }
 
     @Override
     public byte[] getContentBytes() {
-        return messageBody.getBytes();
+        return getContentString().getBytes();
     }
 
-    @Override
-    public void run() {
-        processRequest();
-    }
-
-    @SneakyThrows
-    private void processRequest() {
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-             PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
-            var requestBuilder = new StringBuilder();
-
-            String headerLine = skipToHeaderLine(in);
-            if (headerLine == null) {
-                return;
+    private Map<String, String> readHeaders() {
+        Map<String, String> headers = new HashMap<>();
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(getInputStream()))) {
+            String line;
+            while ((line = in.readLine()) != null && !line.isEmpty()) {
+                if (line.contains(":") && !line.contains("{")) {
+                    headers.put(line.split(": ")[0], line.split(": ")[1]);
+                }
             }
-
-            readMethodAndUrl(headerLine);
-
-            requestBuilder.append(headerLine).append(lineSeparator());
-            requestBuilder.append(setHeaders(in));
-
-            this.messageBody = readMessageBody(in);
-            requestBuilder.append(messageBody).append(lineSeparator());
-            out.write("HTTP/1.0 200 OK\r\n");
-            System.out.println(requestBuilder.toString());
-        } finally {
-            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        return headers;
     }
 
-    private void readMethodAndUrl(String headerLine) {
-        setHttpMethod(headerLine);
-        url = HttpUrl.valueOf(headerLine);
-    }
-
-    @SneakyThrows
-    private String readMessageBody(BufferedReader in) {
-        StringBuilder stringBuilder = new StringBuilder();
-        if (!method.equals(Method.GET) && getHeaders().containsKey(CONTENT_LENGTH.getName())) {
-            for (int i = 0; i < getContentLength(); i++) {
-                int read = in.read();
-                stringBuilder.append((char) read);
-            }
-        }
-        return stringBuilder.toString();
-    }
-
-    private StringBuilder setHeaders(BufferedReader in) throws IOException {
-        StringBuilder requestBuilder = new StringBuilder();
-        String line;
-        while ((line = in.readLine()) != null && !line.isEmpty()) {
-            requestBuilder.append(line).append(lineSeparator());
-            headers.put(line.split(": ")[0], line.split(": ")[1]);
-        }
-        return requestBuilder;
-    }
-
-    private void setHttpMethod(String headerLine) {
-        if (headerLine.contains(Method.GET.name())) {
-            method = Method.GET;
-        } else if (headerLine.contains(Method.POST.name())) {
-            method = Method.POST;
-        } else if (headerLine.contains(Method.PUT.name())) {
-            method = Method.PUT;
-        } else if (headerLine.contains(Method.DELETE.name())) {
-            method = Method.DELETE;
-        }
-    }
-
-    private String skipToHeaderLine(BufferedReader in) throws IOException {
-        String line = in.readLine();
-        while (line != null && line.isEmpty()) {
-            line = in.readLine();
+    private String getHeaderLine() {
+        String line = "";
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(getInputStream()))) {
+            while ((line = in.readLine()) != null && line.isEmpty()) { /* skipping to the headerLine */ }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return line;
     }
