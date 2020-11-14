@@ -1,6 +1,6 @@
 package at.fhtw.bif3;
 
-import at.fhtw.bif3.controller.Controller;
+import at.fhtw.bif3.controller.FrontDispatcher;
 import lombok.SneakyThrows;
 
 import java.net.ServerSocket;
@@ -13,7 +13,7 @@ public class HttpServer {
 
         ServerSocket server = new ServerSocket(port);
         while (true) {
-            new Thread(new Controller(server.accept())).start();
+            new Thread(new FrontDispatcher(server.accept())).start();
         }
 
     }
