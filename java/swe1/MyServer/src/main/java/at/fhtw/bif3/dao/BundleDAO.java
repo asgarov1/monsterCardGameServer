@@ -1,9 +1,12 @@
 package at.fhtw.bif3.dao;
 
+import at.fhtw.bif3.dao.connection.ConnectionFactory;
+import at.fhtw.bif3.dao.domain.BundleCard;
 import at.fhtw.bif3.dao.exception.DAOException;
 import at.fhtw.bif3.domain.Bundle;
 import lombok.Getter;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,7 +18,7 @@ public class BundleDAO extends AbstractDAO<Bundle, String> {
 
     @Override
     protected String getCreateQuery() {
-        return "INSERT INTO " + getTableName() + "(id) VALUES (?);";
+        return "INSERT INTO " + getTableName() + " (id) VALUES (?);";
     }
 
     @Override
@@ -36,20 +39,18 @@ public class BundleDAO extends AbstractDAO<Bundle, String> {
     protected Bundle readObject(ResultSet resultSet) throws DAOException {
         Bundle bundle = new Bundle();
         try {
-            bundle.setId(resultSet.getString("id"));
+            String id = resultSet.getString("id");
+            bundle.setId(id);
+            bundle.setCards(new BundleCardDAO().findAllByBundleId(id));
         } catch (SQLException e) {
             throw new DAOException(e.getMessage(), e);
         }
-
-        // TODO read all cards
         return bundle;
     }
 
     @Override
-    public void delete(String bundleId) throws DAOException {
-        // TODO delete from PLAYER_CARD
-        super.delete(bundleId);
+    public void update(Bundle bundle) {
+        //only one field so nothing to update
     }
-
 }
 

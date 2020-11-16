@@ -14,8 +14,8 @@ public class PlayerService extends AbstractService<Player, String> {
     }
 
     @Override
-    public void create(Player player) {
-        super.create(player);
+    public void save(Player player) {
+        super.save(player);
         player.getCards().forEach(
                 card -> {
                     try {

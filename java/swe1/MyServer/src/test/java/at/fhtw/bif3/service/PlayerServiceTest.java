@@ -8,6 +8,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PlayerServiceTest {
 
+    //TODO write tests for changes with cards
+
     private final PlayerService playerService = new PlayerService();
     Player player;
 
@@ -23,7 +25,7 @@ class PlayerServiceTest {
         int entitiesBefore = playerService.countEntities();
 
         player = new Player("test_id", "test_username", "test_password");
-         playerService.create(player);
+         playerService.save(player);
 
         assertEquals(entitiesBefore + 1, playerService.countEntities());
 
@@ -35,7 +37,7 @@ class PlayerServiceTest {
     @Test
     void update() {
         player = new Player("test_id", "test_username", "test_password");
-        playerService.create(player);
+        playerService.save(player);
 
         int numberOfCoins = 25;
         player.setNumberOfCoins(numberOfCoins);
@@ -47,7 +49,7 @@ class PlayerServiceTest {
     @Test
     void delete() {
         player = new Player("test_id", "test_username", "test_password");
-        playerService.create(player);
+        playerService.save(player);
 
         int entitiesBefore = playerService.countEntities();
 
@@ -59,7 +61,7 @@ class PlayerServiceTest {
     @Test
     void read() {
         player = new Player("test_id", "test_username", "test_password");
-        playerService.create(player);
+        playerService.save(player);
 
         var readPlayer = playerService.findById(player.getId());
         assertNotNull(readPlayer);

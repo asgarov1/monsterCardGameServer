@@ -12,7 +12,7 @@ public abstract class AbstractService<P, K> {
     }
 
     @SneakyThrows
-    public void create(P object) {
+    public void save(P object) {
         abstractDAO.create(object);
     }
 

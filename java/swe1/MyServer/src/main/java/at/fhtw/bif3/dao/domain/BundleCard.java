@@ -1,10 +1,12 @@
 package at.fhtw.bif3.dao.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class BundleCard {
     private String bundleId;
     private String cardId;

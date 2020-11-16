@@ -10,6 +10,8 @@ docker build -t monster-db . && docker run -d -p 5432:5432 monster-db
 <br/>
 <i>If docker doesn't run check that port 5432 is available</i>
 
+<br>
+
 ##Protocol
 
 There is a FrontDispatcher that delegates the requests (in a new thread) to the correct controller 
@@ -25,3 +27,6 @@ because less state => less side effects => less debugging
 The tests cover everything except getters and setters even when these have some minor logic to them.
 Also, DAO Layer isn't tested directly (in accordance with industry standards), but the service layer is tested instead 
 and since the service layer delegates everything to DAO layer, that covers both.
+
+funny issues: couple of small changes that had to be done: user is a reserved table in postgres so i had to use player,
+and package is a keyword in Java so I had to use bundle

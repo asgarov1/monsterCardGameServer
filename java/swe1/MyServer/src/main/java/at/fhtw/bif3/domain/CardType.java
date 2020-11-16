@@ -1,8 +1,17 @@
 package at.fhtw.bif3.domain;
 
+import java.util.Arrays;
+
 public enum CardType {
     SPELL,
-    MONSTER
+    MONSTER;
+
+    public static CardType findByName(String name){
+        return Arrays.stream(values())
+                .filter(value -> value.name().equals(name))
+                .findFirst()
+                .orElseThrow();
+    }
 
     //TODO check for additional logic based on moster types
 //    Goblins are too afraid of Dragons to attack.

@@ -21,22 +21,22 @@ public class CardDAO extends AbstractDAO<Card, String> {
 
     @Override
     protected String getCreateQuery() {
-        return "INSERT INTO " + getTableName() + " (id, card_type, damage, element_type, name) VALUES (?,?,?,?,?);";
+        return "INSERT INTO " + getTableName() + " (name, damage, element_type, card_type, id) VALUES (?,?,?,?,?);";
     }
 
     @Override
     protected String getUpdateQuery() {
-        return "UPDATE " + getTableName() + " SET username = ?, password = ?, number_of_coins = ? WHERE id = ?;";
+        return "UPDATE " + getTableName() + " SET name = ?, damage = ?, element_type = ?, card_type = ? WHERE id = ?;";
     }
 
     @Override
     protected void setObjectStatement(PreparedStatement statement, Card card) throws DAOException {
         try {
-            statement.setString(1, card.getId());
-            statement.setString(2, card.getName());
-            statement.setInt(3, card.getDamage());
-            statement.setString(4, card.getElementType().name());
-            statement.setString(5, card.getCardType().name());
+            statement.setString(1, card.getName());
+            statement.setInt(2, card.getDamage());
+            statement.setString(3, card.getElementType().name());
+            statement.setString(4, card.getCardType().name());
+            statement.setString(5, card.getId());
         } catch (SQLException e) {
             throw new DAOException(e.getMessage(), e);
         }
@@ -49,12 +49,8 @@ public class CardDAO extends AbstractDAO<Card, String> {
             card.setId(resultSet.getString("id"));
             card.setName(resultSet.getString("name"));
             card.setDamage(resultSet.getInt("damage"));
-
-            String element_type = resultSet.getString("element_type");
-            card.setElementType(stream(ElementType.values()).filter(elementType -> elementType.name().equals(element_type)).findFirst().orElseThrow());
-
-            String card_type = resultSet.getString("card_type");
-            card.setElementType(stream(ElementType.values()).filter(cardType -> cardType.name().equals(card_type)).findFirst().orElseThrow());
+            card.setElementType(ElementType.findByName(resultSet.getString("element_type")));
+            card.setCardType(CardType.findByName(resultSet.getString("card_type")));
 
         } catch (SQLException e) {
             throw new DAOException(e.getMessage(), e);
