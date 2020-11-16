@@ -16,5 +16,10 @@ public class HttpServer {
             new Thread(new FrontDispatcher(server.accept())).start();
         }
 
+        //TODO: how does authorization work?
+        //  what does unconfigured deck mean? (echo 10)
+        //  show configured deck with winning attributes?
+        //  stats? whose stats?
+        //  start /b "kienboec battle"
     }
 }
