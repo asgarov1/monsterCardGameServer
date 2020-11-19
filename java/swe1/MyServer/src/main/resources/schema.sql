@@ -3,6 +3,7 @@ create table card
 	id varchar(255) not null constraint card_pkey primary key,
 	card_type varchar(255),
 	damage integer not null,
+	weakness integer not null,
 	element_type varchar(255),
 	name varchar(255)
 );

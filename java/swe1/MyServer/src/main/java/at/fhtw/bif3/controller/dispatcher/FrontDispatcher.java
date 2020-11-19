@@ -4,11 +4,12 @@ import at.fhtw.bif3.controller.*;
 import at.fhtw.bif3.http.request.HttpRequest;
 import at.fhtw.bif3.http.request.Request;
 import at.fhtw.bif3.http.response.HttpResponse;
-import at.fhtw.bif3.http.response.HttpStatus;
 import at.fhtw.bif3.http.response.Response;
 import lombok.SneakyThrows;
 
 import java.net.Socket;
+
+import static at.fhtw.bif3.http.response.HttpStatus.NOT_FOUND;
 
 public class FrontDispatcher implements Runnable {
 
@@ -30,30 +31,30 @@ public class FrontDispatcher implements Runnable {
     private HttpResponse getResponse(Request request) {
         var response = new HttpResponse();
         try {
-            HttpStatus status = handle(request);
-            response.setStatusCode(status.getCode());
+            response = handle(request);
         } catch (IllegalArgumentException e) {
-            response.setStatusCode(HttpStatus.BAD_REQUEST.getCode());
+            response.setStatusCode(NOT_FOUND.getCode());
         }
         return response;
     }
 
-    private HttpStatus handle(Request request) {
-        String path = request.getUrl().getPath();
-        Controller controller;
-        switch (path) {
-            case "/users" -> controller = new UserController();
-            case "/sessions" -> controller = new SessionController();
-            case "/packages" -> controller = new PackageController();
-            case "/transactions" -> controller = new TransactionController();
-            case "/cards" -> controller = new CardController();
-            case "/deck" -> controller = new DeckController();
-            case "/stats" -> controller = new StatsController();
-            case "/score" -> controller = new ScoreController();
-            case "/battles" -> controller = new BattlesController();
-            case "/tradings" -> controller = new TradingController();
+    private HttpResponse handle(Request request) {
+        String path = request.getUrl().getSegments()[0];
+        Controller controller = switch (path) {
+            case "users" -> new UserController();
+            case "sessions" -> new SessionController();
+            case "packages" -> new PackageController();
+            case "transactions" -> new TransactionController();
+            case "cards" -> new CardController();
+            case "deck" -> new DeckController();
+            case "stats" -> new StatsController();
+            case "score" -> new ScoreController();
+            case "battles" -> new BattlesController();
+            case "tradings" -> new TradeController();
             default -> throw new IllegalArgumentException("Unexpected url path: " + path);
-        }
+        };
         return controller.handleRequest(request);
     }
 }
+
+//TODO question: my controllers return Response - I think that is correct? not sure what the echos stand for

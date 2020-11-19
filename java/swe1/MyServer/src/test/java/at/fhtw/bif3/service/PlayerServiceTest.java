@@ -19,8 +19,8 @@ class PlayerServiceTest {
     User player;
 
     @AfterEach
-    private void cleanUp(){
-        if(player.getId() != null) {
+    private void cleanUp() {
+        if (player.getId() != null) {
             player.getCards().forEach(card -> cardService.delete(card.getId()));
             playerService.delete(player.getId());
         }
@@ -61,14 +61,14 @@ class PlayerServiceTest {
 
         playerService.delete(player.getId());
 
-        assertEquals(entitiesBefore-1, playerService.countEntities());
+        assertEquals(entitiesBefore - 1, playerService.countEntities());
     }
 
     @Test
     void read() {
         var cards = Set.of(
-                new Card("test_id1", "test_name1", new Random().nextInt(), ElementType.FIRE, CardType.MONSTER),
-                new Card("test_id2", "test_name2", new Random().nextInt(), ElementType.WATER, CardType.SPELL));
+                new Card("test_id1", "test_name1", new Random().nextDouble(), new Random().nextDouble(), ElementType.FIRE, CardType.MONSTER),
+                new Card("test_id2", "test_name2", new Random().nextDouble(), new Random().nextDouble(), ElementType.WATER, CardType.SPELL));
 
         player = new User("test_id", "test_username", "test_password");
         cards.forEach(cardService::create);

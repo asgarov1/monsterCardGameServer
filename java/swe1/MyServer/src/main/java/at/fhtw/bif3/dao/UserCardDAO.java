@@ -14,7 +14,7 @@ import java.util.List;
 
 import static java.util.Arrays.stream;
 
-public class PlayerCardDAO extends AbstractDAO<PlayerCard, String> {
+public class UserCardDAO extends AbstractDAO<PlayerCard, String> {
 
     @Getter
     private final String tableName = "player_cards";

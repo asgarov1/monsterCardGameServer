@@ -1,6 +1,8 @@
 package at.fhtw.bif3.http.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 
 import java.io.*;
@@ -11,13 +13,16 @@ import java.util.stream.Collectors;
 
 import static java.lang.System.lineSeparator;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class HttpResponse implements Response {
 
     private HttpStatus status = HttpStatus.OK;
     private final Map<String, String> headers = new HashMap<>();
     private String content = "";
     private ContentType contentType;
-    private String serverHeader= "Server: Localhost (Windows)";
+    private String serverHeader = "Server: Localhost (Windows)";
 
     @Override
     public Map<String, String> getHeaders() {

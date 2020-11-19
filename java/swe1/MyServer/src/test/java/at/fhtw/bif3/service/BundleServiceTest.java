@@ -20,9 +20,9 @@ class BundleServiceTest {
     private final BundleService bundleService = new BundleService();
     private Bundle bundle;
     static List<Card> cards = List.of(
-                new Card("test_id1", "test_name1", new Random().nextInt(), ElementType.FIRE, CardType.MONSTER),
-                new Card("test_id2", "test_name2", new Random().nextInt(), ElementType.WATER, CardType.SPELL),
-                new Card("test_id3", "test_name3", new Random().nextInt(), ElementType.NORMAL, CardType.MONSTER));
+                new Card("test_id1", "test_name1", new Random().nextDouble(), new Random().nextDouble(), ElementType.FIRE, CardType.MONSTER),
+                new Card("test_id2", "test_name2", new Random().nextDouble(), new Random().nextDouble(), ElementType.WATER, CardType.SPELL),
+                new Card("test_id3", "test_name3", new Random().nextDouble(), new Random().nextDouble(), ElementType.NORMAL, CardType.MONSTER));
 
     @BeforeAll
     static void prepareCards(){

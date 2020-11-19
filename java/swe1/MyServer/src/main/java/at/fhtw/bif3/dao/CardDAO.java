@@ -31,7 +31,7 @@ public class CardDAO extends AbstractDAO<Card, String> {
     protected void setObjectStatement(PreparedStatement statement, Card card) throws DAOException {
         try {
             statement.setString(1, card.getName());
-            statement.setInt(2, card.getDamage());
+            statement.setDouble(2, card.getDamage());
             statement.setString(3, card.getElementType().name());
             statement.setString(4, card.getCardType().name());
             statement.setString(5, card.getId());

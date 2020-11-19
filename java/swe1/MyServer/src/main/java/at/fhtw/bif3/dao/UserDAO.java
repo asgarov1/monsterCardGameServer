@@ -8,7 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class PlayerDAO extends AbstractDAO<User, String> {
+public class UserDAO extends AbstractDAO<User, String> {
 
     @Getter
     private final String tableName = "player";

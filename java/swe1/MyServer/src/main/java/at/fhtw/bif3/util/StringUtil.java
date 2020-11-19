@@ -1,20 +1,23 @@
 package at.fhtw.bif3.util;
 
+import at.fhtw.bif3.domain.User;
+import com.google.gson.GsonBuilder;
+
 public class StringUtil {
     public static String extractUsername(String contentString) {
-        String withoutBrackets = contentString.replace("{", "").replace("}", "");
-        String usernameLine = withoutBrackets.split(",")[0];
-        return usernameLine.split(":")[1].replace('"', ' ').trim();
+        return new GsonBuilder().create().fromJson(contentString, User.class).getUsername();
     }
 
     public static String extractPassword(String contentString) {
-        String withoutBrackets = contentString.replace("{", "").replace("}", "");
-        String passwordLine = withoutBrackets.split(",")[1];
-        return passwordLine.split(":")[1].replace('"', ' ').trim();
+        return new GsonBuilder().create().fromJson(contentString, User.class).getPassword();
     }
 
     public static String extractToken(String authorizationHeader) {
         //Basic kienboec-mtcgToken
         return authorizationHeader.replace("Basic ", "");
+    }
+
+    public static String extractUsernameFromToken(String token) {
+        return token.substring(token.indexOf(" "), token.indexOf("-"));
     }
 }

@@ -1,5 +1,6 @@
 package at.fhtw.bif3.domain;
 
+import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,10 +13,25 @@ import java.util.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
+    @SerializedName("Id")
     private String id;
+
+    @SerializedName("Username")
     private String username;
+
+    @SerializedName("Password")
     private String password;
+
+    @SerializedName("Bio")
+    private String bio;
+
+    @SerializedName("Image")
+    private String image;
+
     private Set<Card> cards = new HashSet<>();
+    private Set<Card> deck = new HashSet<>();
+//TODO question: does deck get generated randomly? so it doesn't need to be persisted?
+    private Stats stats;
     private int numberOfCoins = 20;
 
     public User(String id, String username, String password) {

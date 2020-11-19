@@ -11,6 +11,7 @@ import java.util.Objects;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Bundle {
     private String id;
     private List<Card> cards = new ArrayList<>();

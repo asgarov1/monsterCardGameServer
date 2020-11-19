@@ -16,8 +16,8 @@ class CardServiceTest {
     private Card card;
 
     @AfterEach
-    private void cleanUp(){
-        if(card.getId() != null) {
+    private void cleanUp() {
+        if (card.getId() != null) {
             cardService.delete(card.getId());
         }
     }
@@ -26,7 +26,7 @@ class CardServiceTest {
     void create() {
         int entitiesBefore = cardService.countEntities();
 
-        card = new Card("test_id", "test_name", new Random().nextInt(), ElementType.FIRE, CardType.MONSTER);
+        card = new Card("test_id", "test_name", new Random().nextDouble(), new Random().nextDouble(), ElementType.FIRE, CardType.MONSTER);
         cardService.create(card);
 
         assertEquals(entitiesBefore + 1, cardService.countEntities());
@@ -38,7 +38,7 @@ class CardServiceTest {
 
     @Test
     void update() {
-        card = new Card("test_id", "test_name", new Random().nextInt(), ElementType.FIRE, CardType.MONSTER);
+        card = new Card("test_id", "test_name", new Random().nextDouble(), new Random().nextDouble(), ElementType.FIRE, CardType.MONSTER);
         cardService.create(card);
 
         int newDamage = 100;
@@ -50,19 +50,19 @@ class CardServiceTest {
 
     @Test
     void delete() {
-        card = new Card("test_id", "test_name", new Random().nextInt(), ElementType.FIRE, CardType.MONSTER);
+        card = new Card("test_id", "test_name", new Random().nextDouble(), new Random().nextDouble(), ElementType.FIRE, CardType.MONSTER);
         cardService.create(card);
 
         int entitiesBefore = cardService.countEntities();
 
         cardService.delete(card.getId());
 
-        assertEquals(entitiesBefore-1, cardService.countEntities());
+        assertEquals(entitiesBefore - 1, cardService.countEntities());
     }
 
     @Test
     void read() {
-        card = new Card("test_id", "test_name", new Random().nextInt(), ElementType.FIRE, CardType.MONSTER);
+        card = new Card("test_id", "test_name", new Random().nextDouble(), new Random().nextDouble(), ElementType.FIRE, CardType.MONSTER);
         cardService.create(card);
 
         var readCard = cardService.findById(card.getId());
@@ -74,7 +74,7 @@ class CardServiceTest {
     void countEntities() {
         int entitiesBefore = cardService.countEntities();
 
-        card = new Card("test_id", "test_name", new Random().nextInt(), ElementType.FIRE, CardType.MONSTER);
+        card = new Card("test_id", "test_name", new Random().nextDouble(), new Random().nextDouble(), ElementType.FIRE, CardType.MONSTER);
         cardService.create(card);
 
         assertEquals(entitiesBefore + 1, cardService.countEntities());
