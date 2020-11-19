@@ -1,14 +1,14 @@
 package at.fhtw.bif3.dao;
 
 import at.fhtw.bif3.dao.exception.DAOException;
-import at.fhtw.bif3.domain.Player;
+import at.fhtw.bif3.domain.User;
 import lombok.Getter;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class PlayerDAO extends AbstractDAO<Player, String> {
+public class PlayerDAO extends AbstractDAO<User, String> {
 
     @Getter
     private final String tableName = "player";
@@ -24,7 +24,7 @@ public class PlayerDAO extends AbstractDAO<Player, String> {
     }
 
     @Override
-    protected void setObjectStatement(PreparedStatement statement, Player player) throws DAOException {
+    protected void setObjectStatement(PreparedStatement statement, User player) throws DAOException {
         try {
             statement.setString(1, player.getUsername());
             statement.setString(2, player.getPassword());
@@ -36,15 +36,13 @@ public class PlayerDAO extends AbstractDAO<Player, String> {
     }
 
     @Override
-    protected Player readObject(ResultSet resultSet) throws DAOException {
-        Player player = new Player();
+    protected User readObject(ResultSet resultSet) throws DAOException {
+        User player = new User();
         try {
             player.setId(resultSet.getString("id"));
             player.setUsername(resultSet.getString("username"));
             player.setPassword(resultSet.getString("password"));
             player.setNumberOfCoins(resultSet.getInt("number_of_coins"));
-
-            //TODO read cards
         } catch (SQLException e) {
             throw new DAOException(e.getMessage(), e);
         }
@@ -53,7 +51,6 @@ public class PlayerDAO extends AbstractDAO<Player, String> {
 
     @Override
     public void delete(String studentId) throws DAOException {
-        // TODO delete from PLAYER_CARD
         super.delete(studentId);
     }
 

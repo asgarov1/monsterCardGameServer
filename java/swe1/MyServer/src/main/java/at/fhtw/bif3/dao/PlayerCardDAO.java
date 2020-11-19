@@ -1,13 +1,16 @@
 package at.fhtw.bif3.dao;
 
-import at.fhtw.bif3.dao.domain.BundleCard;
-import at.fhtw.bif3.dao.domain.PlayerCard;
+import at.fhtw.bif3.dao.connection.ConnectionFactory;
+import at.fhtw.bif3.dao.daoentity.PlayerCard;
 import at.fhtw.bif3.dao.exception.DAOException;
 import lombok.Getter;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.util.Arrays.stream;
 
@@ -48,4 +51,22 @@ public class PlayerCardDAO extends AbstractDAO<PlayerCard, String> {
         return playerCard;
     }
 
+    public List<PlayerCard> findAllByPlayerId(String id) throws DAOException{
+        String query = "select * from " + getTableName() + " where player_id  = ?;";
+
+        List<PlayerCard> palyerCards = new ArrayList<>();
+        try (Connection connection = ConnectionFactory.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, id);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                var cardId = resultSet.getString("cards_id");
+                palyerCards.add(new PlayerCard(id, cardId));
+            }
+        } catch (SQLException e) {
+            throw new DAOException(e.getMessage(), e);
+        }
+        return palyerCards;
+    }
 }

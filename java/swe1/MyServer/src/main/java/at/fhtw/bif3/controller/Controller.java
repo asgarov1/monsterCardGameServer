@@ -1,4 +1,4 @@
-package at.fhtw.bif3.controller.handler;
+package at.fhtw.bif3.controller;
 
 import at.fhtw.bif3.http.request.Request;
 import at.fhtw.bif3.http.response.HttpStatus;

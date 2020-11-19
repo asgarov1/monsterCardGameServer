@@ -13,7 +13,7 @@ public enum CardType {
                 .orElseThrow();
     }
 
-    //TODO check for additional logic based on moster types
+    //TODO check for additional logic based on monster types
 //    Goblins are too afraid of Dragons to attack.
 //    Wizzard can control Orks so they are not able to damage them.
 //    The armor of Knights is so heavy that WaterSpells make them drown instantly.

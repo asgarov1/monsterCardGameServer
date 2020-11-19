@@ -1,4 +1,4 @@
-package at.fhtw.bif3.dao.domain;
+package at.fhtw.bif3.dao.daoentity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

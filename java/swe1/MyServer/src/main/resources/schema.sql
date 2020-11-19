@@ -1,7 +1,3 @@
-create sequence my_sequence;
-
-alter sequence my_sequence owner to admin;
-
 create table card
 (
 	id varchar(255) not null constraint card_pkey primary key,
@@ -11,14 +7,10 @@ create table card
 	name varchar(255)
 );
 
-alter table card owner to admin;
-
 create table bundle
 (
 	id varchar(255) not null constraint bundle_pkey primary key
 );
-
-alter table bundle owner to admin;
 
 create table bundle_cards
 (
@@ -32,8 +24,6 @@ create table bundle_cards
 			references card on delete cascade
 );
 
-alter table bundle_cards owner to admin;
-
 create table player
 (
 	id varchar(255) not null constraint player_pkey primary key,
@@ -41,8 +31,6 @@ create table player
 	password varchar(255),
 	username varchar(255)
 );
-
-alter table player owner to admin;
 
 create table player_cards
 (
@@ -55,6 +43,4 @@ create table player_cards
 		constraint fkqaek75wpycyve467ss52ve2u8
 			references card on delete cascade
 );
-
-alter table player_cards owner to admin;
 

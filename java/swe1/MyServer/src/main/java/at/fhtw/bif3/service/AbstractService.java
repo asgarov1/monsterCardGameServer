@@ -1,18 +1,20 @@
 package at.fhtw.bif3.service;
 
 import at.fhtw.bif3.dao.AbstractDAO;
+import at.fhtw.bif3.dao.exception.DAOException;
+import at.fhtw.bif3.dao.exception.EntityNotFoundException;
 import lombok.SneakyThrows;
 
 public abstract class AbstractService<P, K> {
 
     private final AbstractDAO<P, K> abstractDAO;
 
-    public AbstractService(AbstractDAO<P, K> abstractDAO) {
+    protected AbstractService(AbstractDAO<P, K> abstractDAO) {
         this.abstractDAO = abstractDAO;
     }
 
     @SneakyThrows
-    public void save(P object) {
+    public void create(P object) {
         abstractDAO.create(object);
     }
 
@@ -34,5 +36,22 @@ public abstract class AbstractService<P, K> {
     @SneakyThrows
     public int countEntities(){
         return abstractDAO.countEntities();
+    }
+
+    public boolean exists(K id) {
+        try {
+            abstractDAO.read(id);
+        } catch (EntityNotFoundException e) {
+            return false;
+        }
+        return true;
+    }
+
+    public P findByField(String fieldName, String fieldValue){
+        return abstractDAO.findByField(fieldName, fieldValue);
+    }
+
+    public P findRandom(){
+        return abstractDAO.findRandom();
     }
 }

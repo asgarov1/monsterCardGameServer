@@ -1,6 +1,6 @@
 package at.fhtw.bif3;
 
-import at.fhtw.bif3.controller.FrontDispatcher;
+import at.fhtw.bif3.controller.dispatcher.FrontDispatcher;
 import lombok.SneakyThrows;
 
 import java.net.ServerSocket;

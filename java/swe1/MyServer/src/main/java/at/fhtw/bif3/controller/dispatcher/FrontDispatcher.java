@@ -1,6 +1,6 @@
-package at.fhtw.bif3.controller;
+package at.fhtw.bif3.controller.dispatcher;
 
-import at.fhtw.bif3.controller.handler.*;
+import at.fhtw.bif3.controller.*;
 import at.fhtw.bif3.http.request.HttpRequest;
 import at.fhtw.bif3.http.request.Request;
 import at.fhtw.bif3.http.response.HttpResponse;
@@ -31,7 +31,7 @@ public class FrontDispatcher implements Runnable {
         var response = new HttpResponse();
         try {
             HttpStatus status = handle(request);
-//            response.setStatusCode(status.getCode());
+            response.setStatusCode(status.getCode());
         } catch (IllegalArgumentException e) {
             response.setStatusCode(HttpStatus.BAD_REQUEST.getCode());
         }

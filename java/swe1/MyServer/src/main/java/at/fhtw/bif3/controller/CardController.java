@@ -1,10 +1,9 @@
-package at.fhtw.bif3.controller.handler;
+package at.fhtw.bif3.controller;
 
 import at.fhtw.bif3.http.request.Request;
 import at.fhtw.bif3.http.response.HttpStatus;
 
-public class DeckController implements Controller {
-
+public class CardController implements Controller {
     @Override
     public HttpStatus handleRequest(Request request) {
 

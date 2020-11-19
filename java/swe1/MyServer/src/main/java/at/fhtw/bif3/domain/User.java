@@ -5,23 +5,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-//Table name player because 'user' is a reserved table
-public class Player {
+public class User {
     private String id;
     private String username;
     private String password;
-    private List<Card> cards = new ArrayList<>();
+    private Set<Card> cards = new HashSet<>();
     private int numberOfCoins = 20;
 
-    public Player(String id, String username, String password) {
+    public User(String id, String username, String password) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -31,15 +28,28 @@ public class Player {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Player player = (Player) o;
+        User player = (User) o;
         return numberOfCoins == player.numberOfCoins &&
                 Objects.equals(id, player.id) &&
                 Objects.equals(username, player.username) &&
-                Objects.equals(password, player.password);
+                Objects.equals(password, player.password) &&
+                cards.size() == player.getCards().size();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, password, numberOfCoins);
+        return Objects.hash(id, username, password, numberOfCoins, cards);
+    }
+
+    public Set<Card> getCards() {
+        return Collections.unmodifiableSet(cards);
+    }
+
+    public void addCard(Card card) {
+        cards.add(card);
+    }
+
+    public void removeCard(Card card) {
+        cards.remove(card);
     }
 }

@@ -4,13 +4,11 @@ import at.fhtw.bif3.dao.exception.DAOException;
 import at.fhtw.bif3.domain.Card;
 import at.fhtw.bif3.domain.CardType;
 import at.fhtw.bif3.domain.ElementType;
-import at.fhtw.bif3.domain.Player;
 import lombok.Getter;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
 
 import static java.util.Arrays.stream;
 

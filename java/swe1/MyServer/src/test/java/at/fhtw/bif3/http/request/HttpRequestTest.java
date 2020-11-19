@@ -22,7 +22,7 @@ class HttpRequestTest {
     public static final String APPLICATION_JSON = "application/json";
 
     private final String request =
-            "POST " + URL_PATH + " HTTP/1.1\r\n" +
+                    "POST " + URL_PATH + " HTTP/1.1\r\n" +
                     "Content-Type: " + APPLICATION_JSON + "\r\n" +
                     "User-Agent: " + USER_AGENT + "\r\n" +
                     "Accept: */*\r\n" +

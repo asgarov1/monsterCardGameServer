@@ -27,7 +27,7 @@ class BundleServiceTest {
     @BeforeAll
     static void prepareCards(){
         var cardService = new CardService();
-        cards.forEach(cardService::save);
+        cards.forEach(cardService::create);
     }
 
     @AfterAll
@@ -48,7 +48,7 @@ class BundleServiceTest {
         int entitiesBefore = bundleService.countEntities();
 
         bundle = new Bundle("test_bundle_id", cards);
-        bundleService.save(bundle);
+        bundleService.create(bundle);
 
         assertEquals(entitiesBefore + 1, bundleService.countEntities());
 
@@ -60,7 +60,7 @@ class BundleServiceTest {
     @Test
     void update() {
         bundle = new Bundle("test_bundle_id", cards);
-        bundleService.save(bundle);
+        bundleService.create(bundle);
 
         bundle.setCards(new ArrayList<>());
         bundleService.update(bundle);
@@ -71,7 +71,7 @@ class BundleServiceTest {
     @Test
     void delete() {
         bundle = new Bundle("test_bundle_id", cards);
-        bundleService.save(bundle);
+        bundleService.create(bundle);
 
         int entitiesBefore = bundleService.countEntities();
 
@@ -83,7 +83,7 @@ class BundleServiceTest {
     @Test
     void read() {
         bundle = new Bundle("test_bundle_id", cards);
-        bundleService.save(bundle);
+        bundleService.create(bundle);
 
         var readCard = bundleService.findById(bundle.getId());
         assertNotNull(readCard);
@@ -95,7 +95,7 @@ class BundleServiceTest {
         int entitiesBefore = bundleService.countEntities();
 
         bundle = new Bundle("test_bundle_id", cards);
-        bundleService.save(bundle);
+        bundleService.create(bundle);
 
         assertEquals(entitiesBefore + 1, bundleService.countEntities());
     }

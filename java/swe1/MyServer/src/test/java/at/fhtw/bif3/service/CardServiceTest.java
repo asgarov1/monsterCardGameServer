@@ -27,7 +27,7 @@ class CardServiceTest {
         int entitiesBefore = cardService.countEntities();
 
         card = new Card("test_id", "test_name", new Random().nextInt(), ElementType.FIRE, CardType.MONSTER);
-        cardService.save(card);
+        cardService.create(card);
 
         assertEquals(entitiesBefore + 1, cardService.countEntities());
 
@@ -39,7 +39,7 @@ class CardServiceTest {
     @Test
     void update() {
         card = new Card("test_id", "test_name", new Random().nextInt(), ElementType.FIRE, CardType.MONSTER);
-        cardService.save(card);
+        cardService.create(card);
 
         int newDamage = 100;
         card.setDamage(newDamage);
@@ -51,7 +51,7 @@ class CardServiceTest {
     @Test
     void delete() {
         card = new Card("test_id", "test_name", new Random().nextInt(), ElementType.FIRE, CardType.MONSTER);
-        cardService.save(card);
+        cardService.create(card);
 
         int entitiesBefore = cardService.countEntities();
 
@@ -63,7 +63,7 @@ class CardServiceTest {
     @Test
     void read() {
         card = new Card("test_id", "test_name", new Random().nextInt(), ElementType.FIRE, CardType.MONSTER);
-        cardService.save(card);
+        cardService.create(card);
 
         var readCard = cardService.findById(card.getId());
         assertNotNull(readCard);
@@ -75,7 +75,7 @@ class CardServiceTest {
         int entitiesBefore = cardService.countEntities();
 
         card = new Card("test_id", "test_name", new Random().nextInt(), ElementType.FIRE, CardType.MONSTER);
-        cardService.save(card);
+        cardService.create(card);
 
         assertEquals(entitiesBefore + 1, cardService.countEntities());
     }

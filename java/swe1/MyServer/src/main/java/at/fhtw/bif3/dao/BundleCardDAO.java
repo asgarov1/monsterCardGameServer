@@ -1,10 +1,9 @@
 package at.fhtw.bif3.dao;
 
 import at.fhtw.bif3.dao.connection.ConnectionFactory;
-import at.fhtw.bif3.dao.domain.BundleCard;
+import at.fhtw.bif3.dao.daoentity.BundleCard;
 import at.fhtw.bif3.dao.exception.DAOException;
 import at.fhtw.bif3.domain.Card;
-import at.fhtw.bif3.domain.ElementType;
 import lombok.Getter;
 
 import java.sql.*;
@@ -52,7 +51,10 @@ public class BundleCardDAO extends AbstractDAO<BundleCard, String> {
 
     protected List<Card> findAllByBundleId(String id) throws DAOException {
         String query = "select * from " + getTableName() + " where bundle_id  = ?;";
+        return findAllByQuery(id, query);
+    }
 
+    protected List<Card> findAllByQuery(String id, String query) throws DAOException{
         List<Card> cards = new ArrayList<>();
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {

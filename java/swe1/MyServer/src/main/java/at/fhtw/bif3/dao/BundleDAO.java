@@ -1,12 +1,9 @@
 package at.fhtw.bif3.dao;
 
-import at.fhtw.bif3.dao.connection.ConnectionFactory;
-import at.fhtw.bif3.dao.domain.BundleCard;
 import at.fhtw.bif3.dao.exception.DAOException;
 import at.fhtw.bif3.domain.Bundle;
 import lombok.Getter;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
