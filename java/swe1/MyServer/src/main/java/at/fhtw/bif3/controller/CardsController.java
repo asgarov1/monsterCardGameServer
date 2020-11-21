@@ -17,7 +17,7 @@ import java.awt.desktop.UserSessionEvent;
 import static at.fhtw.bif3.http.response.HttpStatus.NOT_FOUND;
 import static at.fhtw.bif3.util.StringUtil.extractUsernameFromToken;
 
-public class CardController implements Controller {
+public class CardsController implements Controller {
 
     public static final String CARDS_ENDPOINT = "/cards";
     private final UserService userService = new UserService();

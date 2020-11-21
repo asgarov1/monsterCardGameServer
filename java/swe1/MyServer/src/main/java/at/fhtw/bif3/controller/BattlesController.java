@@ -1,12 +1,13 @@
 package at.fhtw.bif3.controller;
 
 import at.fhtw.bif3.http.request.Request;
+import at.fhtw.bif3.http.response.HttpResponse;
 import at.fhtw.bif3.http.response.HttpStatus;
 
 public class BattlesController implements Controller {
 
     @Override
-    public HttpStatus handleRequest(Request request) {
+    public HttpResponse handleRequest(Request request) {
         return null;
     }
 }

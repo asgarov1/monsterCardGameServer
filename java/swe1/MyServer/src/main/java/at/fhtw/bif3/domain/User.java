@@ -28,10 +28,13 @@ public class User {
     @SerializedName("Image")
     private String image;
 
+    private int numberOfGamesPlayed;
+    private int elo;
+
     private Set<Card> cards = new HashSet<>();
     private Set<Card> deck = new HashSet<>();
 //TODO question: does deck get generated randomly? so it doesn't need to be persisted?
-    private Stats stats;
+
     private int numberOfCoins = 20;
 
     public User(String id, String username, String password) {

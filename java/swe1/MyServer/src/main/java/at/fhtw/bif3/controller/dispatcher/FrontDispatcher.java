@@ -41,16 +41,16 @@ public class FrontDispatcher implements Runnable {
     private HttpResponse handle(Request request) {
         String path = request.getUrl().getSegments()[0];
         Controller controller = switch (path) {
-            case "users" -> new UserController();
-            case "sessions" -> new SessionController();
-            case "packages" -> new PackageController();
-            case "transactions" -> new TransactionController();
-            case "cards" -> new CardController();
+            case "users" -> new UsersController();
+            case "sessions" -> new SessionsController();
+            case "packages" -> new PackagesController();
+            case "transactions" -> new TransactionsController();
+            case "cards" -> new CardsController();
             case "deck" -> new DeckController();
             case "stats" -> new StatsController();
             case "score" -> new ScoreController();
             case "battles" -> new BattlesController();
-            case "tradings" -> new TradeController();
+            case "tradings" -> new TradingsController();
             default -> throw new IllegalArgumentException("Unexpected url path: " + path);
         };
         return controller.handleRequest(request);

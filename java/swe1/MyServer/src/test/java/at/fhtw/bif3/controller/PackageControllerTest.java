@@ -1,17 +1,6 @@
 package at.fhtw.bif3.controller;
 
-import at.fhtw.bif3.domain.Card;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import org.junit.jupiter.api.Test;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,7 +14,7 @@ class PackageControllerTest {
                                 "{\"Id\":\"02a9c76e-b17d-427f-9240-2dd49b0d3bfd\", \"Name\":\"RegularSpell\", \"Weakness\": 45.0, \"Damage\": 45.0}, " +
                                 "{\"Id\":\"2508bf5c-20d7-43b4-8c77-bc677decadef\", \"Name\":\"FireElf\", \"Damage\": 25.0}]";
 
-        var cards = new PackageController().extractCards(contentString);
+        var cards = new PackagesController().extractCards(contentString);
         assertEquals(5, cards.size());
         cards.forEach(card -> assertNotNull(card.getId()));
         cards.forEach(card -> assertNotNull(card.getName()));

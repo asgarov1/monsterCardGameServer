@@ -10,8 +10,6 @@ import at.fhtw.bif3.service.exception.TooPoorException;
 import at.fhtw.bif3.service.exception.TransactionException;
 import lombok.SneakyThrows;
 
-import java.util.List;
-
 public class UserService extends AbstractService<User, String> {
     public static final int CARD_PACKAGE_PRICE = 5;
     private final UserDAO userDAO = new UserDAO();
@@ -48,20 +46,14 @@ public class UserService extends AbstractService<User, String> {
     @Override
     public User findById(String id) {
         var user = super.findById(id);
-        userCardDAO.findAllByPlayerId(id)
-                .stream()
-                .map(playerCard -> cardService.findById(playerCard.getCardId()))
-                .forEach(user::addCard);
+        addCardsForUser(user);
 
         return user;
     }
 
     public User findByUsername(String username) {
         var user = byUsername(username);
-        userCardDAO.findAllByPlayerId(user.getId())
-                .stream()
-                .map(playerCard -> cardService.findById(playerCard.getCardId()))
-                .forEach(user::addCard);
+        addCardsForUser(user);
 
         return user;
     }
@@ -91,7 +83,10 @@ public class UserService extends AbstractService<User, String> {
         return findByField("username", username);
     }
 
-    public List<User> findAll() {
-        return findAll();
+    private void addCardsForUser(User user) {
+        userCardDAO.findAllByPlayerId(user.getId())
+                .stream()
+                .map(playerCard -> cardService.findById(playerCard.getCardId()))
+                .forEach(user::addCard);
     }
 }

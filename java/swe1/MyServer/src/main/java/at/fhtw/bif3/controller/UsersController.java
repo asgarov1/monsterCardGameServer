@@ -16,7 +16,7 @@ import com.google.gson.GsonBuilder;
 import static at.fhtw.bif3.http.response.ContentType.APPLICATION_JSON;
 import static at.fhtw.bif3.util.StringUtil.*;
 
-public class UserController implements Controller {
+public class UsersController implements Controller {
     public static final String USERS_ENDPOINT = "/users";
     private final UserService userService = new UserService();
 

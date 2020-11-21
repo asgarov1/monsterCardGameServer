@@ -44,4 +44,10 @@ public interface Controller {
         httpResponse.setStatusCode(CREATED.getCode());
         return httpResponse;
     }
+
+    default HttpResponse unauthorized() {
+        HttpResponse httpResponse = new HttpResponse();
+        httpResponse.setStatusCode(UNAUTHORIZED.getCode());
+        return httpResponse;
+    }
 }

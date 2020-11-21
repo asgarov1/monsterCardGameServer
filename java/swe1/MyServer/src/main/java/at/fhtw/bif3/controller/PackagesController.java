@@ -13,7 +13,7 @@ import com.google.gson.GsonBuilder;
 import java.util.Arrays;
 import java.util.List;
 
-public class PackageController implements Controller {
+public class PackagesController implements Controller {
 
     private final CardService cardService = new CardService();
     private final BundleService bundleService = new BundleService();

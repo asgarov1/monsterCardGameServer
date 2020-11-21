@@ -5,6 +5,8 @@ import at.fhtw.bif3.dao.exception.DAOException;
 import at.fhtw.bif3.dao.exception.EntityNotFoundException;
 import lombok.SneakyThrows;
 
+import java.util.List;
+
 public abstract class AbstractService<P, K> {
 
     private final AbstractDAO<P, K> abstractDAO;
@@ -53,5 +55,9 @@ public abstract class AbstractService<P, K> {
 
     public P findRandom(){
         return abstractDAO.findRandom();
+    }
+
+    public List<P> findAll() {
+        return abstractDAO.findAll();
     }
 }

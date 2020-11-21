@@ -141,5 +141,21 @@ public abstract class AbstractDAO<T, K> implements GenericDAO<T, K> {
         }
         return object;
     }
+
+    public List<T> findAll() {
+        List<T> objects = new ArrayList<>();
+        try (Connection connection = ConnectionFactory.getConnection();
+             Statement statement = connection.createStatement()) {
+
+            String query = "SELECT * FROM " + getTableName() + ";";
+            ResultSet resultSet = statement.executeQuery(query);
+            while (resultSet.next()) {
+                objects.add(readObject(resultSet));
+            }
+        } catch (SQLException e) {
+            throw new DAOException(e.getMessage());
+        }
+        return objects;
+    }
 }
 

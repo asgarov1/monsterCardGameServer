@@ -12,7 +12,7 @@ import at.fhtw.bif3.util.StringUtil;
 
 import static at.fhtw.bif3.util.StringUtil.extractUsername;
 
-public class TransactionController implements Controller {
+public class TransactionsController implements Controller {
 
     private final UserService userService = new UserService();
 

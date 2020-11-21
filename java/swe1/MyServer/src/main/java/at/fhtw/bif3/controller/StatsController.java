@@ -1,6 +1,8 @@
 package at.fhtw.bif3.controller;
 
 import at.fhtw.bif3.controller.context.SessionContext;
+import at.fhtw.bif3.controller.dto.StatsDTO;
+import at.fhtw.bif3.domain.User;
 import at.fhtw.bif3.http.request.HttpMethod;
 import at.fhtw.bif3.http.request.Request;
 import at.fhtw.bif3.http.response.HttpResponse;
@@ -14,7 +16,7 @@ import static at.fhtw.bif3.util.StringUtil.extractUsernameFromToken;
 
 public class StatsController implements Controller {
 
-    private UserService userService = new UserService();
+    private final UserService userService = new UserService();
 
     @Override
     public HttpResponse handleRequest(Request request) {
@@ -32,9 +34,10 @@ public class StatsController implements Controller {
         }
 
         String username = extractUsernameFromToken(token);
+        User user = userService.findByUsername(username);
         return HttpResponse.builder()
                     .status(HttpStatus.OK)
                     .contentType(APPLICATION_JSON)
-                    .content(new Gson().toJson(userService.findByUsername(username).getStats())).build();
+                    .content(new Gson().toJson(new StatsDTO(user.getNumberOfGamesPlayed(), user.getElo()))).build();
     }
 }
