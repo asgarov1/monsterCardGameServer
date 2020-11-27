@@ -1,21 +1,16 @@
 package at.fhtw.bif3.controller;
 
 import at.fhtw.bif3.controller.context.SessionContext;
-import at.fhtw.bif3.dao.daoentity.PlayerCard;
 import at.fhtw.bif3.domain.User;
 import at.fhtw.bif3.http.request.HttpMethod;
 import at.fhtw.bif3.http.request.Request;
 import at.fhtw.bif3.http.response.HttpResponse;
 import at.fhtw.bif3.http.response.HttpStatus;
-import at.fhtw.bif3.service.CardService;
 import at.fhtw.bif3.service.UserService;
 import at.fhtw.bif3.util.StringUtil;
 import com.google.gson.Gson;
 
-import java.awt.desktop.UserSessionEvent;
-
 import static at.fhtw.bif3.http.Header.AUTHORIZATION;
-import static at.fhtw.bif3.http.response.HttpStatus.NOT_FOUND;
 import static at.fhtw.bif3.util.StringUtil.extractUsernameFromToken;
 
 public class CardsController implements Controller {
@@ -41,7 +36,7 @@ public class CardsController implements Controller {
     private HttpResponse handleCardsPost(Request request) {
         HttpResponse httpResponse = new HttpResponse();
         String token = StringUtil.extractToken(request.getHeaders().get(AUTHORIZATION.name()));
-        if (!SessionContext.isTokenPresent(token)) {
+        if (SessionContext.tokenNotPresent(token)) {
             httpResponse.setStatusCode(HttpStatus.FORBIDDEN.getCode());
         } else {
             httpResponse.setStatusCode(HttpStatus.OK.getCode());

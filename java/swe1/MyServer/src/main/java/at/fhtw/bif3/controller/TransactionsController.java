@@ -4,7 +4,6 @@ import at.fhtw.bif3.controller.context.SessionContext;
 import at.fhtw.bif3.http.request.HttpMethod;
 import at.fhtw.bif3.http.request.Request;
 import at.fhtw.bif3.http.response.HttpResponse;
-import at.fhtw.bif3.http.response.HttpStatus;
 import at.fhtw.bif3.service.UserService;
 import at.fhtw.bif3.service.exception.TooPoorException;
 import at.fhtw.bif3.service.exception.TransactionException;
@@ -35,7 +34,7 @@ public class TransactionsController implements Controller {
 
     private HttpResponse handleTransactionsPackagesPost(Request request) {
         String token = StringUtil.extractToken(request.getHeaders().get("Authorization"));
-        if (!SessionContext.isTokenPresent(token)) {
+        if (SessionContext.tokenNotPresent(token)) {
             return forbidden();
         }
 

@@ -5,7 +5,6 @@ import at.fhtw.bif3.dao.exception.DAOException;
 import at.fhtw.bif3.domain.User;
 import at.fhtw.bif3.http.request.HttpMethod;
 import at.fhtw.bif3.http.request.Request;
-import at.fhtw.bif3.http.response.ContentType;
 import at.fhtw.bif3.http.response.HttpResponse;
 import at.fhtw.bif3.http.response.HttpStatus;
 import at.fhtw.bif3.service.UserService;
@@ -37,7 +36,7 @@ public class UsersController implements Controller {
 
     private HttpResponse handleGet(Request request) {
         String token = StringUtil.extractToken(request.getHeaders().get("Authorization"));
-        if (!SessionContext.isTokenPresent(token)) {
+        if (SessionContext.tokenNotPresent(token)) {
             return forbidden();
         }
 
@@ -61,7 +60,7 @@ public class UsersController implements Controller {
 
     private HttpResponse handlePut(Request request) {
         String token = StringUtil.extractToken(request.getHeaders().get("Authorization"));
-        if (!SessionContext.isTokenPresent(token)) {
+        if (SessionContext.tokenNotPresent(token)) {
             return forbidden();
         }
 

@@ -1,11 +1,15 @@
 package at.fhtw.bif3.service;
 
 import at.fhtw.bif3.domain.User;
+import lombok.Singular;
 import lombok.SneakyThrows;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ScheduledExecutorService;
 
 import static java.lang.Thread.sleep;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
@@ -19,6 +23,16 @@ public class BattleManager {
         scheduledService.scheduleWithFixedDelay(this::work, 0, 100, MILLISECONDS);
     }
 
+    private BattleManager() {}
+
+    private static class LazyHolder {
+        static final BattleManager instance = new BattleManager();
+    }
+
+    public static BattleManager getInstance() {
+        return LazyHolder.instance;
+    }
+
     @SneakyThrows
     public boolean putUserToBattle(User user) {
         usersWaitingForBattle.add(user);
@@ -28,14 +42,6 @@ public class BattleManager {
         }
 
         return usersWhoFinishedBattle.removeIf(user::equals);
-    }
-
-    private static class LazyHolder {
-        static final BattleManager instance = new BattleManager();
-    }
-
-    public static BattleManager getInstance() {
-        return LazyHolder.instance;
     }
 
     @SneakyThrows
@@ -49,7 +55,7 @@ public class BattleManager {
 
     private void performBattle(User player1, User player2) {
         //didnt care to write the actual battle logic yet, this is just for test
-        player1.setNumberOfCoins(player1.getNumberOfCoins()-1);
-        player2.setNumberOfCoins(player2.getNumberOfCoins()+1);
+        player1.setNumberOfCoins(player1.getNumberOfCoins() - 1);
+        player2.setNumberOfCoins(player2.getNumberOfCoins() + 1);
     }
 }

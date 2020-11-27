@@ -29,7 +29,7 @@ public class StatsController implements Controller {
 
     private HttpResponse handleGet(Request request) {
         String token = StringUtil.extractToken(request.getHeaders().get("Authorization"));
-        if (!SessionContext.isTokenPresent(token)) {
+        if (SessionContext.tokenNotPresent(token)) {
             return forbidden();
         }
 

@@ -7,7 +7,6 @@ import at.fhtw.bif3.http.request.Request;
 import at.fhtw.bif3.http.response.HttpResponse;
 import at.fhtw.bif3.http.response.HttpStatus;
 import at.fhtw.bif3.service.UserService;
-import at.fhtw.bif3.util.StringUtil;
 import com.google.gson.Gson;
 
 import static at.fhtw.bif3.util.StringUtil.extractToken;
@@ -36,7 +35,7 @@ public class DeckController implements Controller {
     private HttpResponse handleGetDeck(Request request) {
         HttpResponse httpResponse = new HttpResponse();
         String token = extractToken(request.getHeaders().get("Authorization"));
-        if (!SessionContext.isTokenPresent(token)) {
+        if (SessionContext.tokenNotPresent(token)) {
             httpResponse.setStatusCode(HttpStatus.FORBIDDEN.getCode());
         } else {
             User user = userService.findByUsername(extractUsernameFromToken(token));

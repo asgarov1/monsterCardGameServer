@@ -1,18 +1,17 @@
 package at.fhtw.bif3.controller;
 
-import at.fhtw.bif3.service.BattleManager;
 import at.fhtw.bif3.controller.context.SessionContext;
 import at.fhtw.bif3.domain.User;
 import at.fhtw.bif3.http.request.HttpMethod;
 import at.fhtw.bif3.http.request.Request;
 import at.fhtw.bif3.http.response.HttpResponse;
+import at.fhtw.bif3.service.BattleManager;
 import at.fhtw.bif3.service.UserService;
 import at.fhtw.bif3.util.StringUtil;
 import lombok.SneakyThrows;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import static at.fhtw.bif3.http.Header.AUTHORIZATION;
 import static at.fhtw.bif3.util.StringUtil.extractUsernameFromToken;
@@ -37,7 +36,7 @@ public class BattlesController implements Controller {
         }
 
         String token = StringUtil.extractToken(request.getHeaders().get(AUTHORIZATION.name()));
-        if (!SessionContext.isTokenPresent(token)) {
+        if (SessionContext.tokenNotPresent(token)) {
             return forbidden();
         }
 

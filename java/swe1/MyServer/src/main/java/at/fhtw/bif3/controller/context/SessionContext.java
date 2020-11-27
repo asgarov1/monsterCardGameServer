@@ -3,16 +3,18 @@ package at.fhtw.bif3.controller.context;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import static at.fhtw.bif3.util.PropertiesReader.getProperties;
+
 public class SessionContext {
-    public static final String TOKEN_ENDING = "-mtcgToken";
-    private static volatile ConcurrentMap<String, String> loggedUsers = new ConcurrentHashMap<>();
+
+    private static final ConcurrentMap<String, String> loggedUsers = new ConcurrentHashMap<>();
 
     public static boolean isUserLoggedIn(String username) {
         return loggedUsers.keySet().stream().anyMatch(username::equals);
     }
 
-    public static boolean isTokenPresent(String token) {
-        return loggedUsers.values().stream().anyMatch(token::equals);
+    public static boolean tokenNotPresent(String token) {
+        return loggedUsers.values().stream().noneMatch(token::equals);
     }
 
     public static void loginUser(String username) {
@@ -20,6 +22,6 @@ public class SessionContext {
     }
 
     private static String getTokenForUsername(String username) {
-        return username + TOKEN_ENDING;
+        return username + getProperties().getProperty("token.ending");
     }
 }

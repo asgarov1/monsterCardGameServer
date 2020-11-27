@@ -21,7 +21,7 @@ public class TradingsController implements Controller {
     @Override
     public HttpResponse handleRequest(Request request) {
         String token = extractToken(request.getHeaders().get("Authorization"));
-        if (!SessionContext.isTokenPresent(token)) {
+        if (SessionContext.tokenNotPresent(token)) {
             return forbidden();
         }
 
