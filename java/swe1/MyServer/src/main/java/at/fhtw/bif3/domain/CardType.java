@@ -6,7 +6,7 @@ public enum CardType {
     SPELL,
     MONSTER;
 
-    public static CardType findByName(String name){
+    public static CardType assignByName(String name){
         return Arrays.stream(values())
                 .filter(value -> value.name().equals(name))
                 .findFirst()

@@ -26,8 +26,8 @@ public class Card {
         this.id = id;
         this.name = name;
         this.damage = damage;
-        this.elementType = ElementType.findByName(elementType);
-        this.cardType = CardType.findByName(cardType);
+        this.elementType = ElementType.assignByName(elementType);
+        this.cardType = CardType.assignByName(cardType);
     }
 
     public Card(String id, String name, int damage) {

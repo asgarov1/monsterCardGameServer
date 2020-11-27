@@ -1,32 +1,41 @@
 package at.fhtw.bif3.service;
 
+import at.fhtw.bif3.domain.Card;
+import at.fhtw.bif3.domain.CardType;
+import at.fhtw.bif3.domain.ElementType;
 import at.fhtw.bif3.domain.User;
-import lombok.Singular;
 import lombok.SneakyThrows;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ScheduledExecutorService;
 
+import static at.fhtw.bif3.domain.CardType.MONSTER;
+import static at.fhtw.bif3.domain.ElementType.FIRE;
+import static at.fhtw.bif3.domain.ElementType.WATER;
 import static java.lang.Thread.sleep;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 public class BattleManager {
+
     private final ScheduledExecutorService scheduledService = Executors.newSingleThreadScheduledExecutor();
     private final BlockingQueue<User> usersWaitingForBattle = new LinkedBlockingQueue<>();
     private final List<User> usersWhoFinishedBattle = new ArrayList<>();
+    private final BattleService battleService = new BattleService();
 
     {
         scheduledService.scheduleWithFixedDelay(this::work, 0, 100, MILLISECONDS);
     }
 
-    private BattleManager() {}
+    private BattleManager() {
+    }
 
     private static class LazyHolder {
-        static final BattleManager instance = new BattleManager();
+        private static final BattleManager instance = new BattleManager();
     }
 
     public static BattleManager getInstance() {
@@ -36,11 +45,9 @@ public class BattleManager {
     @SneakyThrows
     public boolean putUserToBattle(User user) {
         usersWaitingForBattle.add(user);
-
         while (usersWhoFinishedBattle.stream().noneMatch(user::equals)) {
             sleep(100);
         }
-
         return usersWhoFinishedBattle.removeIf(user::equals);
     }
 
@@ -48,14 +55,8 @@ public class BattleManager {
     private void work() {
         var player1 = usersWaitingForBattle.take();
         var player2 = usersWaitingForBattle.take();
-        performBattle(player1, player2);
+        battleService.performBattle(player1, player2);
         usersWhoFinishedBattle.add(player1);
         usersWhoFinishedBattle.add(player2);
-    }
-
-    private void performBattle(User player1, User player2) {
-        //didnt care to write the actual battle logic yet, this is just for test
-        player1.setNumberOfCoins(player1.getNumberOfCoins() - 1);
-        player2.setNumberOfCoins(player2.getNumberOfCoins() + 1);
     }
 }

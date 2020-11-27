@@ -7,6 +7,7 @@ import at.fhtw.bif3.domain.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -66,7 +67,7 @@ class PlayerServiceTest {
 
     @Test
     void read() {
-        var cards = Set.of(
+        var cards = List.of(
                 new Card("test_id1", "test_name1", new Random().nextDouble(), new Random().nextDouble(), ElementType.FIRE, CardType.MONSTER),
                 new Card("test_id2", "test_name2", new Random().nextDouble(), new Random().nextDouble(), ElementType.WATER, CardType.SPELL));
 

@@ -7,7 +7,7 @@ public enum ElementType {
     FIRE,
     NORMAL;
 
-    public static ElementType findByName(String name) {
+    public static ElementType assignByName(String name) {
         return Arrays.stream(values()).filter(value -> value.name().equals(name)).findFirst().orElseThrow();
     }
 }

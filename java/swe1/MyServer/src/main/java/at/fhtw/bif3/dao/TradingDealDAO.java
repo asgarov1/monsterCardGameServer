@@ -43,7 +43,7 @@ public class TradingDealDAO extends AbstractDAO<TradingDeal, String> {
         try {
             tradingDeal.setId(resultSet.getString("id"));
             tradingDeal.setCardToTrade(new CardDAO().read(resultSet.getString("card_id")));
-            tradingDeal.setCardtype(CardType.findByName(resultSet.getString("card_type")));
+            tradingDeal.setCardtype(CardType.assignByName(resultSet.getString("card_type")));
             tradingDeal.setMinimumDamage(resultSet.getInt("minimum_damage"));
         } catch (SQLException e) {
             throw new DAOException(e.getMessage(), e);
