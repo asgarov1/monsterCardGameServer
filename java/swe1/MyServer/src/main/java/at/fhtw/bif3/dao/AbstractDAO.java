@@ -40,6 +40,9 @@ public abstract class AbstractDAO<T, K> implements GenericDAO<T, K> {
         String createQuery = getCreateQuery();
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(createQuery)) {
+            //Statement statement;
+            //
+
             setObjectStatement(statement, object);
             statement.executeUpdate();
         } catch (SQLException e) {

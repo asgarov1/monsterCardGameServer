@@ -2,8 +2,21 @@ package at.fhtw.bif3;
 
 import at.fhtw.bif3.controller.dispatcher.FrontDispatcher;
 import lombok.SneakyThrows;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.File;
 import java.net.ServerSocket;
+import java.net.Socket;
 
 public class HttpServer {
 
@@ -15,11 +28,14 @@ public class HttpServer {
         while (true) {
             new Thread(new FrontDispatcher(server.accept())).start();
         }
+        //  TODO
+        //    what does unconfigured deck mean? (echo 10)
+        //    show configured deck with winning attributes?
 
-        //TODO: how does authorization work?
-        //  what does unconfigured deck mean? (echo 10)
-        //  show configured deck with winning attributes?
-        //  stats? whose stats?
-        //  start /b "kienboec battle"
     }
 }
+
+
+
+//TODO
+    //

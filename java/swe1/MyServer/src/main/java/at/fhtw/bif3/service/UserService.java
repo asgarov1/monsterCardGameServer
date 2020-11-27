@@ -10,9 +10,11 @@ import at.fhtw.bif3.service.exception.TooPoorException;
 import at.fhtw.bif3.service.exception.TransactionException;
 import lombok.SneakyThrows;
 
+import static at.fhtw.bif3.util.PropertiesReader.getProperties;
+import static java.lang.Integer.parseInt;
+
 public class UserService extends AbstractService<User, String> {
-    public static final int CARD_PACKAGE_PRICE = 5;
-    private final UserDAO userDAO = new UserDAO();
+    public static final int CARD_PACKAGE_PRICE = parseInt(getProperties().getProperty("package.price"));
     private final UserCardDAO userCardDAO = new UserCardDAO();
     private final CardService cardService = new CardService();
 
@@ -74,7 +76,7 @@ public class UserService extends AbstractService<User, String> {
             bundleService.delete(bundle.getId());
         } catch (Exception e) {
             user.setNumberOfCoins(amountOfMoneyBeforeTransaction);
-            throw new TransactionException("Something went wrong during purchase!");
+            throw new TransactionException("Something went wrong during purchase! Transaction rolled back.");
         }
         return true;
     }

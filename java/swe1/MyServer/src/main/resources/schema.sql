@@ -15,6 +15,7 @@ create table bundle
         constraint bundle_pkey primary key
 );
 
+
 create table bundle_cards
 (
     bundle_id varchar(255) not null
@@ -57,7 +58,10 @@ create table player_cards
 create table trading_deal
 (
     id serial primary key,
-    card_id varchar(255) references card (id)
+    card_id varchar(255) references card (id),
+    card_type    varchar(255),
+    minimum_damage integer,
+    creator_id varchar(255) references player(id)
 );
 
 

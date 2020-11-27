@@ -14,10 +14,10 @@ public class TradingDeal {
     @SerializedName("Id")
     private String id;
     @SerializedName("CardToTradeId")
-    private String cardToTradeId; //TODO question: why is this needed? I thought creating a deal is looking for a card?
+    private Card cardToTrade;
     @SerializedName("CardType")
     private CardType cardtype;
     @SerializedName("MinimumDamage")
     private int minimumDamage;
-    private String creatorUsername;
+    private User creator;
 }

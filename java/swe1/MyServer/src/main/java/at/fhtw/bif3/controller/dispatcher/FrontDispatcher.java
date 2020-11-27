@@ -22,7 +22,8 @@ public class FrontDispatcher implements Runnable {
     @Override
     @SneakyThrows
     public void run() {
-        Request request = HttpRequest.valueOf(connectionSocket.getInputStream());
+        var request = HttpRequest.valueOf(connectionSocket.getInputStream());
+        System.out.println(request.getReceivedRequest() + "\n");
         Response response = getResponse(request);
         response.send(connectionSocket.getOutputStream());
         connectionSocket.close();
@@ -39,7 +40,13 @@ public class FrontDispatcher implements Runnable {
     }
 
     private HttpResponse handle(Request request) {
-        String path = request.getUrl().getSegments()[0];
+        String path;
+        try {
+            path = request.getUrl().getSegments()[0];
+        } catch (NullPointerException e){
+            return new HttpResponse();
+        }
+//        POST /packages HTTP/1.1
         Controller controller = switch (path) {
             case "users" -> new UsersController();
             case "sessions" -> new SessionsController();

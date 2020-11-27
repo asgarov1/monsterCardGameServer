@@ -14,7 +14,7 @@ import static at.fhtw.bif3.http.request.HttpHeader.*;
 import static java.lang.System.lineSeparator;
 
 @Getter
-public class HttpRequest implements Request{
+public class HttpRequest implements Request {
 
     private final String receivedRequest;
 
@@ -35,8 +35,8 @@ public class HttpRequest implements Request{
                 requestBuilder.append((char) read);
             }
         }
+//TODO split in methods
         this.receivedRequest = requestBuilder.toString();
-        System.out.println(receivedRequest + "\n");
     }
 
     public static HttpRequest valueOf(InputStream inputStream) throws IOException {

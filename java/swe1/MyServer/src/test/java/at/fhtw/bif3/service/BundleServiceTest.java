@@ -36,12 +36,12 @@ class BundleServiceTest {
         cards.stream().map(Card::getId).forEach(cardService::delete);
     }
 
-    @AfterEach
-    private void cleanUp(){
-        if(bundle.getId() != null) {
-            bundleService.delete(bundle.getId());
-        }
-    }
+//    @AfterEach
+//    private void cleanUp(){
+//        if(bundle.getId() != null) {
+//            bundleService.delete(bundle.getId());
+//        }
+//    }
 
     @Test
     void create() {

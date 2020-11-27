@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 
 import java.awt.desktop.UserSessionEvent;
 
+import static at.fhtw.bif3.http.Header.AUTHORIZATION;
 import static at.fhtw.bif3.http.response.HttpStatus.NOT_FOUND;
 import static at.fhtw.bif3.util.StringUtil.extractUsernameFromToken;
 
@@ -39,7 +40,7 @@ public class CardsController implements Controller {
 
     private HttpResponse handleCardsPost(Request request) {
         HttpResponse httpResponse = new HttpResponse();
-        String token = StringUtil.extractToken(request.getHeaders().get("Authorization"));
+        String token = StringUtil.extractToken(request.getHeaders().get(AUTHORIZATION.name()));
         if (!SessionContext.isTokenPresent(token)) {
             httpResponse.setStatusCode(HttpStatus.FORBIDDEN.getCode());
         } else {
@@ -51,9 +52,9 @@ public class CardsController implements Controller {
     }
 
 //    TODO question: what is supposed to be different here? regarding the response
-//        should I not return anything unless "Content-Type" is set?
+//        should I not return anything unless "Content-Type" is set?  - ANSWER: no difference, typo
 //      echo 8) show all acquired cards kienboec
-//      curl -X GET http://localhost:10001/cards --header "Authorization: Basic kienboec-mtcgToken"
+//      curl -X GET http://localhost:10001/cards --header "Content-Type: application/json" "Authorization: Basic kienboec-mtcgToken"
 //      echo should fail (no token)
 //      curl -X GET http://localhost:10001/cards
 //      echo.

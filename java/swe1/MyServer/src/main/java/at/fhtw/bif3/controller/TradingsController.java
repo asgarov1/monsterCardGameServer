@@ -1,16 +1,12 @@
 package at.fhtw.bif3.controller;
 
 import at.fhtw.bif3.controller.context.SessionContext;
-import at.fhtw.bif3.controller.dto.StatsDTO;
-import at.fhtw.bif3.domain.Card;
 import at.fhtw.bif3.domain.TradingDeal;
-import at.fhtw.bif3.domain.User;
 import at.fhtw.bif3.http.request.HttpMethod;
 import at.fhtw.bif3.http.request.Request;
 import at.fhtw.bif3.http.response.HttpResponse;
 import at.fhtw.bif3.http.response.HttpStatus;
 import at.fhtw.bif3.service.TradingDealService;
-import at.fhtw.bif3.util.StringUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -67,7 +63,7 @@ public class TradingsController implements Controller {
         String token = extractToken(request.getHeaders().get("Authorization"));
         String username = extractUsernameFromToken(token);
         TradingDeal deal = tradingService.findById(new Gson().fromJson(request.getContentString(), String.class));
-        if (deal.getCreatorUsername().equals(username)) {
+        if (deal.getCreator().getUsername().equals(username)) {
             return badRequest();
         } else {
             return processTrade() ? noContent() : badRequest();

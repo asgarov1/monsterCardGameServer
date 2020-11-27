@@ -1,6 +1,7 @@
 package at.fhtw.bif3.dao;
 
 import at.fhtw.bif3.dao.exception.DAOException;
+import at.fhtw.bif3.domain.CardType;
 import at.fhtw.bif3.domain.TradingDeal;
 import lombok.Getter;
 
@@ -15,19 +16,22 @@ public class TradingDealDAO extends AbstractDAO<TradingDeal, String> {
 
     @Override
     protected String getCreateQuery() {
-        return "INSERT INTO " + getTableName() + " (id, card_id) VALUES (?, ?);";
+        return "INSERT INTO " + getTableName() + "(card_id, card_type, minimum_damage, creator_id id) VALUES (?, ?, ?, ?);";
     }
 
     @Override
     protected String getUpdateQuery() {
-        return "UPDATE " + getTableName() + " SET card_id = ? WHERE id = ?;";
+        return "UPDATE " + getTableName() + " SET card_id = ?, card_type = ?, minimum_damage = ?, creator_id = ? WHERE id = ?;";
     }
 
     @Override
     protected void setObjectStatement(PreparedStatement statement, TradingDeal tradingDeal) throws DAOException {
         try {
-            statement.setLong(1, tradingDeal.getId());
             statement.setString(1, tradingDeal.getCardToTrade().getId());
+            statement.setString(2, tradingDeal.getCardtype().name());
+            statement.setLong(3, tradingDeal.getMinimumDamage());
+            statement.setString(4, tradingDeal.getCreator().getUsername());
+            statement.setString(5, tradingDeal.getId());
         } catch (SQLException e) {
             throw new DAOException(e.getMessage(), e);
         }
@@ -37,8 +41,10 @@ public class TradingDealDAO extends AbstractDAO<TradingDeal, String> {
     protected TradingDeal readObject(ResultSet resultSet) throws DAOException {
         TradingDeal tradingDeal = new TradingDeal();
         try {
-            tradingDeal.setId(resultSet.getLong("id"));
+            tradingDeal.setId(resultSet.getString("id"));
             tradingDeal.setCardToTrade(new CardDAO().read(resultSet.getString("card_id")));
+            tradingDeal.setCardtype(CardType.findByName(resultSet.getString("card_type")));
+            tradingDeal.setMinimumDamage(resultSet.getInt("minimum_damage"));
         } catch (SQLException e) {
             throw new DAOException(e.getMessage(), e);
         }

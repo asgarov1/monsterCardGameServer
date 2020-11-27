@@ -22,7 +22,7 @@ public class HttpResponse implements Response {
     private final Map<String, String> headers = new HashMap<>();
     private String content = "";
     private ContentType contentType;
-    private String serverHeader = "Server: Localhost (Windows)";
+    private String serverHeader;
 
     @Override
     public Map<String, String> getHeaders() {
@@ -110,3 +110,9 @@ public class HttpResponse implements Response {
         network.flush();
     }
 }
+
+
+// TODO:
+//      1. Parsing
+//      2. Datenbank bs
+//      3. Controllers/Handlers bzw program logic

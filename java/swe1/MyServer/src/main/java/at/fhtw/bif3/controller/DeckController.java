@@ -52,7 +52,7 @@ public class DeckController implements Controller {
     //echo.
 
 
-//    TODO question: difference bettween 'deck', 'deck?forat=plain', and 'configured deck with winning attributes'?
+//    TODO question: difference bettween 'deck', 'deck?format=plain', and 'configured deck with winning attributes'? ALWAYS JSON
 //    echo 12) show configured deck
 //curl -X GET http://localhost:10001/deck --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken"
 //echo.

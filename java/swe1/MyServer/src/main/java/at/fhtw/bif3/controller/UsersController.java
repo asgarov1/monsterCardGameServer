@@ -22,6 +22,7 @@ public class UsersController implements Controller {
 
     @Override
     public HttpResponse handleRequest(Request request) {
+
         if (request.getMethod().equals(HttpMethod.POST.name())) {
             return handlePost(request);
         } else if (request.getMethod().equals(HttpMethod.PUT.name())) {
@@ -29,6 +30,7 @@ public class UsersController implements Controller {
         } else if (request.getMethod().equals(HttpMethod.GET.name())) {
             return handleGet(request);
         }
+        //switch to switch
 
         return notFound();
     }
