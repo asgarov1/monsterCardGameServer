@@ -47,7 +47,6 @@ public class CardDAO extends AbstractDAO<Card, String> {
             CardType cardType = CardType.assignByName(resultSet.getString("card_type"));
             card = cardType.instantiateByType();
 
-            card.setCardType(cardType);
             card.setId(resultSet.getString("id"));
             card.setName(resultSet.getString("name"));
             card.setDamage(resultSet.getInt("damage"));

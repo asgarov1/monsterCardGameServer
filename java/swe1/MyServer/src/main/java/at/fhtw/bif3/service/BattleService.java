@@ -1,13 +1,11 @@
 package at.fhtw.bif3.service;
 
-import at.fhtw.bif3.domain.card.Card;
 import at.fhtw.bif3.domain.User;
+import at.fhtw.bif3.domain.card.Card;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Random;
 
-import static at.fhtw.bif3.domain.card.ElementType.FIRE;
-import static at.fhtw.bif3.domain.card.ElementType.WATER;
 import static at.fhtw.bif3.util.PropertiesReader.getProperties;
 import static java.lang.Integer.parseInt;
 

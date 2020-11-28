@@ -1,4 +1,16 @@
 package at.fhtw.bif3.domain.card;
 
 public class KrakenCard extends Card {
+
+    public KrakenCard() {
+    }
+
+    public KrakenCard(String id, String name, int damage, ElementType elementType) {
+        super(id, name, damage, elementType);
+    }
+
+    @Override
+    protected void setCardType() {
+        this.cardType = CardType.KRAKEN;
+    }
 }

@@ -1,8 +1,6 @@
 package at.fhtw.bif3.service;
 
-import at.fhtw.bif3.domain.card.Card;
-import at.fhtw.bif3.domain.card.CardType;
-import at.fhtw.bif3.domain.card.ElementType;
+import at.fhtw.bif3.domain.card.*;
 import at.fhtw.bif3.domain.User;
 import org.junit.jupiter.api.Test;
 
@@ -19,17 +17,17 @@ class BattleServiceTest {
         User userB = new User("userB", "pass");
 
         userA.setCards(Stream.of(
-                new Card("test_id1", "Firemonster", new Random().nextInt(100), new Random().nextInt(100), ElementType.FIRE, CardType.ELF),
-                new Card("test_id2", "Water Spell", new Random().nextInt(100), new Random().nextInt(100), ElementType.WATER, CardType.SPELL),
-                new Card("test_id3", "Earth Elementel", new Random().nextInt(100), new Random().nextInt(100), ElementType.NORMAL, CardType.DRAGON),
-                new Card("test_id4", "Werewolf", new Random().nextInt(100), new Random().nextInt(100), ElementType.NORMAL, CardType.WIZARD)).collect(toList())
+                new ElfCard("test_id1", "Firemonster", new Random().nextInt(100), ElementType.FIRE),
+                new SpellCard("test_id2", "Water Spell", new Random().nextInt(100), ElementType.WATER),
+                new DragonCard("test_id3", "Earth Elementel", new Random().nextInt(100), ElementType.NORMAL),
+                new WizardCard("test_id4", "Werewolf", new Random().nextInt(100),  ElementType.NORMAL)).collect(toList())
         );
 
         userB.setCards(Stream.of(
-                new Card("test_id1", "Fire Dragon", new Random().nextInt(100), new Random().nextInt(100), ElementType.FIRE, CardType.DRAGON),
-                new Card("test_id2", "Ice Spell", new Random().nextInt(100), new Random().nextInt(100), ElementType.WATER, CardType.SPELL),
-                new Card("test_id3", "Tigerman", new Random().nextInt(100), new Random().nextInt(100), ElementType.NORMAL, CardType.GOBLIN),
-                new Card("test_id4", "Cursed Tree", new Random().nextInt(100), new Random().nextInt(100), ElementType.NORMAL, CardType.ORK)).collect(toList())
+                new DragonCard("test_id1", "Fire Dragon", new Random().nextInt(100), ElementType.FIRE),
+                new SpellCard("test_id2", "Ice Spell", new Random().nextInt(100), ElementType.WATER),
+                new GoblinCard("test_id3", "Tigerman", new Random().nextInt(100), ElementType.NORMAL),
+                new OrkCard("test_id4", "Cursed Tree", new Random().nextInt(100), ElementType.NORMAL)).collect(toList())
         );
 
         new BattleService().performBattle(userA, userB);
