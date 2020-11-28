@@ -12,9 +12,9 @@ import static at.fhtw.bif3.util.StringUtil.extractUsername;
 
 public class SessionsController implements Controller {
 
-    public static final String SESSIONS_ENDPOINT = "sessions";
+    public static final String SESSIONS_ENDPOINT = "/sessions";
 
-    private UserService userService = new UserService();
+    private final UserService userService = new UserService();
 
     @Override
     public HttpResponse handleRequest(Request request) {

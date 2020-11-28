@@ -1,7 +1,11 @@
 package at.fhtw.bif3.controller;
 
+import at.fhtw.bif3.controller.dto.CardDTO;
 import at.fhtw.bif3.domain.Bundle;
 import at.fhtw.bif3.domain.card.Card;
+import at.fhtw.bif3.domain.card.CardType;
+import at.fhtw.bif3.domain.card.ElementType;
+import at.fhtw.bif3.domain.card.SpellCard;
 import at.fhtw.bif3.http.request.HttpMethod;
 import at.fhtw.bif3.http.request.Request;
 import at.fhtw.bif3.http.response.HttpResponse;
@@ -11,8 +15,9 @@ import com.google.gson.GsonBuilder;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class PackagesController implements Controller {
+public class PackageController implements Controller {
 
     private final CardService cardService = new CardService();
     private final BundleService bundleService = new BundleService();
@@ -37,10 +42,28 @@ public class PackagesController implements Controller {
         List<Card> cards = extractCards(request.getContentString());
         cards.forEach(cardService::create);
         bundleService.create(Bundle.builder().cards(cards).id(Integer.toString(this.hashCode())).build());
-        return noContent();
+        return created();
     }
 
     public List<Card> extractCards(String contentString) {
-        return Arrays.asList(new GsonBuilder().create().fromJson(contentString, Card[].class));
+        return Arrays.stream(new GsonBuilder().create().fromJson(contentString, CardDTO[].class))
+                .map(this::instantiateCard)
+                .collect(Collectors.toList());
+    }
+
+    private Card instantiateCard(CardDTO cardDTO) {
+        CardType cardType = CardType.assignByName(cardDTO.getName());
+
+        Card card = cardType.instantiateByType();
+        card.setId(cardDTO.getId());
+        card.setName(cardDTO.getName());
+        card.setElementType(ElementType.assignByName(cardDTO.getName()));
+        card.setDamage(cardDTO.getDamage());
+
+        if(cardDTO.getWeakness() != null){
+            ((SpellCard) card).setWeakness(cardDTO.getWeakness());
+        }
+
+        return card;
     }
 }

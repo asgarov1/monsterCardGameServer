@@ -11,13 +11,13 @@ public class DragonCard extends Card {
     public DragonCard() {
     }
 
-    public DragonCard(String id, String name, int damage, ElementType elementType) {
+    public DragonCard(String id, String name, double damage, ElementType elementType) {
         super(id, name, damage, elementType);
     }
 
     @Override
     public double calculateDamageAgainst(Card card) {
-        if(card.getElementType().equals(FIRE) && card instanceof ElfCard){
+        if (card.getElementType().equals(FIRE) && card instanceof ElfCard) {
             return DAMAGE_AGAINST_FILE_ELF; //because FireElves evade dragon attacks
         }
         return getDamage();

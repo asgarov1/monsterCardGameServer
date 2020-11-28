@@ -6,11 +6,13 @@ import at.fhtw.bif3.http.request.Request;
 import at.fhtw.bif3.http.response.HttpResponse;
 import at.fhtw.bif3.http.response.Response;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 import java.net.Socket;
 
 import static at.fhtw.bif3.http.response.HttpStatus.NOT_FOUND;
 
+@Slf4j
 public class FrontDispatcher implements Runnable {
 
     private final Socket connectionSocket;
@@ -23,7 +25,7 @@ public class FrontDispatcher implements Runnable {
     @SneakyThrows
     public void run() {
         var request = HttpRequest.valueOf(connectionSocket.getInputStream());
-        System.out.println(request.getReceivedRequest() + "\n");
+        log.info("\nRECEIVED REQUEST: " + request.getReceivedRequest() + "\n");
         Response response = getResponse(request);
         response.send(connectionSocket.getOutputStream());
         connectionSocket.close();
@@ -44,13 +46,14 @@ public class FrontDispatcher implements Runnable {
         try {
             path = request.getUrl().getSegments()[0];
         } catch (NullPointerException e){
+            //Postman's first NPE creating request handler
             return new HttpResponse();
         }
-//        POST /packages HTTP/1.1
+
         Controller controller = switch (path) {
             case "users" -> new UsersController();
             case "sessions" -> new SessionsController();
-            case "packages" -> new PackagesController();
+            case "packages" -> new PackageController();
             case "transactions" -> new TransactionsController();
             case "cards" -> new CardsController();
             case "deck" -> new DeckController();
@@ -63,5 +66,3 @@ public class FrontDispatcher implements Runnable {
         return controller.handleRequest(request);
     }
 }
-
-//TODO question: my controllers return Response - I think that is correct? not sure what the echos stand for

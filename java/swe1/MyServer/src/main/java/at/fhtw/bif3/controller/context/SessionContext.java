@@ -24,4 +24,8 @@ public class SessionContext {
     private static String getTokenForUsername(String username) {
         return username + getProperties().getProperty("token.ending");
     }
+
+    public static void logoutUser(String username){
+        loggedUsers.remove(username);
+    }
 }

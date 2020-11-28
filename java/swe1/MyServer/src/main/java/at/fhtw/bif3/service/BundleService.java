@@ -44,4 +44,19 @@ public class BundleService extends AbstractService<Bundle, String> {
                     }
                 });
     }
+
+    @Override
+    public void delete(String bundle_id) {
+        Bundle bundle = findById(bundle_id);
+        var cardService = new CardService();
+        bundle.getCards()
+                .forEach(card -> {
+                    try {
+                        cardService.delete(card.getId());
+                    } catch (DAOException e) {
+                        e.printStackTrace();
+                    }
+                });
+        super.delete(bundle_id);
+    }
 }

@@ -1,8 +1,6 @@
 package at.fhtw.bif3.service;
 
-import at.fhtw.bif3.domain.card.Card;
-import at.fhtw.bif3.domain.card.CardType;
-import at.fhtw.bif3.domain.card.ElementType;
+import at.fhtw.bif3.domain.card.*;
 import at.fhtw.bif3.domain.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -67,8 +65,8 @@ class PlayerServiceTest {
     @Test
     void read() {
         var cards = List.of(
-                new Card("test_id1", "test_name1", new Random().nextDouble(), new Random().nextDouble(), ElementType.FIRE, CardType.ELF),
-                new Card("test_id2", "test_name2", new Random().nextDouble(), new Random().nextDouble(), ElementType.WATER, CardType.SPELL));
+                new ElfCard("test_id1", "test_name1", new Random().nextDouble(), ElementType.FIRE),
+                new SpellCard("test_id2", "test_name2", new Random().nextDouble(), ElementType.WATER));
 
         player = new User("test_id", "test_username", "test_password");
         cards.forEach(cardService::create);

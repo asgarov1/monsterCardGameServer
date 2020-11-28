@@ -3,8 +3,8 @@ create table card
     id           varchar(255) not null
         constraint card_pkey primary key,
     card_type    varchar(255),
-    damage       integer      not null,
-    weakness     integer      not null,
+    damage       DOUBLE PRECISION not null,
+    weakness     DOUBLE PRECISION,
     element_type varchar(255),
     name         varchar(255)
 );
@@ -33,8 +33,8 @@ create table player
     id              varchar(255) not null
         constraint player_pkey primary key,
     number_of_coins integer      not null,
-    password        varchar(255),
-    username        varchar(255),
+    password        varchar(255) not null,
+    username        varchar(255) unique,
     bio             varchar(255),
     image           varchar(255),
     numberOfGamesPlayed integer,

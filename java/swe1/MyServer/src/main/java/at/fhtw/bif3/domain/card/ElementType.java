@@ -8,6 +8,6 @@ public enum ElementType {
     NORMAL;
 
     public static ElementType assignByName(String name) {
-        return Arrays.stream(values()).filter(value -> value.name().equals(name)).findFirst().orElseThrow();
+        return Arrays.stream(values()).filter(value -> name.toLowerCase().contains(value.name().toLowerCase())).findFirst().orElse(NORMAL);
     }
 }

@@ -5,7 +5,7 @@ public class KnightCard extends Card {
     public KnightCard() {
     }
 
-    public KnightCard(String id, String name, int damage, ElementType elementType) {
+    public KnightCard(String id, String name, double damage, ElementType elementType) {
         super(id, name, damage, elementType);
     }
 

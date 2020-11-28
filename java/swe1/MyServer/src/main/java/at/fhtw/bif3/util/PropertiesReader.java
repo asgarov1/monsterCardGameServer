@@ -1,10 +1,13 @@
 package at.fhtw.bif3.util;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+@Slf4j
 public class PropertiesReader {
 
     private static final String DEFAULT_PROPERTIES_FILE = "application.properties";
@@ -28,7 +31,7 @@ public class PropertiesReader {
         Properties properties = new Properties();
         try (InputStream input = PropertiesReader.class.getClassLoader().getResourceAsStream(fileName)) {
             if (input == null) {
-                System.out.println(fileName + " not found on classpath");
+                log.error(fileName + " not found on classpath");
                 throw new FileNotFoundException();
             }
             properties.load(input);

@@ -85,13 +85,3 @@ public class UsersController implements Controller {
     }
 
 }
-
-//TODO question: what do GETs do? just return user data in Json
-
-//echo 15) edit user data
-//curl -X GET http://localhost:10001/users/kienboec --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken"
-//echo.
-//curl -X GET http://localhost:10001/users/kienboec --header "Content-Type: application/json" --header "Authorization: Basic altenhof-mtcgToken"
-//echo.
-//
-//curl -X PUT http://localhost:10001/users/kienboec --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken" -d "{\"Name\": \"Kienboeck\", \"Bio\": \"me playin...\", \"Image\": \":-)\"}"

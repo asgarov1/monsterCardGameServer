@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import static at.fhtw.bif3.http.request.HttpMethod.POST;
+import static java.lang.System.lineSeparator;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -31,7 +32,7 @@ class HttpRequestTest {
                     "Accept-Encoding: gzip, deflate, br\r\n" +
                     "Connection: keep-alive\r\n" +
                     "Content-Length: " + MESSAGE_CONTENT.length() + "\r\n\r\n" +
-                    MESSAGE_CONTENT + "\n\r";
+                    MESSAGE_CONTENT + lineSeparator();
 
     HttpRequest httpRequest;
 

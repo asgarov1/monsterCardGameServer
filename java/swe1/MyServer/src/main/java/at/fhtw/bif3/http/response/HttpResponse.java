@@ -111,8 +111,3 @@ public class HttpResponse implements Response {
     }
 }
 
-
-// TODO:
-//      1. Parsing
-//      2. Datenbank bs
-//      3. Controllers/Handlers bzw program logic

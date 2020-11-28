@@ -14,7 +14,7 @@ public class GoblinCard extends Card {
     public GoblinCard() {
     }
 
-    public GoblinCard(String id, String name, int damage, ElementType elementType) {
+    public GoblinCard(String id, String name, double damage, ElementType elementType) {
         super(id, name, damage, elementType);
     }
 

@@ -5,7 +5,7 @@ public class ElfCard extends Card {
     public ElfCard() {
     }
 
-    public ElfCard(String id, String name, int damage, ElementType elementType) {
+    public ElfCard(String id, String name, double damage, ElementType elementType) {
         super(id, name, damage, elementType);
     }
 

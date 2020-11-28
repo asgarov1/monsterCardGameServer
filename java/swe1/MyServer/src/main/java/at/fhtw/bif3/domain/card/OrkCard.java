@@ -10,7 +10,7 @@ public class OrkCard extends Card {
     public OrkCard() {
     }
 
-    public OrkCard(String id, String name, int damage, ElementType elementType) {
+    public OrkCard(String id, String name, double damage, ElementType elementType) {
         super(id, name, damage, elementType);
     }
 

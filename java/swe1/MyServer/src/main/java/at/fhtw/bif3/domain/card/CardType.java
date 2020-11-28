@@ -14,7 +14,7 @@ public enum CardType {
 
     public static CardType assignByName(String name){
         return Arrays.stream(values())
-                .filter(value -> value.name().equals(name))
+                .filter(value -> name.toLowerCase().contains(value.name().toLowerCase()))
                 .findFirst()
                 .orElseThrow();
     }
