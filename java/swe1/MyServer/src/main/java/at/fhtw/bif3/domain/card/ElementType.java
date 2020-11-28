@@ -1,4 +1,4 @@
-package at.fhtw.bif3.domain;
+package at.fhtw.bif3.domain.card;
 
 import java.util.Arrays;
 

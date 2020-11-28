@@ -1,6 +1,6 @@
 package at.fhtw.bif3.domain;
 
-import at.fhtw.bif3.util.NumberUtil;
+import at.fhtw.bif3.domain.card.Card;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,14 +33,12 @@ public class User {
     @SerializedName("Image")
     private String image;
 
-    private int numberOfGamesPlayed;
-    private int elo = parseInt(getProperties().getProperty("elo.start-value"));
-
+    private int numberOfGamesPlayed;  //TODO question: is this number of rounds? Or battle events?
+    private int elo = parseInt(getProperties().getProperty("elo.start-value")); //TODO question: can elo go beyond zero? should elo be updated after each round? or after each battle?
+    private int numberOfCoins = parseInt(getProperties().getProperty("user.start-money"));
     private List<Card> cards = new ArrayList<>();
     private List<Card> deck = new ArrayList<>();
-    //TODO question: deck gets generated randomly each round
-
-    private int numberOfCoins = parseInt(getProperties().getProperty("user.start-money"));
+    private List<Card> lockedForTrade = new ArrayList<>();
 
     public User(String id, String username, String password) {
         this.id = id;
@@ -52,30 +50,6 @@ public class User {
         this.id = username;
         this.username = username;
         this.password = password;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(id, user.id) &&
-                Objects.equals(username, user.username) &&
-                Objects.equals(password, user.password);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, username, password);
-    }
-
-    public void generateBattleDeck() {
-        int numberOfElements = parseInt(getProperties().getProperty("deck.battle.size"));
-        for (int i = 0; i < numberOfElements; i++) {
-            Card randomCard = cards.get(randomInt(0, cards.size()));
-            cards.remove(randomCard);
-            deck.add(randomCard);
-        }
     }
 
     public void returnCardsFromDeck() {
@@ -103,5 +77,41 @@ public class User {
 
     public boolean hasBattleCards() {
         return !deck.isEmpty();
+    }
+
+    public void incrementGamesPlayed() {
+        numberOfGamesPlayed++;
+    }
+
+    public void incrementElo(int pointsForWin) {
+        elo += pointsForWin;
+    }
+
+    public void decrementElo(int pointsForLoss) {
+        elo -= pointsForLoss;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) &&
+                Objects.equals(username, user.username) &&
+                Objects.equals(password, user.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username, password);
+    }
+
+    public void generateBattleDeck() {
+        int numberOfElements = parseInt(getProperties().getProperty("deck.battle.size"));
+        for (int i = 0; i < numberOfElements; i++) {
+            Card randomCard = cards.get(randomInt(0, cards.size()));
+            cards.remove(randomCard);
+            deck.add(randomCard);
+        }
     }
 }

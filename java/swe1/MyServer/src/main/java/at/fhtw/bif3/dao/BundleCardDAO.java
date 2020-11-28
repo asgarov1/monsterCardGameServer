@@ -3,7 +3,7 @@ package at.fhtw.bif3.dao;
 import at.fhtw.bif3.dao.connection.ConnectionFactory;
 import at.fhtw.bif3.dao.daoentity.BundleCard;
 import at.fhtw.bif3.dao.exception.DAOException;
-import at.fhtw.bif3.domain.Card;
+import at.fhtw.bif3.domain.card.Card;
 import lombok.Getter;
 
 import java.sql.*;

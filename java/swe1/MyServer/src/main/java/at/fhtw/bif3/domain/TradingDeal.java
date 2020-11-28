@@ -1,5 +1,7 @@
 package at.fhtw.bif3.domain;
 
+import at.fhtw.bif3.domain.card.Card;
+import at.fhtw.bif3.domain.card.CardType;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

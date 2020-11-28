@@ -1,11 +1,10 @@
 package at.fhtw.bif3.controller;
 
 import at.fhtw.bif3.domain.Bundle;
-import at.fhtw.bif3.domain.Card;
+import at.fhtw.bif3.domain.card.Card;
 import at.fhtw.bif3.http.request.HttpMethod;
 import at.fhtw.bif3.http.request.Request;
 import at.fhtw.bif3.http.response.HttpResponse;
-import at.fhtw.bif3.http.response.HttpStatus;
 import at.fhtw.bif3.service.BundleService;
 import at.fhtw.bif3.service.CardService;
 import com.google.gson.GsonBuilder;

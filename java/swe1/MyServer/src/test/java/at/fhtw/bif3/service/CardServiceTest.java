@@ -1,8 +1,8 @@
 package at.fhtw.bif3.service;
 
-import at.fhtw.bif3.domain.Card;
-import at.fhtw.bif3.domain.CardType;
-import at.fhtw.bif3.domain.ElementType;
+import at.fhtw.bif3.domain.card.Card;
+import at.fhtw.bif3.domain.card.CardType;
+import at.fhtw.bif3.domain.card.ElementType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
@@ -26,7 +26,7 @@ class CardServiceTest {
     void create() {
         int entitiesBefore = cardService.countEntities();
 
-        card = new Card("test_id", "test_name", new Random().nextDouble(), new Random().nextDouble(), ElementType.FIRE, CardType.MONSTER);
+        card = new Card("test_id", "test_name", new Random().nextDouble(), new Random().nextDouble(), ElementType.FIRE, CardType.KRAKEN);
         cardService.create(card);
 
         assertEquals(entitiesBefore + 1, cardService.countEntities());
@@ -38,7 +38,7 @@ class CardServiceTest {
 
     @Test
     void update() {
-        card = new Card("test_id", "test_name", new Random().nextDouble(), new Random().nextDouble(), ElementType.FIRE, CardType.MONSTER);
+        card = new Card("test_id", "test_name", new Random().nextDouble(), new Random().nextDouble(), ElementType.FIRE, CardType.GOBLIN);
         cardService.create(card);
 
         int newDamage = 100;
@@ -50,7 +50,7 @@ class CardServiceTest {
 
     @Test
     void delete() {
-        card = new Card("test_id", "test_name", new Random().nextDouble(), new Random().nextDouble(), ElementType.FIRE, CardType.MONSTER);
+        card = new Card("test_id", "test_name", new Random().nextDouble(), new Random().nextDouble(), ElementType.FIRE, CardType.DRAGON);
         cardService.create(card);
 
         int entitiesBefore = cardService.countEntities();
@@ -62,7 +62,7 @@ class CardServiceTest {
 
     @Test
     void read() {
-        card = new Card("test_id", "test_name", new Random().nextDouble(), new Random().nextDouble(), ElementType.FIRE, CardType.MONSTER);
+        card = new Card("test_id", "test_name", new Random().nextDouble(), new Random().nextDouble(), ElementType.FIRE, CardType.KRAKEN);
         cardService.create(card);
 
         var readCard = cardService.findById(card.getId());
@@ -74,7 +74,7 @@ class CardServiceTest {
     void countEntities() {
         int entitiesBefore = cardService.countEntities();
 
-        card = new Card("test_id", "test_name", new Random().nextDouble(), new Random().nextDouble(), ElementType.FIRE, CardType.MONSTER);
+        card = new Card("test_id", "test_name", new Random().nextDouble(), new Random().nextDouble(), ElementType.FIRE, CardType.WIZARD);
         cardService.create(card);
 
         assertEquals(entitiesBefore + 1, cardService.countEntities());

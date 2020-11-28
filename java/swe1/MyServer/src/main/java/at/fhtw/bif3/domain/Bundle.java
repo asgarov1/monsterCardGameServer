@@ -1,9 +1,9 @@
 package at.fhtw.bif3.domain;
 
+import at.fhtw.bif3.domain.card.Card;
 import lombok.*;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 

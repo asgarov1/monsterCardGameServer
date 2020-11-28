@@ -1,11 +1,10 @@
 package at.fhtw.bif3.service;
 
 import at.fhtw.bif3.domain.Bundle;
-import at.fhtw.bif3.domain.Card;
-import at.fhtw.bif3.domain.CardType;
-import at.fhtw.bif3.domain.ElementType;
+import at.fhtw.bif3.domain.card.Card;
+import at.fhtw.bif3.domain.card.CardType;
+import at.fhtw.bif3.domain.card.ElementType;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -20,9 +19,9 @@ class BundleServiceTest {
     private final BundleService bundleService = new BundleService();
     private Bundle bundle;
     static List<Card> cards = List.of(
-                new Card("test_id1", "test_name1", new Random().nextDouble(), new Random().nextDouble(), ElementType.FIRE, CardType.MONSTER),
+                new Card("test_id1", "test_name1", new Random().nextDouble(), new Random().nextDouble(), ElementType.FIRE, CardType.KNIGHT),
                 new Card("test_id2", "test_name2", new Random().nextDouble(), new Random().nextDouble(), ElementType.WATER, CardType.SPELL),
-                new Card("test_id3", "test_name3", new Random().nextDouble(), new Random().nextDouble(), ElementType.NORMAL, CardType.MONSTER));
+                new Card("test_id3", "test_name3", new Random().nextDouble(), new Random().nextDouble(), ElementType.NORMAL, CardType.ORK));
 
     @BeforeAll
     static void prepareCards(){

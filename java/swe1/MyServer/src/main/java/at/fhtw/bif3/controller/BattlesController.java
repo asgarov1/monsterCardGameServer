@@ -11,7 +11,6 @@ import at.fhtw.bif3.util.StringUtil;
 import lombok.SneakyThrows;
 
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
 
 import static at.fhtw.bif3.http.Header.AUTHORIZATION;
 import static at.fhtw.bif3.util.StringUtil.extractUsernameFromToken;
@@ -30,7 +29,7 @@ public class BattlesController implements Controller {
         return notFound();
     }
 
-    private HttpResponse handlePost(Request request) throws ExecutionException, InterruptedException {
+    private HttpResponse handlePost(Request request) {
         if (!request.getUrl().getPath().equals(BATTLES_ENDPOINT)) {
             return notFound();
         }
@@ -41,8 +40,7 @@ public class BattlesController implements Controller {
         }
 
         User user = userService.findByUsername(extractUsernameFromToken(token));
-        Executors.newSingleThreadExecutor().submit(
-                () -> BattleManager.getInstance().putUserToBattle(user)).get();
+        BattleManager.getInstance().putUserToBattle(user);
         userService.save(user);
 
         return noContent();

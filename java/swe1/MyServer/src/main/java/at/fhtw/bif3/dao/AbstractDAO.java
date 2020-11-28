@@ -3,8 +3,6 @@ package at.fhtw.bif3.dao;
 import at.fhtw.bif3.dao.connection.ConnectionFactory;
 import at.fhtw.bif3.dao.exception.DAOException;
 import at.fhtw.bif3.dao.exception.EntityNotFoundException;
-import at.fhtw.bif3.domain.Bundle;
-import at.fhtw.bif3.domain.Card;
 
 import java.sql.*;
 import java.util.ArrayList;

@@ -1,7 +1,7 @@
 package at.fhtw.bif3.dao;
 
 import at.fhtw.bif3.dao.exception.DAOException;
-import at.fhtw.bif3.domain.CardType;
+import at.fhtw.bif3.domain.card.CardType;
 import at.fhtw.bif3.domain.TradingDeal;
 import lombok.Getter;
 

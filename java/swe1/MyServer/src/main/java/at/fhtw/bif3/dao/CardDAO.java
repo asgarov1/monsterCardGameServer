@@ -1,9 +1,9 @@
 package at.fhtw.bif3.dao;
 
 import at.fhtw.bif3.dao.exception.DAOException;
-import at.fhtw.bif3.domain.Card;
-import at.fhtw.bif3.domain.CardType;
-import at.fhtw.bif3.domain.ElementType;
+import at.fhtw.bif3.domain.card.Card;
+import at.fhtw.bif3.domain.card.CardType;
+import at.fhtw.bif3.domain.card.ElementType;
 import lombok.Getter;
 
 import java.sql.PreparedStatement;
@@ -42,22 +42,20 @@ public class CardDAO extends AbstractDAO<Card, String> {
 
     @Override
     protected Card readObject(ResultSet resultSet) throws DAOException {
-        Card card = new Card();
+        Card card;
         try {
+            CardType cardType = CardType.assignByName(resultSet.getString("card_type"));
+            card = cardType.instantiateByType();
+
+            card.setCardType(cardType);
             card.setId(resultSet.getString("id"));
             card.setName(resultSet.getString("name"));
             card.setDamage(resultSet.getInt("damage"));
             card.setElementType(ElementType.assignByName(resultSet.getString("element_type")));
-            card.setCardType(CardType.assignByName(resultSet.getString("card_type")));
 
         } catch (SQLException e) {
             throw new DAOException(e.getMessage(), e);
         }
         return card;
-    }
-
-    @Override
-    public void delete(String cardId) throws DAOException {
-        super.delete(cardId);
     }
 }

@@ -1,4 +1,4 @@
-package at.fhtw.bif3.domain;
+package at.fhtw.bif3.domain.card;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.*;
@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Card {
+public abstract class Card {
     @SerializedName("Id")
     private String id;
 
@@ -34,5 +34,9 @@ public class Card {
         this.id = id;
         this.name = name;
         this.damage = damage;
+    }
+
+    public double calculateDamageAgainst(Card card) {
+        return damage;
     }
 }

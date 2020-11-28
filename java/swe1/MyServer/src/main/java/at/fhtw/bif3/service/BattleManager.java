@@ -1,22 +1,15 @@
 package at.fhtw.bif3.service;
 
-import at.fhtw.bif3.domain.Card;
-import at.fhtw.bif3.domain.CardType;
-import at.fhtw.bif3.domain.ElementType;
 import at.fhtw.bif3.domain.User;
 import lombok.SneakyThrows;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ScheduledExecutorService;
 
-import static at.fhtw.bif3.domain.CardType.MONSTER;
-import static at.fhtw.bif3.domain.ElementType.FIRE;
-import static at.fhtw.bif3.domain.ElementType.WATER;
 import static java.lang.Thread.sleep;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
@@ -28,11 +21,10 @@ public class BattleManager {
     private final BattleService battleService = new BattleService();
 
     {
-        scheduledService.scheduleWithFixedDelay(this::work, 0, 100, MILLISECONDS);
+        scheduledService.scheduleWithFixedDelay(this::work, 0, 1, MILLISECONDS);
     }
 
-    private BattleManager() {
-    }
+    private BattleManager() { }
 
     private static class LazyHolder {
         private static final BattleManager instance = new BattleManager();
