@@ -9,9 +9,9 @@ import at.fhtw.bif3.service.exception.TooPoorException;
 import at.fhtw.bif3.service.exception.TransactionException;
 import at.fhtw.bif3.util.StringUtil;
 
-import static at.fhtw.bif3.util.StringUtil.extractUsername;
+import static at.fhtw.bif3.http.Header.AUTHORIZATION;
 
-public class TransactionsController implements Controller {
+public class TransactionController implements Controller {
 
     private final UserService userService = new UserService();
 
@@ -33,13 +33,14 @@ public class TransactionsController implements Controller {
     }
 
     private HttpResponse handleTransactionsPackagesPost(Request request) {
-        String token = StringUtil.extractToken(request.getHeaders().get("Authorization"));
+        String token = StringUtil.extractToken(request.getHeaders().get(AUTHORIZATION.getName()));
         if (SessionContext.tokenNotPresent(token)) {
             return forbidden();
         }
 
         try {
-            userService.processPackagePurchaseFor(extractUsername(request.getContentString()));
+            String username = SessionContext.getUsernameForToken(token);
+            userService.processPackagePurchaseFor(username);
             return noContent();
         } catch (TooPoorException | TransactionException e) {
             return internalServerError();

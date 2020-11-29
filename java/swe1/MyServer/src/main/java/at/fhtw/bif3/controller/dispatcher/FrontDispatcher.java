@@ -54,7 +54,7 @@ public class FrontDispatcher implements Runnable {
             case "users" -> new UsersController();
             case "sessions" -> new SessionsController();
             case "packages" -> new PackageController();
-            case "transactions" -> new TransactionsController();
+            case "transactions" -> new TransactionController();
             case "cards" -> new CardsController();
             case "deck" -> new DeckController();
             case "stats" -> new StatsController();

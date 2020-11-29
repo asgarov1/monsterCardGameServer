@@ -21,7 +21,7 @@ public class BattleManager {
     private final BattleService battleService = new BattleService();
 
     {
-        scheduledService.scheduleWithFixedDelay(this::work, 0, 1, MILLISECONDS);
+        scheduledService.scheduleWithFixedDelay(this::work, 0, 100, MILLISECONDS);
     }
 
     private BattleManager() { }
@@ -40,7 +40,12 @@ public class BattleManager {
         while (usersWhoFinishedBattle.stream().noneMatch(user::equals)) {
             sleep(100);
         }
-        return usersWhoFinishedBattle.removeIf(user::equals);
+        removeUserFromFinished(user);
+        return true;
+    }
+
+    private synchronized void removeUserFromFinished(User user) {
+        usersWhoFinishedBattle.removeIf(user::equals);
     }
 
     @SneakyThrows

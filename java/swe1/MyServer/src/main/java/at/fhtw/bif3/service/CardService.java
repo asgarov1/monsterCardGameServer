@@ -7,4 +7,8 @@ public class CardService extends AbstractService<Card, String> {
     public CardService() {
         super(new CardDAO());
     }
+
+    public void delete(Card card){
+        delete(card.getId());
+    }
 }

@@ -44,6 +44,19 @@ public class UserService extends AbstractService<User, String> {
         );
     }
 
+    @Override
+    public void update(User user) {
+        super.update(user);
+
+        user.getCards()
+                .stream()
+                .filter(card -> userCardDAO.findAllByPlayerId(user.getId())
+                        .stream()
+                        .map(PlayerCard::getCardId)
+                        .noneMatch(id -> id.equals(card.getId())))
+                .forEach(card -> userCardDAO.create(new PlayerCard(user.getId(), card.getId())));
+    }
+
     @SneakyThrows
     @Override
     public User findById(String id) {
@@ -66,13 +79,13 @@ public class UserService extends AbstractService<User, String> {
             throw new TooPoorException("User with username " + username + " doesn't have enough coins for this operation");
         }
 
-        //start transaction
         int amountOfMoneyBeforeTransaction = user.getNumberOfCoins();
         try {
             user.setNumberOfCoins(user.getNumberOfCoins() - CARD_PACKAGE_PRICE);
             var bundleService = new BundleService();
             Bundle bundle = bundleService.findRandom();
             bundle.getCards().forEach(user::addCard);
+            update(user);
             bundleService.delete(bundle.getId());
         } catch (Exception e) {
             user.setNumberOfCoins(amountOfMoneyBeforeTransaction);

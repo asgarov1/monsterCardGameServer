@@ -1,5 +1,6 @@
 package at.fhtw.bif3.controller.context;
 
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -27,5 +28,15 @@ public class SessionContext {
 
     public static void logoutUser(String username){
         loggedUsers.remove(username);
+    }
+
+    public static String getUsernameForToken(String token) {
+        return loggedUsers
+                .entrySet()
+                .stream()
+                .filter(entry -> token.equals(entry.getValue()))
+                .map(Map.Entry::getKey)
+                .findFirst()
+                .orElseThrow();
     }
 }

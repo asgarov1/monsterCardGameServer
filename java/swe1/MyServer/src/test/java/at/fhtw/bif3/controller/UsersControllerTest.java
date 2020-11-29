@@ -23,7 +23,7 @@ class UsersControllerTest {
     private final UserService userService = new UserService();
 
     private final String userName = "jamesBond";
-    public final String CONTENT = "{`Username`:`" + userName + "`, `Password`:`longLiveTheQueen`}".replace('`', '"');
+    public final String CONTENT = "{\"Username\":\"" + userName + "\", \"Password\":\"longLiveTheQueen\"}".replace('`', '"');
     private final String createUserRequest = "POST /users HTTP/1.1" + lineSeparator() +
             "Content-Type: application/json" + lineSeparator() +
             "User-Agent: PostmanRuntime/7.26.8" + lineSeparator() +
@@ -58,12 +58,12 @@ class UsersControllerTest {
         int usersBefore = userService.countEntities();
 
         Response httpResponse = new UsersController().handleRequest(httpRequest);
-        assertEquals(httpResponse.getStatusCode(), CREATED.getCode());
+        assertEquals(CREATED.getCode(), httpResponse.getStatusCode());
         assertEquals(usersBefore + 1, userService.countEntities());
 
         usersBefore = userService.countEntities();
         httpResponse = new UsersController().handleRequest(httpRequest);
-        assertEquals(httpResponse.getStatusCode(), BAD_REQUEST.getCode());
+        assertEquals(BAD_REQUEST.getCode(), httpResponse.getStatusCode());
         assertEquals(usersBefore, userService.countEntities());
     }
 

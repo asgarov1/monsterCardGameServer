@@ -45,8 +45,7 @@ public class BundleService extends AbstractService<Bundle, String> {
                 });
     }
 
-    @Override
-    public void delete(String bundle_id) {
+    public void deleteWithCards(String bundle_id) {
         Bundle bundle = findById(bundle_id);
         var cardService = new CardService();
         bundle.getCards()
