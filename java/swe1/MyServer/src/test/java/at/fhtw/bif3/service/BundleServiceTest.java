@@ -18,25 +18,28 @@ class BundleServiceTest {
     private final BundleService bundleService = new BundleService();
     private Bundle bundle;
     static List<Card> cards = List.of(
-                new KnightCard("test_id1", "test_name1", new Random().nextDouble(), ElementType.FIRE),
-                new SpellCard("test_id2", "test_name2", new Random().nextDouble(), ElementType.WATER),
-                new OrkCard("test_id3", "test_name3", new Random().nextDouble(), ElementType.NORMAL));
+            new KnightCard("bundleServiceTest_id1", "test_name1", new Random().nextDouble(), ElementType.FIRE),
+            new SpellCard("bundleServiceTest_id2", "test_name2", new Random().nextDouble(), ElementType.WATER),
+            new OrkCard("bundleServiceTest_id3", "test_name3", new Random().nextDouble(), ElementType.NORMAL),
+            new OrkCard("bundleServiceTest_id4", "test_name4", new Random().nextDouble(), ElementType.FIRE),
+            new OrkCard("bundleServiceTest_id5", "test_name5", new Random().nextDouble(), ElementType.NORMAL)
+    );
 
     @BeforeAll
-    static void prepareCards(){
+    static void prepareCards() {
         var cardService = new CardService();
         cards.forEach(cardService::create);
     }
 
     @AfterAll
-    static void cleanUpCards(){
+    static void cleanUpCards() {
         var cardService = new CardService();
         cards.stream().map(Card::getId).forEach(cardService::delete);
     }
 
     @AfterEach
-    private void cleanUp(){
-        if(bundle.getId() != null) {
+    void cleanUp() {
+        if (bundle.getId() != null) {
             bundleService.delete(bundle.getId());
         }
     }
@@ -75,7 +78,7 @@ class BundleServiceTest {
 
         bundleService.delete(bundle.getId());
 
-        assertEquals(entitiesBefore-1, bundleService.countEntities());
+        assertEquals(entitiesBefore - 1, bundleService.countEntities());
     }
 
     @Test

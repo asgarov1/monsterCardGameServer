@@ -42,13 +42,18 @@ public class UsersController implements Controller {
 
         String username = extractUsernameFromToken(token);
         String[] segments = request.getUrl().getSegments();
-        if (segments.length > 2 && segments[1].equals(username)) {
+        if(segments.length > 2){
+            return notFound();
+        }
+
+        if (segments.length == 2 && segments[1].equals(username)) {
             return HttpResponse.builder()
                     .status(HttpStatus.OK)
                     .contentType(APPLICATION_JSON)
                     .content(new Gson().toJson(userService.findByUsername(username))).build();
         }
-        return badRequest();
+
+        return forbidden();
     }
 
     private HttpResponse handlePost(Request request) {
@@ -65,12 +70,36 @@ public class UsersController implements Controller {
         }
 
         String[] segments = request.getUrl().getSegments();
+        var username = SessionContext.getUsernameForToken(token);
         if (segments.length > 2 && segments[1].equals(extractUsernameFromToken(token))) {
             User user = new GsonBuilder().create().fromJson(request.getContentString(), User.class);
-            userService.update(user);
+            applyUpdatedAttributes(user, username);
             return noContent();
         }
         return notFound();
+    }
+
+    private void applyUpdatedAttributes(User user, String username) {
+        UserService userService = new UserService();
+        var existingUser = userService.findByUsername(username);
+
+        if(user.getUsername() != null) {
+            existingUser.setUsername(user.getUsername());
+        }
+        if(user.getPassword() != null) {
+            existingUser.setPassword(user.getPassword());
+        }
+        if(user.getName() != null) {
+            existingUser.setName(user.getName());
+        }
+        if(user.getBio() != null) {
+            existingUser.setBio(user.getBio());
+        }
+        if(user.getImage() != null) {
+            existingUser.setImage(user.getImage());
+        }
+
+        userService.update(existingUser);
     }
 
     private HttpResponse handleUsersPost(Request request) {

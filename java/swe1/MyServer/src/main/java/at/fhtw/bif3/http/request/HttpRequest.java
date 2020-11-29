@@ -7,10 +7,12 @@ import lombok.SneakyThrows;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import static at.fhtw.bif3.http.request.HttpHeader.*;
+import static java.lang.System.console;
 import static java.lang.System.lineSeparator;
 
 @Getter
@@ -101,15 +103,12 @@ public class HttpRequest implements Request {
 
     @Override
     public String getContentString() {
-        String line = "";
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(getInputStream()))) {
-            if (getContentLength() > 0) {
-                while ((line = in.readLine()) != null && !line.contains("{")) { /* skipping to the content line */ }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return line;
+        return Arrays.stream(receivedRequest
+                .split("\n"))
+                .filter(line -> line.contains("[") || line.contains("{"))
+                .map(line -> line.replace("\r", ""))
+                .findFirst()
+                .orElseThrow();
     }
 
     @Override

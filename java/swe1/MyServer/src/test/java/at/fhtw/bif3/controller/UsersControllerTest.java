@@ -4,6 +4,7 @@ import at.fhtw.bif3.http.request.HttpRequest;
 import at.fhtw.bif3.http.request.Request;
 import at.fhtw.bif3.http.response.Response;
 import at.fhtw.bif3.service.UserService;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,29 +24,14 @@ class UsersControllerTest {
 
     private final UserService userService = new UserService();
 
-    private final String userName = "jamesBond";
-    public final String CONTENT = "{\"Username\":\"" + userName + "\", \"Password\":\"longLiveTheQueen\"}".replace('`', '"');
-    private final String createUserRequest = postCreateRequest(POST.name(), USERS_ENDPOINT, CONTENT);
-
-    Request httpRequest;
-
-    @BeforeEach
-    public void init() {
-        try {
-            var inputStream = new ByteArrayInputStream(createUserRequest.getBytes(StandardCharsets.UTF_8));
-            httpRequest = HttpRequest.valueOf(inputStream);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @AfterEach
-    public void cleanUp() {
-        userService.delete(userName);
-    }
-
+    @SneakyThrows
     @Test
     public void postToUserShouldWork() {
+        String userName = "jamesBond";
+        String CONTENT = "{\"Username\":\"" + userName + "\", \"Password\":\"longLiveTheQueen\"}";
+        String createUserRequest = postCreateRequest(POST.name(), USERS_ENDPOINT, CONTENT);
+        Request httpRequest = HttpRequest.valueOf(new ByteArrayInputStream(createUserRequest.getBytes(StandardCharsets.UTF_8)));
+
         int usersBefore = userService.countEntities();
 
         Response httpResponse = new UsersController().handleRequest(httpRequest);
@@ -56,6 +42,8 @@ class UsersControllerTest {
         httpResponse = new UsersController().handleRequest(httpRequest);
         assertEquals(BAD_REQUEST.getCode(), httpResponse.getStatusCode());
         assertEquals(usersBefore, userService.countEntities());
+
+        userService.delete(userName);
     }
 
 }

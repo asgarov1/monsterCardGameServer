@@ -17,16 +17,21 @@ import static java.util.Arrays.stream;
 public class UserCardDAO extends AbstractDAO<PlayerCard, String> {
 
     @Getter
-    private final String tableName = "player_cards";
+    private final String tableName;
+
+    public UserCardDAO(String tableName) {
+        super();
+        this.tableName = tableName;
+    }
 
     @Override
     protected String getCreateQuery() {
-        return "INSERT INTO " + getTableName() + " (player_id, cards_id) VALUES (?,?);";
+        return "INSERT INTO " + getTableName() + " (player_id, card_id) VALUES (?,?);";
     }
 
     @Override
     protected String getUpdateQuery() {
-        return "UPDATE " + getTableName() + " SET player_id = ?, cards_id = ? WHERE player_id = ? AND cards_id = ?;";
+        return "UPDATE " + getTableName() + " SET player_id = ?, card_id = ? WHERE player_id = ? AND card_id = ?;";
     }
 
     @Override
@@ -44,7 +49,7 @@ public class UserCardDAO extends AbstractDAO<PlayerCard, String> {
         PlayerCard playerCard = new PlayerCard();
         try {
             playerCard.setPlayerId(resultSet.getString("player_id"));
-            playerCard.setCardId(resultSet.getString("cards_id"));
+            playerCard.setCardId(resultSet.getString("card_id"));
         } catch (SQLException e) {
             throw new DAOException(e.getMessage(), e);
         }
@@ -61,7 +66,7 @@ public class UserCardDAO extends AbstractDAO<PlayerCard, String> {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                var cardId = resultSet.getString("cards_id");
+                var cardId = resultSet.getString("card_id");
                 palyerCards.add(new PlayerCard(id, cardId));
             }
         } catch (SQLException e) {

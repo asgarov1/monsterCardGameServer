@@ -45,7 +45,7 @@ class PackageControllerTest {
 
     @AfterAll
     static void cleanUp() {
-        String bundle_id = new BundleCardDAO().findByField("cards_id", "845f0dc7-37d0-426e-994e-43fc3ac83c08").getBundleId();
+        String bundle_id = new BundleCardDAO().findByField("card_id", "845f0dc7-37d0-426e-994e-43fc3ac83c08").getBundleId();
         new BundleService().deleteWithCards(bundle_id);
     }
 

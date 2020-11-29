@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static at.fhtw.bif3.util.NumberUtil.randomInt;
 import static at.fhtw.bif3.util.PropertiesReader.getProperties;
@@ -29,6 +30,9 @@ public class User {
 
     @SerializedName("Password")
     private String password;
+
+    @SerializedName("Name")
+    private String name;
 
     @SerializedName("Bio")
     private String bio;
@@ -68,6 +72,10 @@ public class User {
         cards.add(card);
     }
 
+    public void addCardToDeck(Card card) {
+        deck.add(card);
+    }
+
     public Card playRandomCard() {
         Card randomCard = getDeck().get(randomInt(0, deck.size()));
         deck.remove(randomCard);
@@ -87,9 +95,6 @@ public class User {
     }
 
     public List<Card> getDeck() {
-        if(deck.isEmpty() && cards.size() >= DECK_SIZE){
-            generateBattleDeck();
-        }
         return deck;
     }
 
@@ -122,5 +127,19 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(id, username, password);
+    }
+
+    public void configureDeck(List<String> cardIds) {
+        returnCardsFromDeck();
+
+        cards.stream()
+                .filter(card -> cardIds.contains(card.getId()))
+                .forEach(card -> {
+                    deck.add(card);
+                });
+
+        for (Card card : deck) {
+            cards.remove(card);
+        }
     }
 }

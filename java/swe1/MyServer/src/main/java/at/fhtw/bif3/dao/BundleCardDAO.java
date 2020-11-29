@@ -15,16 +15,16 @@ import static java.util.Arrays.stream;
 public class BundleCardDAO extends AbstractDAO<BundleCard, String> {
 
     @Getter
-    private final String tableName = "bundle_cards";
+    private final String tableName = "bundle_card";
 
     @Override
     protected String getCreateQuery() {
-        return "INSERT INTO " + getTableName() + " (bundle_id, cards_id) VALUES (?,?);";
+        return "INSERT INTO " + getTableName() + " (bundle_id, card_id) VALUES (?,?);";
     }
 
     @Override
     protected String getUpdateQuery() {
-        return "UPDATE " + getTableName() + " SET bundle_id = ?, cards_id = ? WHERE bundle_id = ? AND cards_id = ?;";
+        return "UPDATE " + getTableName() + " SET bundle_id = ?, card_id = ? WHERE bundle_id = ? AND card_id = ?;";
     }
 
     @Override
@@ -42,7 +42,7 @@ public class BundleCardDAO extends AbstractDAO<BundleCard, String> {
         BundleCard bundleCard = new BundleCard();
         try {
             bundleCard.setBundleId(resultSet.getString("bundle_id"));
-            bundleCard.setCardId(resultSet.getString("cards_id"));
+            bundleCard.setCardId(resultSet.getString("card_id"));
         } catch (SQLException e) {
             throw new DAOException(e.getMessage(), e);
         }
@@ -63,7 +63,7 @@ public class BundleCardDAO extends AbstractDAO<BundleCard, String> {
 
             CardDAO cardDAO = new CardDAO();
             while (resultSet.next()) {
-                var cardId = resultSet.getString("cards_id");
+                var cardId = resultSet.getString("card_id");
                 cards.add(cardDAO.read(cardId));
             }
         } catch (SQLException | DAOException e) {

@@ -5,6 +5,7 @@ import at.fhtw.bif3.domain.User;
 import at.fhtw.bif3.http.request.HttpRequest;
 import at.fhtw.bif3.http.request.Request;
 import at.fhtw.bif3.http.response.HttpResponse;
+import at.fhtw.bif3.service.UserService;
 import com.google.gson.Gson;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
@@ -26,7 +27,7 @@ class CardControllerTest {
     @SneakyThrows
     @Test
     void showCardsRequestShouldReturnUsersCards() {
-        setUpUserWithCards(user);
+        setUpUserWithCards(user, this.getClass().getName());
         SessionContext.loginUser(user.getUsername());
 
         Request getCardsRequest = HttpRequest.valueOf(new ByteArrayInputStream(showCardsRequest.getBytes(StandardCharsets.UTF_8)));
@@ -35,6 +36,6 @@ class CardControllerTest {
         assertEquals(OK.getCode(), response.getStatusCode());
         assertEquals(new Gson().toJson(user.getCards()).length(), response.getContentLength());
 
-        deleteUserAndCards(user);
+        new UserService().delete(user);
     }
 }

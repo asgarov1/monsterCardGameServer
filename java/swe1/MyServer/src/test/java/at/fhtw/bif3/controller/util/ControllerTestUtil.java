@@ -25,20 +25,13 @@ public class ControllerTestUtil {
                 "Content-Length: 0\n";
     }
 
-    public static void deleteUserAndCards(User user) {
-        CardService cardService = new CardService();
-        user.getCards().forEach(cardService::delete);
-
-        new UserService().delete(user.getId());
-    }
-
-    public static void setUpUserWithCards(User user) {
+    public static void setUpUserWithCards(User user, String className) {
         List<Card> cards = Stream.of(
-                new KnightCard("test_id1", "test_name1", randomInt(0, 100), ElementType.FIRE),
-                new SpellCard("test_id2", "test_name2", randomInt(0, 100), ElementType.WATER),
-                new OrkCard("test_id3", "test_name3", randomInt(0, 100), ElementType.NORMAL),
-                new WizardCard("test_id4", "test_name4", randomInt(0, 100), ElementType.FIRE),
-                new SpellCard("test_id5", "test_name5", randomInt(0, 100), ElementType.NORMAL)).collect(Collectors.toList());
+                new KnightCard(className + "test_id1", "test_name1", randomInt(0, 100), ElementType.FIRE),
+                new SpellCard(className + "test_id2", "test_name2", randomInt(0, 100), ElementType.WATER),
+                new OrkCard(className + "test_id3", "test_name3", randomInt(0, 100), ElementType.NORMAL),
+                new WizardCard(className + "test_id4", "test_name4", randomInt(0, 100), ElementType.FIRE),
+                new SpellCard(className + "test_id5", "test_name5", randomInt(0, 100), ElementType.NORMAL)).collect(Collectors.toList());
         CardService cardService = new CardService();
         cards.forEach(cardService::create);
 
@@ -56,8 +49,22 @@ public class ControllerTestUtil {
                 "Host: localhost:10001" + lineSeparator() +
                 "Accept-Encoding: gzip, deflate, br" + lineSeparator() +
                 "Connection: keep-alive" + lineSeparator() +
-                "Content-Length: 55" + lineSeparator() + lineSeparator() +
+                "Content-Length: " + content.length() + lineSeparator() + lineSeparator() +
                 content + lineSeparator();
+    }
+
+    public static String getPutRequest(String method, String endpoint, String username, String content) {
+        return method + " " + endpoint + " HTTP/1.1\n" +
+                "Authorization: Basic " + username + "-mtcgToken\n" +
+                "Content-Type: application/json\n" +
+                "User-Agent: PostmanRuntime/7.26.8\n" +
+                "Accept: */*\n" +
+                "Postman-Token: f292034f-2d7c-4f39-aff6-12d51a071002\n" +
+                "Host: localhost:10001\n" +
+                "Accept-Encoding: gzip, deflate, br\n" +
+                "Connection: keep-alive\n" +
+                "Content-Length: " + content.length() + "\n" +
+                content + "\n";
     }
 
     public static String postNoContentRequest(String method, String endpoint, String username) {
