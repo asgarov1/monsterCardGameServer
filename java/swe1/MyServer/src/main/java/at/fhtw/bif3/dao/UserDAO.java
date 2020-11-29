@@ -15,12 +15,14 @@ public class UserDAO extends AbstractDAO<User, String> {
 
     @Override
     protected String getCreateQuery() {
-        return "INSERT INTO " + getTableName() + " (username, password, number_of_coins, id) VALUES (?,?,?,?);";
+        return "INSERT INTO " + getTableName() + " (username, password, number_of_coins, name, bio, image, games_played, elo, id)" +
+                " VALUES (?,?,?,?,?,?,?,?,?);";
     }
 
     @Override
     protected String getUpdateQuery() {
-        return "UPDATE " + getTableName() + " SET username = ?, password = ?, number_of_coins = ? WHERE id = ?;";
+        return "UPDATE " + getTableName() + " SET username = ?, password = ?, number_of_coins = ?, name = ?, bio = ?, " +
+                "image = ?, games_played = ?, elo = ? WHERE id = ?;";
     }
 
     @Override
@@ -29,7 +31,12 @@ public class UserDAO extends AbstractDAO<User, String> {
             statement.setString(1, player.getUsername());
             statement.setString(2, player.getPassword());
             statement.setInt(3, player.getNumberOfCoins());
-            statement.setString(4, player.getId());
+            statement.setString(4, player.getName());
+            statement.setString(5, player.getBio());
+            statement.setString(6, player.getImage());
+            statement.setInt(7, player.getGamesPlayed());
+            statement.setInt(8, player.getElo());
+            statement.setString(9, player.getId());
         } catch (SQLException e) {
             throw new DAOException(e.getMessage(), e);
         }
@@ -43,6 +50,11 @@ public class UserDAO extends AbstractDAO<User, String> {
             player.setUsername(resultSet.getString("username"));
             player.setPassword(resultSet.getString("password"));
             player.setNumberOfCoins(resultSet.getInt("number_of_coins"));
+            player.setName(resultSet.getString("name"));
+            player.setBio(resultSet.getString("bio"));
+            player.setImage(resultSet.getString("image"));
+            player.setGamesPlayed(resultSet.getInt("games_played"));
+            player.setElo(resultSet.getInt("elo"));
         } catch (SQLException e) {
             throw new DAOException(e.getMessage(), e);
         }

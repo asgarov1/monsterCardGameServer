@@ -46,7 +46,7 @@ class DeckControllerTest {
     @SneakyThrows
     @Test
     void showDeckRequestShouldReturnDeck() {
-        String showDeckRequest = getRequest(GET.name(), DECK_ENDPOINT, user.getUsername());
+        String showDeckRequest = getRequest(DECK_ENDPOINT, user.getUsername());
         Request getDeckRequest = HttpRequest.valueOf(new ByteArrayInputStream(showDeckRequest.getBytes(StandardCharsets.UTF_8)));
         HttpResponse response = new DeckController().handleRequest(getDeckRequest);
 
@@ -58,7 +58,7 @@ class DeckControllerTest {
     void configureDeckRequestShouldWorkOk() {
         List<String> cardIds = getFourRandomCardIds(user);
 
-        String configureDeckRequest = getPutRequest(PUT.name(), DECK_ENDPOINT, user.getUsername(), new Gson().toJson(cardIds));
+        String configureDeckRequest = getPutRequest(DECK_ENDPOINT, user.getUsername(), new Gson().toJson(cardIds));
         Request request = HttpRequest.valueOf(new ByteArrayInputStream(configureDeckRequest.getBytes(StandardCharsets.UTF_8)));
         HttpResponse response = new DeckController().handleRequest(request);
 

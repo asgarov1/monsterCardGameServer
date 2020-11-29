@@ -1,9 +1,6 @@
 package at.fhtw.bif3.http.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.SneakyThrows;
+import lombok.*;
 
 import java.io.*;
 import java.util.Arrays;
@@ -20,9 +17,10 @@ public class HttpResponse implements Response {
 
     private HttpStatus status = HttpStatus.OK;
     private final Map<String, String> headers = new HashMap<>();
+    @Getter
     private String content = "";
     private ContentType contentType;
-    private String serverHeader;
+    private String serverHeader = "Java HTTP Server v1.0";
 
     @Override
     public Map<String, String> getHeaders() {

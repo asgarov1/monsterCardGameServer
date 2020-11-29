@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static at.fhtw.bif3.util.NumberUtil.randomInt;
 import static at.fhtw.bif3.util.PropertiesReader.getProperties;
@@ -40,7 +39,7 @@ public class User {
     @SerializedName("Image")
     private String image;
 
-    private int numberOfGamesPlayed;  //TODO question: is this number of rounds? Or battle events?
+    private int gamesPlayed;  //TODO question: is this number of rounds? Or battle events?
     private int elo = parseInt(getProperties().getProperty("elo.start-value")); //TODO question: can elo go beyond zero? should elo be updated after each round? or after each battle?
     private int numberOfCoins = parseInt(getProperties().getProperty("user.start-money"));
     private List<Card> cards = new ArrayList<>();
@@ -103,7 +102,7 @@ public class User {
     }
 
     public void incrementGamesPlayed() {
-        numberOfGamesPlayed++;
+        gamesPlayed++;
     }
 
     public void incrementElo(int pointsForWin) {

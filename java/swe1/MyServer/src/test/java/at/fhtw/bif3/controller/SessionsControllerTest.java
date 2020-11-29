@@ -26,7 +26,7 @@ class SessionsControllerTest {
 
     private final User testUser = new User("jamesBond", "longLiveTheQueen");
     public final String CONTENT = "{\"Username\":\"" + testUser.getUsername() + "\", \"Password\":\"" + testUser.getPassword() + "\"}".replace('`', '"');
-    private final String loginRequest = postCreateRequest(POST.name(), SESSIONS_ENDPOINT, CONTENT);
+    private final String loginRequest = postCreateRequest(SESSIONS_ENDPOINT, CONTENT);
     HttpRequest httpRequest;
 
     @BeforeEach

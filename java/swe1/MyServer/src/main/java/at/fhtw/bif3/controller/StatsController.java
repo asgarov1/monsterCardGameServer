@@ -16,11 +16,13 @@ import static at.fhtw.bif3.util.StringUtil.extractUsernameFromToken;
 
 public class StatsController implements Controller {
 
+    public static final String STATS_ENDPOINT = "/stats";
+
     private final UserService userService = new UserService();
 
     @Override
     public HttpResponse handleRequest(Request request) {
-        if (request.getMethod().equals(HttpMethod.GET.name())) {
+        if (request.getMethod().equals(HttpMethod.GET.name()) && request.getUrl().getPath().equals(STATS_ENDPOINT)) {
             return handleGet(request);
         }
 
@@ -38,6 +40,6 @@ public class StatsController implements Controller {
         return HttpResponse.builder()
                     .status(HttpStatus.OK)
                     .contentType(APPLICATION_JSON)
-                    .content(new Gson().toJson(new StatsDTO(user.getNumberOfGamesPlayed(), user.getElo()))).build();
+                    .content(new Gson().toJson(new StatsDTO(user.getGamesPlayed(), user.getElo()))).build();
     }
 }

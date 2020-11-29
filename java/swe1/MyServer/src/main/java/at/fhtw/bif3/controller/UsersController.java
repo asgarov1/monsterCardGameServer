@@ -21,7 +21,6 @@ public class UsersController implements Controller {
 
     @Override
     public HttpResponse handleRequest(Request request) {
-
         if (request.getMethod().equals(HttpMethod.POST.name())) {
             return handlePost(request);
         } else if (request.getMethod().equals(HttpMethod.PUT.name())) {
@@ -29,7 +28,6 @@ public class UsersController implements Controller {
         } else if (request.getMethod().equals(HttpMethod.GET.name())) {
             return handleGet(request);
         }
-        //switch to switch
 
         return notFound();
     }
@@ -71,7 +69,7 @@ public class UsersController implements Controller {
 
         String[] segments = request.getUrl().getSegments();
         var username = SessionContext.getUsernameForToken(token);
-        if (segments.length > 2 && segments[1].equals(extractUsernameFromToken(token))) {
+        if (segments.length == 2 && segments[1].equals(username)) {
             User user = new GsonBuilder().create().fromJson(request.getContentString(), User.class);
             applyUpdatedAttributes(user, username);
             return noContent();

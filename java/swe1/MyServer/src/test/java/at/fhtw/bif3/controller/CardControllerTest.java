@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class CardControllerTest {
 
     User user = new User("kienboec", "password");
-    String showCardsRequest = getRequest(GET.name(), CARDS_ENDPOINT, user.getUsername());
+    String showCardsRequest = getRequest(CARDS_ENDPOINT, user.getUsername());
 
     @SneakyThrows
     @Test

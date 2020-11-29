@@ -30,15 +30,15 @@ create table bundle_card
 
 create table player
 (
-    id                  varchar(255) not null
-        constraint player_pkey primary key,
-    number_of_coins     integer      not null,
-    password            varchar(255) not null,
-    username            varchar(255) unique,
-    bio                 varchar(255),
-    image               varchar(255),
-    numberOfGamesPlayed integer,
-    elo                 integer
+    id              varchar(255) not null constraint player_pkey primary key,
+    number_of_coins integer      not null,
+    password        varchar(255) not null,
+    username        varchar(255) unique,
+    name            varchar(255),
+    bio             varchar(255),
+    image           varchar(255),
+    games_played    integer,
+    elo             integer
 );
 
 

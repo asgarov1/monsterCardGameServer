@@ -13,8 +13,8 @@ import static at.fhtw.bif3.util.NumberUtil.randomInt;
 import static java.lang.System.lineSeparator;
 
 public class ControllerTestUtil {
-    public static String getRequest(String method, String path, String username) {
-        return method + " " + path + " HTTP/1.1\n" +
+    public static String getRequest(String path, String username) {
+        return "GET " + path + " HTTP/1.1\n" +
                 "Authorization: Basic " + username + "-mtcgToken\n" +
                 "User-Agent: PostmanRuntime/7.26.8\n" +
                 "Accept: */*\n" +
@@ -40,8 +40,8 @@ public class ControllerTestUtil {
         userService.create(user);
     }
 
-    public static String postCreateRequest(String method, String endpoint, String content) {
-        return method + " " + endpoint + " HTTP/1.1" + lineSeparator() +
+    public static String postCreateRequest(String endpoint, String content) {
+        return "POST " + endpoint + " HTTP/1.1" + lineSeparator() +
                 "Content-Type: application/json" + lineSeparator() +
                 "User-Agent: PostmanRuntime/7.26.8" + lineSeparator() +
                 "Accept: */*" + lineSeparator() +
@@ -53,8 +53,8 @@ public class ControllerTestUtil {
                 content + lineSeparator();
     }
 
-    public static String getPutRequest(String method, String endpoint, String username, String content) {
-        return method + " " + endpoint + " HTTP/1.1\n" +
+    public static String getPutRequest(String endpoint, String username, String content) {
+        return "PUT " + endpoint + " HTTP/1.1\n" +
                 "Authorization: Basic " + username + "-mtcgToken\n" +
                 "Content-Type: application/json\n" +
                 "User-Agent: PostmanRuntime/7.26.8\n" +
