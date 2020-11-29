@@ -18,6 +18,6 @@ public class StringUtil {
     }
 
     public static String extractUsernameFromToken(String token) {
-        return token.substring(token.indexOf(" "), token.indexOf("-"));
+        return token.substring(0, token.indexOf("-"));
     }
 }

@@ -14,6 +14,7 @@ import org.junit.jupiter.api.*;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -28,7 +29,7 @@ class TransactionsControllerTest {
 
     private static final int PACKAGE_SIZE = parseInt(getProperties().getProperty("package.size"));
     private static final String BUNDLE_ID = "test_id";
-    String request = "POST /transactions/packages HTTP/1.1\n" +
+    String acquirePackageRequest = "POST /transactions/packages HTTP/1.1\n" +
             "Authorization: Basic kienboec-mtcgToken\n" +
             "User-Agent: PostmanRuntime/7.26.8\n" +
             "Accept: */*\n" +
@@ -50,10 +51,9 @@ class TransactionsControllerTest {
 
     Request httpRequest;
     User user;
-    List<Card> cards;
+    List<Card> cards = new ArrayList<>();
 
-    @BeforeEach
-    void setUp() {
+    void setUpABundleForTest() {
         cards = List.of(
                 new KnightCard("test_id1", "test_name1", new Random().nextDouble(), ElementType.FIRE),
                 new SpellCard("test_id2", "test_name2", new Random().nextDouble(), ElementType.WATER),
@@ -78,12 +78,15 @@ class TransactionsControllerTest {
         var cardService = new CardService();
         cards.forEach(cardService::delete);
 
+
         new BundleService().delete(BUNDLE_ID);
     }
 
     @SneakyThrows
     @Test
     public void handleTransactionsPackagesPostShouldFailForUnloggedUser() {
+        setUpABundleForTest();
+
         httpRequest = HttpRequest.valueOf(new ByteArrayInputStream(badRequest.getBytes(StandardCharsets.UTF_8)));
         assertEquals(FORBIDDEN.getCode(), new TransactionController().handleRequest(httpRequest).getStatusCode());
     }
@@ -91,6 +94,8 @@ class TransactionsControllerTest {
     @SneakyThrows
     @Test
     public void handleTransactionsPackagesPostShouldWorkOk() {
+        setUpABundleForTest();
+
         UserService userService = new UserService();
         user = new User("kienboec", "daniel");
         userService.create(user);
@@ -99,7 +104,7 @@ class TransactionsControllerTest {
         assertTrue(user.getCards().isEmpty());
         int numberOfCoinsBefore = user.getNumberOfCoins();
 
-        httpRequest = HttpRequest.valueOf(new ByteArrayInputStream(request.getBytes(StandardCharsets.UTF_8)));
+        httpRequest = HttpRequest.valueOf(new ByteArrayInputStream(acquirePackageRequest.getBytes(StandardCharsets.UTF_8)));
         assertEquals(NO_CONTENT.getCode(), new TransactionController().handleRequest(httpRequest).getStatusCode());
 
         user = userService.findByUsername(user.getUsername());
@@ -108,9 +113,11 @@ class TransactionsControllerTest {
     }
 
     @SneakyThrows
-    @DisplayName("Request to purhase packages should fail if not enough money")
+    @DisplayName("Request to purchase packages should fail if not enough money")
     @Test
     public void handleTransactionsPackagesPostShouldFailIfNotEnoughMoney() {
+        setUpABundleForTest();
+
         UserService userService = new UserService();
         user = new User("kienboec", "daniel");
         int numberOfCoinsBeforeTransaction = 2;
@@ -120,11 +127,32 @@ class TransactionsControllerTest {
 
         assertTrue(user.getCards().isEmpty());
 
-        httpRequest = HttpRequest.valueOf(new ByteArrayInputStream(request.getBytes(StandardCharsets.UTF_8)));
+        httpRequest = HttpRequest.valueOf(new ByteArrayInputStream(acquirePackageRequest.getBytes(StandardCharsets.UTF_8)));
         assertEquals(INTERNAL_SERVER_ERROR.getCode(), new TransactionController().handleRequest(httpRequest).getStatusCode());
 
         user = userService.findByUsername(user.getUsername());
         assertTrue(user.getCards().isEmpty());
         assertEquals(numberOfCoinsBeforeTransaction, user.getNumberOfCoins());
+    }
+
+    @SneakyThrows
+    @DisplayName("Request to purchase packages should fail if there is no package")
+    @Test
+    public void handleTransactionsPackagesShouldFailIfNoPackage() {
+        UserService userService = new UserService();
+        user = new User("kienboec", "daniel");
+
+        userService.create(user);
+        SessionContext.loginUser(user.getUsername());
+
+        int numberOfCoinsBefore = user.getNumberOfCoins();
+        assertTrue(user.getCards().isEmpty());
+
+        httpRequest = HttpRequest.valueOf(new ByteArrayInputStream(acquirePackageRequest.getBytes(StandardCharsets.UTF_8)));
+        assertEquals(INTERNAL_SERVER_ERROR.getCode(), new TransactionController().handleRequest(httpRequest).getStatusCode());
+
+        user = userService.findByUsername(user.getUsername());
+        assertTrue(user.getCards().isEmpty());
+        assertEquals(numberOfCoinsBefore, user.getNumberOfCoins());
     }
 }
