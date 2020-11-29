@@ -17,7 +17,7 @@ class PlayerServiceTest {
     User player;
 
     @AfterEach
-    private void cleanUp() {
+    void cleanUp() {
         if (player.getId() != null) {
             player.getCards().forEach(card -> cardService.delete(card.getId()));
             playerService.delete(player.getId());

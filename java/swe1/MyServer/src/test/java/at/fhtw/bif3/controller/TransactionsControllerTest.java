@@ -18,6 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static at.fhtw.bif3.controller.TransactionController.TRANSACTIONS_PACKAGES_ENDPOINT;
+import static at.fhtw.bif3.controller.util.ControllerTestUtil.postNoContentRequest;
+import static at.fhtw.bif3.http.request.HttpMethod.POST;
 import static at.fhtw.bif3.http.response.HttpStatus.*;
 import static at.fhtw.bif3.service.UserService.CARD_PACKAGE_PRICE;
 import static at.fhtw.bif3.util.PropertiesReader.getProperties;
@@ -29,25 +32,8 @@ class TransactionsControllerTest {
 
     private static final int PACKAGE_SIZE = parseInt(getProperties().getProperty("package.size"));
     private static final String BUNDLE_ID = "test_id";
-    String acquirePackageRequest = "POST /transactions/packages HTTP/1.1\n" +
-            "Authorization: Basic kienboec-mtcgToken\n" +
-            "User-Agent: PostmanRuntime/7.26.8\n" +
-            "Accept: */*\n" +
-            "Postman-Token: 8cb5e3e8-d323-4377-9f96-6ce200807e2f\n" +
-            "Host: localhost:10001\n" +
-            "Accept-Encoding: gzip, deflate, br\n" +
-            "Connection: keep-alive\n" +
-            "Content-Length: 0\n";
-
-    String badRequest = "POST /transactions/packages HTTP/1.1\n" +
-            "Authorization: Basic baduser-mtcgToken\n" +
-            "User-Agent: PostmanRuntime/7.26.8\n" +
-            "Accept: */*\n" +
-            "Postman-Token: 8cb5e3e8-d323-4377-9f96-6ce200807e2f\n" +
-            "Host: localhost:10001\n" +
-            "Accept-Encoding: gzip, deflate, br\n" +
-            "Connection: keep-alive\n" +
-            "Content-Length: 0\n";
+    String acquirePackageRequest = postNoContentRequest(POST.name(), TRANSACTIONS_PACKAGES_ENDPOINT, "kienboec");
+    String badRequest = postNoContentRequest(POST.name(), TRANSACTIONS_PACKAGES_ENDPOINT, "non_existing_user");
 
     Request httpRequest;
     User user;

@@ -14,9 +14,6 @@ public class BattleService {
     private static final int MAX_NUMBER_OF_ROUNDS = parseInt(getProperties().getProperty("battle.rounds-max"));
 
     public void performBattle(User player1, User player2) {
-        player1.generateBattleDeck();
-        player2.generateBattleDeck();
-
         int i = 0;
         while (player1.hasBattleCards() && player2.hasBattleCards() && i++ < MAX_NUMBER_OF_ROUNDS) {
             log.info("\n===BEGINNING ROUND " + i + "===");
@@ -69,5 +66,4 @@ public class BattleService {
         log.info(winner.getUsername() + " gets " + pointsForWin + " points!");
         log.info(loser.getUsername() + " lost " + pointsForLoss + " points!");
     }
-
 }

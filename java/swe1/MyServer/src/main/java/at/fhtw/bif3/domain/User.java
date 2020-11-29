@@ -18,6 +18,9 @@ import static java.lang.Integer.parseInt;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
+
+    public static final int DECK_SIZE = parseInt(getProperties().getProperty("deck.battle.size"));
+
     @SerializedName("Id")
     private String id;
 
@@ -66,13 +69,28 @@ public class User {
     }
 
     public Card playRandomCard() {
-        Card randomCard = deck.get(randomInt(0, deck.size()));
+        Card randomCard = getDeck().get(randomInt(0, deck.size()));
         deck.remove(randomCard);
         return randomCard;
     }
 
     public void addCardsToDeck(Card playingCard, Card defendingCard) {
         deck.addAll(Arrays.asList(playingCard, defendingCard));
+    }
+
+    public void generateBattleDeck() {
+        for (int i = 0; i < DECK_SIZE; i++) {
+            Card randomCard = cards.get(randomInt(0, cards.size()));
+            cards.remove(randomCard);
+            deck.add(randomCard);
+        }
+    }
+
+    public List<Card> getDeck() {
+        if(deck.isEmpty() && cards.size() >= DECK_SIZE){
+            generateBattleDeck();
+        }
+        return deck;
     }
 
     public boolean hasBattleCards() {
@@ -104,14 +122,5 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(id, username, password);
-    }
-
-    public void generateBattleDeck() {
-        int numberOfElements = parseInt(getProperties().getProperty("deck.battle.size"));
-        for (int i = 0; i < numberOfElements; i++) {
-            Card randomCard = cards.get(randomInt(0, cards.size()));
-            cards.remove(randomCard);
-            deck.add(randomCard);
-        }
     }
 }

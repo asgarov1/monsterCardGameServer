@@ -51,7 +51,7 @@ public class UserCardDAO extends AbstractDAO<PlayerCard, String> {
         return playerCard;
     }
 
-    public List<PlayerCard> findAllByPlayerId(String id) throws DAOException{
+    public List<PlayerCard> findAllByUserId(String id) throws DAOException{
         String query = "select * from " + getTableName() + " where player_id  = ?;";
 
         List<PlayerCard> palyerCards = new ArrayList<>();
@@ -68,5 +68,16 @@ public class UserCardDAO extends AbstractDAO<PlayerCard, String> {
             throw new DAOException(e.getMessage(), e);
         }
         return palyerCards;
+    }
+
+    public void deleteByPlayerId(String id) {
+        String query = "delete from " + getTableName() + " where player_id  = ?;";
+        try (Connection connection = ConnectionFactory.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, id);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException(e.getMessage(), e);
+        }
     }
 }

@@ -15,7 +15,7 @@ class CardServiceTest {
     private Card card;
 
     @AfterEach
-    private void cleanUp() {
+    void cleanUp() {
         if (card.getId() != null) {
             cardService.delete(card.getId());
         }

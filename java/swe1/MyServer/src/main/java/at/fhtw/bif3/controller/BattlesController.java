@@ -42,7 +42,6 @@ public class BattlesController implements Controller {
         User user = userService.findByUsername(extractUsernameFromToken(token));
         BattleManager.getInstance().putUserToBattle(user);
         userService.save(user);
-
         return noContent();
     }
 }

@@ -15,7 +15,7 @@ public class TransactionController implements Controller {
 
     private final UserService userService = new UserService();
 
-    public static final String TRANSACTIONS_PACKAGES = "/transactions/packages";
+    public static final String TRANSACTIONS_PACKAGES_ENDPOINT = "/transactions/packages";
 
     @Override
     public HttpResponse handleRequest(Request request) {
@@ -26,7 +26,7 @@ public class TransactionController implements Controller {
     }
 
     private HttpResponse handlePost(Request request) {
-        if (request.getUrl().getPath().equals(TRANSACTIONS_PACKAGES)) {
+        if (request.getUrl().getPath().equals(TRANSACTIONS_PACKAGES_ENDPOINT)) {
             return handleTransactionsPackagesPost(request);
         }
         return notFound();

@@ -33,28 +33,14 @@ public class UserService extends AbstractService<User, String> {
     @Override
     public void create(User player) {
         super.create(player);
-        player.getCards().forEach(
-                card -> {
-                    try {
-                        userCardDAO.create(new PlayerCard(player.getId(), card.getId()));
-                    } catch (DAOException e) {
-                        e.printStackTrace();
-                    }
-                }
-        );
+        player.getCards().forEach(card -> userCardDAO.create(new PlayerCard(player.getId(), card.getId())));
     }
 
     @Override
     public void update(User user) {
         super.update(user);
-
-        user.getCards()
-                .stream()
-                .filter(card -> userCardDAO.findAllByPlayerId(user.getId())
-                        .stream()
-                        .map(PlayerCard::getCardId)
-                        .noneMatch(id -> id.equals(card.getId())))
-                .forEach(card -> userCardDAO.create(new PlayerCard(user.getId(), card.getId())));
+        new UserCardDAO().deleteByPlayerId(user.getId());
+        user.getCards().forEach(card -> userCardDAO.create(new PlayerCard(user.getId(), card.getId())));
     }
 
     @SneakyThrows
@@ -62,14 +48,12 @@ public class UserService extends AbstractService<User, String> {
     public User findById(String id) {
         var user = super.findById(id);
         addCardsForUser(user);
-
         return user;
     }
 
     public User findByUsername(String username) {
         var user = byUsername(username);
         addCardsForUser(user);
-
         return user;
     }
 
@@ -99,7 +83,7 @@ public class UserService extends AbstractService<User, String> {
     }
 
     private void addCardsForUser(User user) {
-        userCardDAO.findAllByPlayerId(user.getId())
+        userCardDAO.findAllByUserId(user.getId())
                 .stream()
                 .map(playerCard -> cardService.findById(playerCard.getCardId()))
                 .forEach(user::addCard);
