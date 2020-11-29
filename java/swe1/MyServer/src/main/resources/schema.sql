@@ -65,10 +65,10 @@ create table player_deck_card
 
 create table trading_deal
 (
-    id             serial primary key,
+    id             varchar(255) primary key,
     card_id        varchar(255) references card (id),
     card_type      varchar(255),
-    minimum_damage integer,
+    minimum_damage DOUBLE PRECISION,
     creator_id     varchar(255) references player (id)
 );
 

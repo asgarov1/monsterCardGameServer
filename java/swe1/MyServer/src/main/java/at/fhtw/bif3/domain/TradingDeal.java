@@ -20,6 +20,6 @@ public class TradingDeal {
     @SerializedName("CardType")
     private CardType cardtype;
     @SerializedName("MinimumDamage")
-    private int minimumDamage;
+    private double minimumDamage;
     private User creator;
 }

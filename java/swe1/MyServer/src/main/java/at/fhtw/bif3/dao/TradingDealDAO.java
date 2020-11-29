@@ -16,7 +16,7 @@ public class TradingDealDAO extends AbstractDAO<TradingDeal, String> {
 
     @Override
     protected String getCreateQuery() {
-        return "INSERT INTO " + getTableName() + "(card_id, card_type, minimum_damage, creator_id id) VALUES (?, ?, ?, ?);";
+        return "INSERT INTO " + getTableName() + "(card_id, card_type, minimum_damage, creator_id, id) VALUES (?,?,?,?,?);";
     }
 
     @Override
@@ -29,8 +29,8 @@ public class TradingDealDAO extends AbstractDAO<TradingDeal, String> {
         try {
             statement.setString(1, tradingDeal.getCardToTrade().getId());
             statement.setString(2, tradingDeal.getCardtype().name());
-            statement.setLong(3, tradingDeal.getMinimumDamage());
-            statement.setString(4, tradingDeal.getCreator().getUsername());
+            statement.setDouble(3, tradingDeal.getMinimumDamage());
+            statement.setString(4, tradingDeal.getCreator().getId());
             statement.setString(5, tradingDeal.getId());
         } catch (SQLException e) {
             throw new DAOException(e.getMessage(), e);
@@ -44,7 +44,8 @@ public class TradingDealDAO extends AbstractDAO<TradingDeal, String> {
             tradingDeal.setId(resultSet.getString("id"));
             tradingDeal.setCardToTrade(new CardDAO().read(resultSet.getString("card_id")));
             tradingDeal.setCardtype(CardType.assignByName(resultSet.getString("card_type")));
-            tradingDeal.setMinimumDamage(resultSet.getInt("minimum_damage"));
+            tradingDeal.setMinimumDamage(resultSet.getDouble("minimum_damage"));
+            tradingDeal.setCreator(new UserDAO().read(resultSet.getString("creator_id")));
         } catch (SQLException e) {
             throw new DAOException(e.getMessage(), e);
         }
