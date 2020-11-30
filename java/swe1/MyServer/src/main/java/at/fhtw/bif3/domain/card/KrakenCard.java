@@ -10,7 +10,7 @@ public class KrakenCard extends Card {
     }
 
     @Override
-    protected void setCardType() {
-        this.cardType = CardType.KRAKEN;
+    protected void setCardClass() {
+        this.cardClass = CardClass.KRAKEN;
     }
 }

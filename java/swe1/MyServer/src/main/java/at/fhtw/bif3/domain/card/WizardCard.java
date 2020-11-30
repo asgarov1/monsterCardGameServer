@@ -10,7 +10,7 @@ public class WizardCard extends Card {
     }
 
     @Override
-    protected void setCardType() {
-        this.cardType = CardType.WIZARD;
+    protected void setCardClass() {
+        this.cardClass = CardClass.WIZARD;
     }
 }

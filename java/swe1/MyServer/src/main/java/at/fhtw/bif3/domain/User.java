@@ -141,4 +141,13 @@ public class User {
             cards.remove(card);
         }
     }
+
+    public void unlockCard(Card cardToTrade) {
+        lockedForTrade.remove(cardToTrade);
+        cards.add(cardToTrade);
+    }
+
+    public void removeCard(Card card) {
+        cards.remove(card);
+    }
 }

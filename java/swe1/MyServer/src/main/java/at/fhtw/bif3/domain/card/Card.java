@@ -5,6 +5,9 @@ import lombok.*;
 
 import java.util.Objects;
 
+import static at.fhtw.bif3.domain.card.CardType.MONSTER;
+import static at.fhtw.bif3.domain.card.CardType.SPELL;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,9 +25,18 @@ public abstract class Card {
     ElementType elementType;
 
     @Setter(AccessLevel.NONE)
-    CardType cardType;
+    CardClass cardClass;
 
-    { setCardType(); }
+    CardType type;
+
+    {
+        setCardClass();
+        if (cardClass.isSpellClass()) {
+            type = SPELL;
+        } else {
+            type = MONSTER;
+        }
+    }
 
     public Card(String id, String name, double damage, ElementType elementType) {
         this.id = id;
@@ -43,7 +55,7 @@ public abstract class Card {
         return damage;
     }
 
-    protected abstract void setCardType();
+    protected abstract void setCardClass();
 
     @Override
     public boolean equals(Object o) {
@@ -54,11 +66,11 @@ public abstract class Card {
                 Objects.equals(id, card.id) &&
                 Objects.equals(name, card.name) &&
                 elementType == card.elementType &&
-                cardType == card.cardType;
+                cardClass == card.cardClass;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, damage, elementType, cardType);
+        return Objects.hash(id, name, damage, elementType, cardClass);
     }
 }

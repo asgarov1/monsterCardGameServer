@@ -10,7 +10,7 @@ public class KnightCard extends Card {
     }
 
     @Override
-    protected void setCardType() {
-        this.cardType = CardType.KNIGHT;
+    protected void setCardClass() {
+        this.cardClass = CardClass.KNIGHT;
     }
 }

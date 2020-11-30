@@ -24,7 +24,7 @@ public class DragonCard extends Card {
     }
 
     @Override
-    protected void setCardType() {
-        this.cardType = CardType.DRAGON;
+    protected void setCardClass() {
+        this.cardClass = CardClass.DRAGON;
     }
 }

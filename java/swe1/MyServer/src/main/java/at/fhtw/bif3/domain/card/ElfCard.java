@@ -10,7 +10,7 @@ public class ElfCard extends Card {
     }
 
     @Override
-    protected void setCardType() {
-        this.cardType = CardType.ELF;
+    protected void setCardClass() {
+        this.cardClass = CardClass.ELF;
     }
 }

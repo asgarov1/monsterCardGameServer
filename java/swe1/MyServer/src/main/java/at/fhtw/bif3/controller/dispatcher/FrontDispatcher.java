@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.net.Socket;
 
-import static at.fhtw.bif3.http.response.HttpStatus.NOT_FOUND;
+import static at.fhtw.bif3.http.response.HttpStatus.*;
 
 @Slf4j
 public class FrontDispatcher implements Runnable {
@@ -63,6 +63,13 @@ public class FrontDispatcher implements Runnable {
             case "tradings" -> new TradingsController();
             default -> throw new IllegalArgumentException("Unexpected url path: " + path);
         };
-        return controller.handleRequest(request);
+        try {
+            return controller.handleRequest(request);
+        } catch (Exception e) {
+            e.printStackTrace();
+            HttpResponse httpResponse = new HttpResponse();
+            httpResponse.setStatusCode(INTERNAL_SERVER_ERROR.getCode());
+            return httpResponse;
+        }
     }
 }

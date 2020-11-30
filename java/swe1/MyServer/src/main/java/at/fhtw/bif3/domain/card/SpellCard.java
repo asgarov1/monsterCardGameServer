@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import lombok.Setter;
 
-import static at.fhtw.bif3.domain.card.CardType.SPELL;
+import static at.fhtw.bif3.domain.card.CardClass.SPELL;
 import static at.fhtw.bif3.domain.card.ElementType.FIRE;
 import static at.fhtw.bif3.domain.card.ElementType.WATER;
 import static at.fhtw.bif3.util.PropertiesReader.getProperties;
@@ -52,8 +52,8 @@ public class SpellCard extends Card {
     }
 
     @Override
-    protected void setCardType() {
-        this.cardType = SPELL;
+    protected void setCardClass() {
+        this.cardClass = SPELL;
     }
 
 }

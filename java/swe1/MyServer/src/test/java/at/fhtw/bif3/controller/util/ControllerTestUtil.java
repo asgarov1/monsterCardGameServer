@@ -25,6 +25,18 @@ public class ControllerTestUtil {
                 "Content-Length: 0\n";
     }
 
+    public static String deleteRequest(String path, String username) {
+        return "DELETE " + path + " HTTP/1.1\n" +
+                "Authorization: Basic " + username + "-mtcgToken\n" +
+                "User-Agent: PostmanRuntime/7.26.8\n" +
+                "Accept: */*\n" +
+                "Postman-Token: 8cb5e3e8-d323-4377-9f96-6ce200807e2f\n" +
+                "Host: localhost:10001\n" +
+                "Accept-Encoding: gzip, deflate, br\n" +
+                "Connection: keep-alive\n" +
+                "Content-Length: 0\n";
+    }
+
     public static void setUpUserWithCards(User user, String className) {
         List<Card> cards = Stream.of(
                 new KnightCard(className + "test_id1", "test_name1", randomInt(0, 100), ElementType.FIRE),
@@ -42,6 +54,20 @@ public class ControllerTestUtil {
 
     public static String postCreateRequest(String endpoint, String content) {
         return "POST " + endpoint + " HTTP/1.1" + lineSeparator() +
+                "Content-Type: application/json" + lineSeparator() +
+                "User-Agent: PostmanRuntime/7.26.8" + lineSeparator() +
+                "Accept: */*" + lineSeparator() +
+                "Postman-Token: f292034f-2d7c-4f39-aff6-12d51a071002" + lineSeparator() +
+                "Host: localhost:10001" + lineSeparator() +
+                "Accept-Encoding: gzip, deflate, br" + lineSeparator() +
+                "Connection: keep-alive" + lineSeparator() +
+                "Content-Length: " + content.length() + lineSeparator() + lineSeparator() +
+                content + lineSeparator();
+    }
+
+    public static String postCreateRequestWithAuthorization(String endpoint, String username, String content) {
+        return "POST " + endpoint + " HTTP/1.1" + lineSeparator() +
+                "Authorization: Basic " + username + "-mtcgToken\n" +
                 "Content-Type: application/json" + lineSeparator() +
                 "User-Agent: PostmanRuntime/7.26.8" + lineSeparator() +
                 "Accept: */*" + lineSeparator() +

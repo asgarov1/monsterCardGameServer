@@ -9,6 +9,7 @@ import org.junit.jupiter.api.*;
 import static at.fhtw.bif3.domain.card.ElementType.WATER;
 import static at.fhtw.bif3.util.NumberUtil.randomInt;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class TradingDealServiceTest {
 
@@ -18,7 +19,7 @@ class TradingDealServiceTest {
 
     static User user = new User("Tom", "pass");
     static Card card = new GoblinCard("tradingDeal_testId1", "test_name", randomInt(0, 100), WATER);
-    TradingDeal tradingDeal = new TradingDeal("tradingDeal_testId2", card, card.getCardType(), 50, user);
+    TradingDeal tradingDeal = new TradingDeal("tradingDeal_testId2", card, card.getType(), 50, user);
 
     @BeforeAll
     static void setUp(){
@@ -30,6 +31,11 @@ class TradingDealServiceTest {
     static void clean() {
         userService.delete(user);
         cardService.delete(card);
+    }
+
+    @AfterEach
+    void afterEachDelete(){
+        service.delete(tradingDeal.getId());
     }
 
     @Test
@@ -49,6 +55,22 @@ class TradingDealServiceTest {
         service.update(tradingDeal);
 
         assertEquals(minDamage, tradingDeal.getMinimumDamage());
+    }
+
+    @Test
+    void readShouldWork() {
+        service.create(tradingDeal);
+        assertNotNull(service.findById(tradingDeal.getId()));
+    }
+
+    @Test
+    void deleteShouldWork() {
+        int countEntities = service.countEntities();
+        service.create(tradingDeal);
+        assertEquals(countEntities + 1, service.countEntities());
+
+        service.delete(tradingDeal.getId());
+        assertEquals(countEntities, service.countEntities());
     }
 
 }

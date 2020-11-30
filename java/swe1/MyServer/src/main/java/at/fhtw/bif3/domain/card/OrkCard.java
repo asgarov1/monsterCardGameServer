@@ -23,7 +23,7 @@ public class OrkCard extends Card {
     }
 
     @Override
-    protected void setCardType() {
-        this.cardType = CardType.ORK;
+    protected void setCardClass() {
+        this.cardClass = CardClass.ORK;
     }
 }

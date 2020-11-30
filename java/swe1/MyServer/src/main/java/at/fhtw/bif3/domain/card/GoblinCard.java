@@ -2,7 +2,7 @@ package at.fhtw.bif3.domain.card;
 
 import lombok.Builder;
 
-import static at.fhtw.bif3.domain.card.CardType.GOBLIN;
+import static at.fhtw.bif3.domain.card.CardClass.GOBLIN;
 import static at.fhtw.bif3.util.PropertiesReader.getProperties;
 import static java.lang.Integer.parseInt;
 
@@ -27,7 +27,7 @@ public class GoblinCard extends Card {
     }
 
     @Override
-    protected void setCardType() {
-        this.cardType = GOBLIN;
+    protected void setCardClass() {
+        this.cardClass = GOBLIN;
     }
 }

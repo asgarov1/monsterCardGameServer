@@ -108,7 +108,11 @@ public class HttpRequest implements Request {
                 .filter(line -> line.contains("[") || line.contains("{"))
                 .map(line -> line.replace("\r", ""))
                 .findFirst()
-                .orElseThrow();
+                .orElseGet(this::getLastLine);
+    }
+
+    private String getLastLine() {
+        return receivedRequest.split("\n")[receivedRequest.split("\n").length-1];
     }
 
     @Override

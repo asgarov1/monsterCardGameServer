@@ -3,7 +3,7 @@ package at.fhtw.bif3.controller;
 import at.fhtw.bif3.controller.dto.CardDTO;
 import at.fhtw.bif3.domain.Bundle;
 import at.fhtw.bif3.domain.card.Card;
-import at.fhtw.bif3.domain.card.CardType;
+import at.fhtw.bif3.domain.card.CardClass;
 import at.fhtw.bif3.domain.card.ElementType;
 import at.fhtw.bif3.domain.card.SpellCard;
 import at.fhtw.bif3.http.request.HttpMethod;
@@ -52,9 +52,9 @@ public class PackageController implements Controller {
     }
 
     private Card instantiateCard(CardDTO cardDTO) {
-        CardType cardType = CardType.assignByName(cardDTO.getName());
+        CardClass cardClass = CardClass.assignByName(cardDTO.getName());
 
-        Card card = cardType.instantiateByType();
+        Card card = cardClass.instantiateByType();
         card.setId(cardDTO.getId());
         card.setName(cardDTO.getName());
         card.setElementType(ElementType.assignByName(cardDTO.getName()));

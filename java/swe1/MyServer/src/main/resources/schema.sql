@@ -63,13 +63,22 @@ create table player_deck_card
         references card on delete cascade
 );
 
+create table player_locked_card
+(
+    player_id varchar(255) not null
+        references player on delete cascade,
+    card_id   varchar(255) not null
+        unique
+        references card on delete cascade
+);
+
 create table trading_deal
 (
     id             varchar(255) primary key,
-    card_id        varchar(255) references card (id),
+    card_id        varchar(255) references card(id) on delete cascade,
     card_type      varchar(255),
     minimum_damage DOUBLE PRECISION,
-    creator_id     varchar(255) references player (id)
+    creator_id     varchar(255) references player(id) on delete cascade
 );
 
 
