@@ -5,10 +5,7 @@ import lombok.SneakyThrows;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.*;
 
 import static java.lang.Thread.sleep;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
@@ -17,14 +14,15 @@ public class BattleManager {
 
     private final ScheduledExecutorService scheduledService = Executors.newSingleThreadScheduledExecutor();
     private final BlockingQueue<User> usersWaitingForBattle = new LinkedBlockingQueue<>();
-    private final List<User> usersWhoFinishedBattle = new ArrayList<>();
+    private final List<User> usersWhoFinishedBattle = new CopyOnWriteArrayList<>();
     private final BattleService battleService = new BattleService();
 
     {
         scheduledService.scheduleWithFixedDelay(this::work, 0, 100, MILLISECONDS);
     }
 
-    private BattleManager() { }
+    private BattleManager() {
+    }
 
     private static class LazyHolder {
         private static final BattleManager instance = new BattleManager();
@@ -40,12 +38,9 @@ public class BattleManager {
         while (usersWhoFinishedBattle.stream().noneMatch(user::equals)) {
             sleep(100);
         }
-        removeUserFromFinished(user);
+        //TODO change to countdownlatch
+        usersWhoFinishedBattle.remove(user);
         return true;
-    }
-
-    private synchronized void removeUserFromFinished(User user) {
-        usersWhoFinishedBattle.removeIf(user::equals);
     }
 
     @SneakyThrows
@@ -53,6 +48,11 @@ public class BattleManager {
         var player1 = usersWaitingForBattle.take();
         var player2 = usersWaitingForBattle.take();
         battleService.performBattle(player1, player2);
+
+        var userService = new UserService();
+        userService.update(player1);
+        userService.update(player2);
+
         usersWhoFinishedBattle.add(player1);
         usersWhoFinishedBattle.add(player2);
     }

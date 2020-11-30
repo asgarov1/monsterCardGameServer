@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class BattleManagerTest {
 
-    ExecutorService WORKER_THREAD_POOL = Executors.newFixedThreadPool(10);
+    ExecutorService WORKER_THREAD_POOL = Executors.newFixedThreadPool(2);
 
     @Test
     public void battleShouldWorkOk() throws InterruptedException, ExecutionException {

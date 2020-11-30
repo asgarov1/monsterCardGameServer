@@ -97,10 +97,6 @@ public class User {
         return deck;
     }
 
-    public boolean hasBattleCards() {
-        return !deck.isEmpty();
-    }
-
     public void incrementGamesPlayed() {
         gamesPlayed++;
     }
@@ -149,5 +145,23 @@ public class User {
 
     public void removeCard(Card card) {
         cards.remove(card);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", bio='" + bio + '\'' +
+                ", image='" + image + '\'' +
+                ", gamesPlayed=" + gamesPlayed +
+                ", elo=" + elo +
+                ", numberOfCoins=" + numberOfCoins +
+                ", cards=" + cards +
+                ", deck=" + deck +
+                ", lockedForTrade=" + lockedForTrade +
+                '}';
     }
 }

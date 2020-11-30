@@ -32,8 +32,8 @@ class TransactionsControllerTest {
 
     private static final int PACKAGE_SIZE = parseInt(getProperties().getProperty("package.size"));
     private static final String BUNDLE_ID = "test_id";
-    String acquirePackageRequest = postNoContentRequest(POST.name(), TRANSACTIONS_PACKAGES_ENDPOINT, "kienboec");
-    String badRequest = postNoContentRequest(POST.name(), TRANSACTIONS_PACKAGES_ENDPOINT, "non_existing_user");
+    String acquirePackageRequest = postNoContentRequest(TRANSACTIONS_PACKAGES_ENDPOINT, "kienboec");
+    String badRequest = postNoContentRequest(TRANSACTIONS_PACKAGES_ENDPOINT, "non_existing_user");
 
     Request httpRequest;
     User user;

@@ -34,14 +34,13 @@ public class BattlesController implements Controller {
             return notFound();
         }
 
-        String token = StringUtil.extractToken(request.getHeaders().get(AUTHORIZATION.name()));
+        String token = StringUtil.extractToken(request.getHeaders().get(AUTHORIZATION.getName()));
         if (SessionContext.tokenNotPresent(token)) {
             return forbidden();
         }
 
         User user = userService.findByUsername(extractUsernameFromToken(token));
         BattleManager.getInstance().putUserToBattle(user);
-        userService.save(user);
         return noContent();
     }
 }

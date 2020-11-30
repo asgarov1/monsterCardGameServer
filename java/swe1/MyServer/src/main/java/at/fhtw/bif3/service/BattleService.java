@@ -15,7 +15,7 @@ public class BattleService {
 
     public void performBattle(User player1, User player2) {
         int i = 0;
-        while (player1.hasBattleCards() && player2.hasBattleCards() && i++ < MAX_NUMBER_OF_ROUNDS) {
+        while (!player1.getDeck().isEmpty() && !player2.getDeck().isEmpty() && i++ < MAX_NUMBER_OF_ROUNDS) {
             log.info("\n===BEGINNING ROUND " + i + "===");
             User startingPlayer = new Random().nextBoolean() ? player1 : player2;
             User secondPlayer = startingPlayer == player1 ? player2 : player1;
@@ -38,7 +38,7 @@ public class BattleService {
             log.info("\n===END OF ROUND " + i + "===\n");
         }
 
-        User winner = player1.hasBattleCards() ? player1 : player2;
+        User winner = player1.getDeck().isEmpty() ? player2 : player1;
         log.info("\nBATTLE HAS FINISHED! " + winner.getUsername() + " has won!!!\n");
 
         player1.returnCardsFromDeck();

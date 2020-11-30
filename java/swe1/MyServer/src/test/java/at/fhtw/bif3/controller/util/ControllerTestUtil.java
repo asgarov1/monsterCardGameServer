@@ -93,8 +93,8 @@ public class ControllerTestUtil {
                 content + "\n";
     }
 
-    public static String postNoContentRequest(String method, String endpoint, String username) {
-        return method + " " + endpoint + " HTTP/1.1\n" +
+    public static String postNoContentRequest(String endpoint, String username) {
+        return "POST " + endpoint + " HTTP/1.1\n" +
                 "Authorization: Basic " + username + "-mtcgToken\n" +
                 "User-Agent: PostmanRuntime/7.26.8\n" +
                 "Accept: */*\n" +
