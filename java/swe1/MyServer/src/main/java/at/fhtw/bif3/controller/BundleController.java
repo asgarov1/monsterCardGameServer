@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class PackageController implements Controller {
+public class BundleController implements Controller {
 
     private final CardService cardService = new CardService();
     private final BundleService bundleService = new BundleService();

@@ -107,5 +107,16 @@ public class HttpResponse implements Response {
         network.write(messageBuilder.toString().getBytes());
         network.flush();
     }
+
+    @Override
+    public String toString() {
+        return "HttpResponse{" +
+                "status=" + status +
+                ", headers=" + headers +
+                ", content='" + content + '\'' +
+                ", contentType=" + contentType +
+                ", serverHeader='" + serverHeader + '\'' +
+                '}';
+    }
 }
 

@@ -13,6 +13,8 @@ import static java.lang.Integer.parseInt;
 public class BattleService {
     private static final int MAX_NUMBER_OF_ROUNDS = parseInt(getProperties().getProperty("battle.rounds-max"));
 
+//    TODO question: where do you want the log?
+//      what happens if battle starts but user hasn't configured his deck?
     public void performBattle(User player1, User player2) {
         int i = 0;
         while (!player1.getDeck().isEmpty() && !player2.getDeck().isEmpty() && i++ < MAX_NUMBER_OF_ROUNDS) {

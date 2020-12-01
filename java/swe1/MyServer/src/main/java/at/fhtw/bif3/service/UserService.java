@@ -3,6 +3,7 @@ package at.fhtw.bif3.service;
 import at.fhtw.bif3.dao.UserCardDAO;
 import at.fhtw.bif3.dao.UserDAO;
 import at.fhtw.bif3.dao.daoentity.PlayerCard;
+import at.fhtw.bif3.dao.exception.EntityNotFoundException;
 import at.fhtw.bif3.domain.Bundle;
 import at.fhtw.bif3.domain.User;
 import at.fhtw.bif3.domain.card.Card;
@@ -55,7 +56,7 @@ public class UserService extends AbstractService<User, String> {
     private void persistCardsForUser(User user) {
         user.getCards().forEach(card -> userCardDAO.create(new PlayerCard(user.getId(), card.getId())));
         user.getDeck().forEach(card -> userDeckCardDAO.create(new PlayerCard(user.getId(), card.getId())));
-        user.getDeck().forEach(card -> userLockedCardDAO.create(new PlayerCard(user.getId(), card.getId())));
+        user.getLockedForTrade().forEach(card -> userLockedCardDAO.create(new PlayerCard(user.getId(), card.getId())));
     }
 
     public void delete(User user) {
@@ -74,33 +75,31 @@ public class UserService extends AbstractService<User, String> {
     }
 
     public User findByUsername(String username) {
-        var user = byUsername(username);
+        var user = findByField("username", username);
         readCardsForUser(user);
         return user;
     }
 
     public synchronized void processPackagePurchaseFor(String username) {
-        var user = byUsername(username);
+        var user = findByUsername(username);
         if (user.getNumberOfCoins() < CARD_PACKAGE_PRICE) {
-            throw new TooPoorException("User with username " + username + " doesn't have enough coins for this operation");
+            throw new TooPoorException("User with username " + username + " doesn't have enough coins for this transaction");
         }
 
         int amountOfMoneyBeforeTransaction = user.getNumberOfCoins();
         try {
-            user.setNumberOfCoins(user.getNumberOfCoins() - CARD_PACKAGE_PRICE);
             var bundleService = new BundleService();
             Bundle bundle = bundleService.findRandom();
+            user.setNumberOfCoins(user.getNumberOfCoins() - CARD_PACKAGE_PRICE);
             bundle.getCards().forEach(user::addCard);
             update(user);
             bundleService.delete(bundle.getId());
+        } catch (EntityNotFoundException e) {
+            throw new EntityNotFoundException("No packages available");
         } catch (Exception e) {
             user.setNumberOfCoins(amountOfMoneyBeforeTransaction);
             throw new TransactionException("Something went wrong during purchase! Transaction rolled back.");
         }
-    }
-
-    private User byUsername(String username) {
-        return findByField("username", username);
     }
 
     private void readCardsForUser(User user) {
@@ -117,9 +116,9 @@ public class UserService extends AbstractService<User, String> {
 
     public void transferCard(User giver, User receiver, Card card) {
         giver.removeCard(card);
-        update(giver);
-
         receiver.addCard(card);
+
+        update(giver);
         update(receiver);
     }
 }

@@ -2,6 +2,7 @@ package at.fhtw.bif3.controller;
 
 import at.fhtw.bif3.controller.context.SessionContext;
 import at.fhtw.bif3.controller.dto.TradingDTO;
+import at.fhtw.bif3.dao.exception.EntityNotFoundException;
 import at.fhtw.bif3.domain.TradingDeal;
 import at.fhtw.bif3.domain.User;
 import at.fhtw.bif3.domain.card.Card;
@@ -30,7 +31,7 @@ public class TradingsController implements Controller {
     private final UserService userService = new UserService();
 
     @Override
-    public HttpResponse  handleRequest(Request request) {
+    public HttpResponse handleRequest(Request request) {
 
         try {
             String token = extractToken(request.getHeaders().get(AUTHORIZATION.getName()));
@@ -77,13 +78,18 @@ public class TradingsController implements Controller {
 
     private HttpResponse handlePostCreate(Request request) {
         String token = extractToken(request.getHeaders().get(AUTHORIZATION.getName()));
-
         TradingDTO tradingDTO = new GsonBuilder().create().fromJson(request.getContentString(), TradingDTO.class);
-        Card card = new CardService().findById(tradingDTO.getCardToTradeId());
-        User username = new UserService().findByUsername(SessionContext.getUsernameForToken(token));
-        TradingDeal tradingDeal = new TradingDeal(tradingDTO.getId(), card, card.getType(), tradingDTO.getMinimumDamage(), username);
-        tradingService.create(tradingDeal);
-        return noContent();
+        User user = new UserService().findByUsername(SessionContext.getUsernameForToken(token));
+        try {
+            Card cardToTrade = user.getCards().stream().filter(card -> card.getId().equals(tradingDTO.getCardToTradeId())).findFirst().orElseThrow(EntityNotFoundException::new);
+            user.lockCard(cardToTrade);
+            TradingDeal tradingDeal = new TradingDeal(tradingDTO.getId(), cardToTrade, cardToTrade.getType(), tradingDTO.getMinimumDamage(), user);
+            tradingService.create(tradingDeal);
+            userService.update(user);
+            return noContent();
+        } catch (EntityNotFoundException e) {
+            return badRequest("User " + user.getUsername() + " doesn't possess this card");
+        }
     }
 
     private HttpResponse handlePostTrade(Request request) {
@@ -93,22 +99,25 @@ public class TradingsController implements Controller {
         if (deal.getCreator().getUsername().equals(username)) {
             return badRequest();
         } else {
-            return processTrade(deal, username, new Gson().fromJson(request.getContentString(), String.class));
+            String dealAcceptersCardId = new Gson().fromJson(request.getContentString(), String.class);
+            return processTrade(deal, username, dealAcceptersCardId);
         }
     }
 
     private HttpResponse processTrade(TradingDeal deal, String username, String dealAcceptersCardId) {
-        User dealCreator = deal.getCreator();
-        User dealAccepter = userService.findById(username);
+        User dealCreator = userService.findByUsername(deal.getCreator().getUsername());
+
+        User dealAccepter = userService.findByUsername(username);
         Card dealAcceptersCard = new CardService().findById(dealAcceptersCardId);
 
-        if(dealAcceptersCard.getDamage() < deal.getMinimumDamage() || dealAcceptersCard.getType() != deal.getCardToTrade().getType()){
+        if (dealAcceptersCard.getDamage() < deal.getMinimumDamage() || dealAcceptersCard.getType() != deal.getCardToTrade().getType()) {
             return badRequest();
         }
 
         dealCreator.unlockCard(deal.getCardToTrade());
         userService.transferCard(dealAccepter, dealCreator, dealAcceptersCard);
         userService.transferCard(dealCreator, dealAccepter, deal.getCardToTrade());
+        tradingService.delete(deal.getId());
 
         return noContent();
     }
@@ -120,11 +129,15 @@ public class TradingsController implements Controller {
             TradingDeal tradingDeal = tradingService.findById(dealId);
             String token = extractToken(request.getHeaders().get(AUTHORIZATION.getName()));
             String username = extractUsernameFromToken(token);
-            if (tradingDeal.getCreator().getUsername().equals(username)) {
-                tradingService.delete(dealId);
-                return noContent();
+
+            if (!tradingDeal.getCreator().getUsername().equals(username)) {
+                return forbidden();
             }
-            return forbidden();
+            User user = userService.findByUsername(username);
+            tradingService.delete(dealId);
+            user.unlockCard(tradingDeal.getCardToTrade());
+            userService.update(user);
+            return noContent();
         }
         return notFound();
     }

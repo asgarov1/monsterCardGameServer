@@ -15,7 +15,7 @@ class BattleManagerTest {
 
     ExecutorService WORKER_THREAD_POOL = Executors.newFixedThreadPool(2);
 
-    @Test
+//    @Test
     public void battleShouldWorkOk() throws InterruptedException, ExecutionException {
         User userA = new User("userA", "pass");
         User userB = new User("userB", "pass");

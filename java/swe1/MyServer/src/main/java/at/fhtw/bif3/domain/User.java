@@ -64,7 +64,7 @@ public class User {
     }
 
     public List<Card> getCards() {
-        return Collections.unmodifiableList(cards);
+        return cards;
     }
 
     public void addCard(Card card) {
@@ -109,6 +109,29 @@ public class User {
         elo -= pointsForLoss;
     }
 
+    public void configureDeck(List<String> cardIds) {
+        returnCardsFromDeck();
+        cards.stream()
+                .filter(card -> cardIds.contains(card.getId()))
+                .forEach(deck::add);
+
+        deck.forEach(cards::remove);
+    }
+
+    public void lockCard(Card card) {
+        lockedForTrade.add(card);
+        cards.remove(card);
+    }
+
+    public void unlockCard(Card cardToTrade) {
+        cards.add(cardToTrade);
+        lockedForTrade.remove(cardToTrade);
+    }
+
+    public void removeCard(Card card) {
+        cards.remove(card);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -122,29 +145,6 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(id, username, password);
-    }
-
-    public void configureDeck(List<String> cardIds) {
-        returnCardsFromDeck();
-
-        cards.stream()
-                .filter(card -> cardIds.contains(card.getId()))
-                .forEach(card -> {
-                    deck.add(card);
-                });
-
-        for (Card card : deck) {
-            cards.remove(card);
-        }
-    }
-
-    public void unlockCard(Card cardToTrade) {
-        lockedForTrade.remove(cardToTrade);
-        cards.add(cardToTrade);
-    }
-
-    public void removeCard(Card card) {
-        cards.remove(card);
     }
 
     @Override

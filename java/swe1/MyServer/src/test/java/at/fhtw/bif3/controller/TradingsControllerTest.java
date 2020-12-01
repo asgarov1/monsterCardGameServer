@@ -85,7 +85,7 @@ class TradingsControllerTest {
     public void createShouldWork() {
         int numberOfDealsBefore = tradingService.countEntities();
 
-        String content = new Gson().toJson(new TradingDTO("tradingsControllerTest_tradeid", card.getId(), card.getCardClass().name(), randomInt(0, 100)));
+        String content = new Gson().toJson(new TradingDTO("tradingsControllerTest_tradeid", card.getId(), card.getType().name(), randomInt(0, 100)));
         String getTradingDealsRequest = postCreateRequestWithAuthorization(TRADINGS_ENDPOINT, user.getUsername(), content);
         Request httpRequest = HttpRequest.valueOf(new ByteArrayInputStream(getTradingDealsRequest.getBytes(StandardCharsets.UTF_8)));
 

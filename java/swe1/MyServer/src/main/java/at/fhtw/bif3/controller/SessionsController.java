@@ -6,10 +6,12 @@ import at.fhtw.bif3.http.request.Request;
 import at.fhtw.bif3.http.response.HttpResponse;
 import at.fhtw.bif3.http.response.HttpStatus;
 import at.fhtw.bif3.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 
 import static at.fhtw.bif3.util.StringUtil.extractPassword;
 import static at.fhtw.bif3.util.StringUtil.extractUsername;
 
+@Slf4j
 public class SessionsController implements Controller {
 
     public static final String SESSIONS_ENDPOINT = "/sessions";

@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DeckControllerTest {
 
-    User user = new User("kienboec", "password");
+    User user = new User("johnny", "password");
 
     @BeforeEach
     void init() {
@@ -55,6 +55,17 @@ class DeckControllerTest {
 
     @SneakyThrows
     @Test
+    void showDeckRequestPLainShouldWork() {
+        String showDeckRequest = getRequest(DECK_ENDPOINT + "?format=plain", user.getUsername());
+        Request getDeckRequest = HttpRequest.valueOf(new ByteArrayInputStream(showDeckRequest.getBytes(StandardCharsets.UTF_8)));
+        HttpResponse response = new DeckController().handleRequest(getDeckRequest);
+
+        assertEquals(OK.getCode(), response.getStatusCode());
+        assertEquals(user.getDeck().toString(), response.getContent());
+    }
+
+    @SneakyThrows
+    @Test
     void configureDeckRequestShouldWorkOk() {
         List<String> cardIds = getFourRandomCardIds(user);
 
@@ -76,24 +87,4 @@ class DeckControllerTest {
                 .limit(4)
                 .collect(Collectors.toList());
     }
-
-//  TODO question: dont understand these requests:
-//    echo 13) show configured deck different representation
-//      echo kienboec
-//      curl -X GET http://localhost:10001/deck?format=plain --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken"
-//      echo.
-//      echo.
-//      echo altenhof
-//      curl -X GET http://localhost:10001/deck?format=plain --header "Content-Type: application/json" --header "Authorization: Basic altenhof-mtcgToken"
-//      echo.
-//      echo.
-//    echo 14) show configured deck with winning attributes
-//      echo kienboec
-//      curl -X GET http://localhost:10001/deck?format=plain --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken"
-//      echo.
-//      echo.
-//      echo altenhof
-//      curl -X GET http://localhost:10001/deck?format=plain --header "Content-Type: application/json" --header "Authorization: Basic altenhof-mtcgToken"
-//      echo.
-//      echo.
 }

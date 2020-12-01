@@ -4,7 +4,6 @@ import at.fhtw.bif3.controller.*;
 import at.fhtw.bif3.http.request.HttpRequest;
 import at.fhtw.bif3.http.request.Request;
 import at.fhtw.bif3.http.response.HttpResponse;
-import at.fhtw.bif3.http.response.Response;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,7 +25,8 @@ public class FrontDispatcher implements Runnable {
     public void run() {
         var request = HttpRequest.valueOf(connectionSocket.getInputStream());
         log.info("\nRECEIVED REQUEST: " + request.getReceivedRequest() + "\n");
-        Response response = getResponse(request);
+        HttpResponse response = getResponse(request);
+        log.info("\nRESPONSE: " + response);
         response.send(connectionSocket.getOutputStream());
         connectionSocket.close();
     }
@@ -53,7 +53,7 @@ public class FrontDispatcher implements Runnable {
         Controller controller = switch (path) {
             case "users" -> new UsersController();
             case "sessions" -> new SessionsController();
-            case "packages" -> new PackageController();
+            case "packages" -> new BundleController();
             case "transactions" -> new TransactionController();
             case "cards" -> new CardController();
             case "deck" -> new DeckController();

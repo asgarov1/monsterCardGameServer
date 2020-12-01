@@ -18,8 +18,5 @@ public class HttpServer {
         while (true) {
             new Thread(new FrontDispatcher(server.accept())).start();
         }
-        //  TODO
-        //    show configured deck with winning attributes?
-
     }
 }

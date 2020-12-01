@@ -27,15 +27,23 @@ public interface Controller {
         return httpResponse;
     }
 
-    default HttpResponse internalServerError() {
+    default HttpResponse internalServerError(String message) {
         HttpResponse httpResponse = new HttpResponse();
         httpResponse.setStatusCode(INTERNAL_SERVER_ERROR.getCode());
+        httpResponse.setContent(message);
         return httpResponse;
     }
 
     default HttpResponse badRequest() {
         HttpResponse httpResponse = new HttpResponse();
         httpResponse.setStatusCode(BAD_REQUEST.getCode());
+        return httpResponse;
+    }
+
+    default HttpResponse badRequest(String message) {
+        HttpResponse httpResponse = new HttpResponse();
+        httpResponse.setStatusCode(BAD_REQUEST.getCode());
+        httpResponse.setContent(message);
         return httpResponse;
     }
 

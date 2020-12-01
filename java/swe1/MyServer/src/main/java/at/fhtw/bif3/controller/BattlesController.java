@@ -10,8 +10,6 @@ import at.fhtw.bif3.service.UserService;
 import at.fhtw.bif3.util.StringUtil;
 import lombok.SneakyThrows;
 
-import java.util.concurrent.ExecutionException;
-
 import static at.fhtw.bif3.http.Header.AUTHORIZATION;
 import static at.fhtw.bif3.util.StringUtil.extractUsernameFromToken;
 

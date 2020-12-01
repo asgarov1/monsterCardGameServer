@@ -3,7 +3,6 @@ package at.fhtw.bif3.service;
 import at.fhtw.bif3.domain.User;
 import lombok.SneakyThrows;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 

@@ -1,6 +1,7 @@
 package at.fhtw.bif3.controller;
 
 import at.fhtw.bif3.controller.context.SessionContext;
+import at.fhtw.bif3.dao.exception.EntityNotFoundException;
 import at.fhtw.bif3.http.request.HttpMethod;
 import at.fhtw.bif3.http.request.Request;
 import at.fhtw.bif3.http.response.HttpResponse;
@@ -42,8 +43,10 @@ public class TransactionController implements Controller {
             String username = SessionContext.getUsernameForToken(token);
             userService.processPackagePurchaseFor(username);
             return noContent();
-        } catch (TooPoorException | TransactionException e) {
-            return internalServerError();
+        } catch (TooPoorException e) {
+            return badRequest(e.getMessage());
+        } catch (TransactionException | EntityNotFoundException e) {
+            return internalServerError(e.getMessage());
         }
     }
 }

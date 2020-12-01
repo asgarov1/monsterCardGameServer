@@ -73,4 +73,13 @@ public abstract class Card {
     public int hashCode() {
         return Objects.hash(id, name, damage, elementType, cardClass);
     }
+
+    @Override
+    public String toString() {
+        return "Card{" +
+                 name + '\'' +
+                ", " + damage +
+                ", " + elementType +
+                '}';
+    }
 }

@@ -20,7 +20,8 @@ public class SpellCard extends Card {
         super(id, name, damage, elementType);
     }
 
-    public static final int DAMAGE_AGAINST_KRAKEN = parseInt(getProperties().getProperty("damage.spell-vs-kraken"));;
+    public static final int DAMAGE_AGAINST_KRAKEN = parseInt(getProperties().getProperty("damage.spell-vs-kraken"));
+    ;
     public static final double DAMAGE_AGAINST_KNIGHT = Double.MAX_VALUE;
 
     @Getter
@@ -32,11 +33,11 @@ public class SpellCard extends Card {
 
     @Override
     public double calculateDamageAgainst(Card opponent) {
-        if(opponent instanceof KrakenCard){
+        if (opponent instanceof KrakenCard) {
             return DAMAGE_AGAINST_KRAKEN; //Kraken immune against spells
-        } else if (getElementType().equals(WATER) && opponent instanceof KnightCard){
+        } else if (getElementType().equals(WATER) && opponent instanceof KnightCard) {
             return DAMAGE_AGAINST_KNIGHT; //Knights automatically drown to water spell
-        } else if (opponent instanceof SpellCard){
+        } else if (opponent instanceof SpellCard) {
             return getPureSpellBattleDamage(opponent);
         }
         return getDamage();

@@ -114,7 +114,7 @@ class TransactionsControllerTest {
         assertTrue(user.getCards().isEmpty());
 
         httpRequest = HttpRequest.valueOf(new ByteArrayInputStream(acquirePackageRequest.getBytes(StandardCharsets.UTF_8)));
-        assertEquals(INTERNAL_SERVER_ERROR.getCode(), new TransactionController().handleRequest(httpRequest).getStatusCode());
+        assertEquals(BAD_REQUEST.getCode(), new TransactionController().handleRequest(httpRequest).getStatusCode());
 
         user = userService.findByUsername(user.getUsername());
         assertTrue(user.getCards().isEmpty());

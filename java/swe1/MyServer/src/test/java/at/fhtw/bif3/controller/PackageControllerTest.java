@@ -6,7 +6,6 @@ import at.fhtw.bif3.http.request.Request;
 import at.fhtw.bif3.http.response.Response;
 import at.fhtw.bif3.service.BundleService;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -54,7 +53,7 @@ class PackageControllerTest {
         BundleService bundleService = new BundleService();
         int bundlesBefore = bundleService.countEntities();
 
-        Response httpResponse = new PackageController().handleRequest(httpRequest);
+        Response httpResponse = new BundleController().handleRequest(httpRequest);
         assertEquals(CREATED.getCode(), httpResponse.getStatusCode());
         assertEquals(bundlesBefore + 1, bundleService.countEntities());
     }
@@ -67,7 +66,7 @@ class PackageControllerTest {
                 "{\"Id\":\"02a9c76e-b17d-427f-9240-2dd49b0d3bfd\", \"Name\":\"RegularSpell\", \"Weakness\": 45.0, \"Damage\": 45.0}, " +
                 "{\"Id\":\"2508bf5c-20d7-43b4-8c77-bc677decadef\", \"Name\":\"FireElf\", \"Damage\": 25.0}]";
 
-        var cards = new PackageController().extractCards(contentString);
+        var cards = new BundleController().extractCards(contentString);
         assertEquals(5, cards.size());
         cards.forEach(card -> assertNotNull(card.getId()));
         cards.forEach(card -> assertNotNull(card.getName()));

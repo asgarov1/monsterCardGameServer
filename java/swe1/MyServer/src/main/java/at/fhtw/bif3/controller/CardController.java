@@ -28,16 +28,16 @@ public class CardController implements Controller {
 
     private HttpResponse handleGet(Request request) {
         if (request.getUrl().getPath().equals(CARDS_ENDPOINT)) {
-            return handleCardsPost(request);
+            return handleCardsGet(request);
         }
         return notFound();
     }
 
-    private HttpResponse handleCardsPost(Request request) {
+    private HttpResponse handleCardsGet(Request request) {
         HttpResponse httpResponse = new HttpResponse();
         String authorizationHeaderValue = request.getHeaders().get(AUTHORIZATION.getName());
         if(authorizationHeaderValue == null){
-            return badRequest();
+            return badRequest("Authorization token is missing");
         }
 
         String token = StringUtil.extractToken(authorizationHeaderValue);
