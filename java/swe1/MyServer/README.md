@@ -9,9 +9,10 @@ _If docker doesn't run check that port 5432 is available_
 
 ##Protocol
 
-**Total time spent: 20 hours**
+**Total time spent: 20 hours**<br/>
+**Test coverage: 85%**
 
-There are 4 main layers: controller, dao, service
+There are 3 main layers: controller, persistence (dao) and service
 
 There is a FrontDispatcher in the controller layer that delegates the requests (in a new thread) to the correct controller 
 based on the endpoint.

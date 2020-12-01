@@ -119,13 +119,13 @@ public class User {
     }
 
     public void lockCard(Card card) {
-        lockedForTrade.add(card);
         cards.remove(card);
+        lockedForTrade.add(card);
     }
 
     public void unlockCard(Card cardToTrade) {
-        cards.add(cardToTrade);
         lockedForTrade.remove(cardToTrade);
+        cards.add(cardToTrade);
     }
 
     public void removeCard(Card card) {

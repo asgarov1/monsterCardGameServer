@@ -1,7 +1,6 @@
 create table card
 (
-    id           varchar(255)     not null
-        constraint card_pkey primary key,
+    id           varchar(255) not null primary key,
     card_type    varchar(255),
     damage       DOUBLE PRECISION not null,
     weakness     DOUBLE PRECISION,
@@ -11,26 +10,21 @@ create table card
 
 create table bundle
 (
-    id varchar(255) not null
-        constraint bundle_pkey primary key
+    id varchar(255) not null primary key
 );
 
 
 create table bundle_card
 (
     bundle_id varchar(255) not null
-        constraint fkplvc2a9jrvp4ocjw1dvynoa06
-            references bundle on delete cascade,
-    card_id   varchar(255) not null
-        constraint uk_3gfs03j1evhkapeolruvt3hox
-            unique
-        constraint fkhmyts8ihb23kfv53iler73vl
-            references card on delete cascade
+        references bundle on delete cascade,
+    card_id   varchar(255) not null unique references card on delete cascade
 );
 
 create table player
 (
-    id              varchar(255) not null constraint player_pkey primary key,
+    id              varchar(255) not null
+        constraint player_pkey primary key,
     number_of_coins integer      not null,
     password        varchar(255) not null,
     username        varchar(255) unique,
@@ -45,13 +39,9 @@ create table player
 create table player_card
 (
     player_id varchar(255) not null
-        constraint fkde21dwj10h5g5bfd1m4sdxiw9
-            references player on delete cascade,
+        references player on delete cascade,
     card_id   varchar(255) not null
-        constraint uk_eu14jwktj3wqbooslor0xd0p0
-            unique
-        constraint fkqaek75wpycyve467ss52ve2u8
-            references card on delete cascade
+        references card on delete cascade
 );
 
 create table player_deck_card
@@ -75,10 +65,10 @@ create table player_locked_card
 create table trading_deal
 (
     id             varchar(255) primary key,
-    card_id        varchar(255) references card(id) on delete cascade,
+    card_id        varchar(255) references card (id) on delete cascade,
     card_type      varchar(255),
     minimum_damage DOUBLE PRECISION,
-    creator_id     varchar(255) references player(id) on delete cascade
+    creator_id     varchar(255) references player (id) on delete cascade
 );
 
 

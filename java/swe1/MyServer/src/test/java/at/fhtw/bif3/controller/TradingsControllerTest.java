@@ -16,11 +16,10 @@ import at.fhtw.bif3.service.TradingDealService;
 import at.fhtw.bif3.service.UserService;
 import com.google.gson.Gson;
 import lombok.SneakyThrows;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import static at.fhtw.bif3.controller.TradingsController.TRADINGS_ENDPOINT;
@@ -36,24 +35,24 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class TradingsControllerTest {
 
     private final TradingsController tradingsController = new TradingsController();
-    private static final TradingDealService tradingService = new TradingDealService();
-    private static final UserService userService = new UserService();
-    private static final CardService cardService = new CardService();
+    private final TradingDealService tradingService = new TradingDealService();
+    private final UserService userService = new UserService();
+    private final CardService cardService = new CardService();
 
-    private static final User user = new User("Tom", "pass");
-    private static final Card card = new GoblinCard("tradingController_testId1", "test_name", randomInt(0, 100), WATER);
-    private static final TradingDeal tradingDeal = new TradingDeal("tradingController_testId2", card, card.getType(), 50, user);
+    private User user = new User("Tom", "pass");
+    private Card card = new GoblinCard("tradingController_testId1", "test_name", randomInt(0, 100), WATER);
+    private TradingDeal tradingDeal = new TradingDeal("tradingController_testId2", card, card.getType(), 50, user);
 
-    @BeforeAll
-    static void setUp() {
+    @BeforeEach
+    void setUp() {
         cardService.create(card);
         user.addCard(card);
         userService.create(user);
         SessionContext.loginUser(user.getUsername());
     }
 
-    @AfterAll
-    static void clean() {
+    @AfterEach
+    void clean() {
         SessionContext.logoutUser(user.getUsername());
         tradingService.delete(tradingDeal.getId());
         userService.delete(user);
@@ -95,9 +94,8 @@ class TradingsControllerTest {
         assertEquals(numberOfDealsBefore + 1, tradingService.countEntities());
     }
 
-    @SneakyThrows
     @Test
-    public void deleteShouldWork() {
+    public void deleteShouldWork() throws IOException {
         tradingService.create(tradingDeal);
         int numberOfDealsBefore = tradingService.countEntities();
 
@@ -111,29 +109,22 @@ class TradingsControllerTest {
         assertEquals(numberOfDealsBefore - 1, tradingService.countEntities());
     }
 
-    @SneakyThrows
     @Test
-    public void tradeShouldWork() {
-        Card card = new GoblinCard("tradingController_testId3", "test_name", randomInt(0, 100), WATER);
-        cardService.create(card);
-        User user = new User("John", "pass");
-        user.addCard(card);
-        userService.create(user);
-        TradingDeal deal = new TradingDeal("tradingController_testId4", card, card.getType(), 50, user);
-        tradingService.create(deal);
-
-        User dealCreator = deal.getCreator();
-        Card cardOffered = deal.getCardToTrade();
+    public void tradeShouldWork() throws IOException {
+        User dealCreator = user;
+        user.lockCard(card);
+        userService.update(user);
+        tradingService.create(tradingDeal);
 
         User dealAccepter = new User("Adam", "pass");
-        Card acceptersCard = new DragonCard("TradingControllerTest_offeredCardid123", "Drogo", deal.getMinimumDamage()+1, FIRE);
+        Card acceptersCard = new DragonCard("TradingControllerTest_offeredCardid123", "Drogo", tradingDeal.getMinimumDamage() + 1, FIRE);
         try {
             cardService.create(acceptersCard);
             dealAccepter.addCard(acceptersCard);
             userService.create(dealAccepter);
             SessionContext.loginUser(dealAccepter.getUsername());
 
-            String tradeRequest = postCreateRequestWithAuthorization("/tradings/" + deal.getId(), dealAccepter.getUsername(), new Gson().toJson(acceptersCard.getId()));
+            String tradeRequest = postCreateRequestWithAuthorization("/tradings/" + tradingDeal.getId(), dealAccepter.getUsername(), new Gson().toJson(acceptersCard.getId()));
             Request request = HttpRequest.valueOf(new ByteArrayInputStream(tradeRequest.getBytes(StandardCharsets.UTF_8)));
 
             Response response = tradingsController.handleRequest(request);
@@ -143,11 +134,11 @@ class TradingsControllerTest {
             dealCreator = userService.findById(dealCreator.getId());
             dealAccepter = userService.findById(dealAccepter.getId());
 
-            assertEquals(cardOffered, dealAccepter.getCards().get(0));
+            assertEquals(tradingDeal.getCardToTrade(), dealAccepter.getCards().get(0));
             assertEquals(acceptersCard, dealCreator.getCards().get(0));
         } finally {
+            cardService.delete(acceptersCard);
             userService.delete(dealAccepter);
-            userService.delete(user);
         }
     }
 }

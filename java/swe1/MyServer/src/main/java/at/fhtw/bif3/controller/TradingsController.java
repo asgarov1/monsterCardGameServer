@@ -134,9 +134,9 @@ public class TradingsController implements Controller {
                 return forbidden();
             }
             User user = userService.findByUsername(username);
-            tradingService.delete(dealId);
             user.unlockCard(tradingDeal.getCardToTrade());
             userService.update(user);
+            tradingService.delete(dealId);
             return noContent();
         }
         return notFound();
