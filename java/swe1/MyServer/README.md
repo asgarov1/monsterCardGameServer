@@ -22,9 +22,7 @@ Service layer provides communication between controllers and dao layer, as well 
 
 I made my classes immutable whenever possible, minimizing state and giving preference to functional programming 
 because less state => less side effects => less debugging. BattleManager, class that manages battle between 2 different 
-requests, is implemented as singleton. Concurrent collections are use where necessary with only exception of me not wanting 
-to use CopyOnWriteArrayList - I didn't want to account for complications of getting copies and not original objects back 
-and therefore used simple `synchorised` there.
+requests, is implemented as singleton. Concurrent collections are used where necessary.
 
 The tests cover everything except getters and setters even when these have some minor logic to them.
 Also, DAO Layer isn't tested directly (in accordance with industry standards), but the service layer is tested instead 

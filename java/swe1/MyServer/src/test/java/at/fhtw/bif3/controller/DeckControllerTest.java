@@ -77,7 +77,7 @@ class DeckControllerTest {
                 .collect(Collectors.toList());
     }
 
-//  TODO question: dont underand these requests:
+//  TODO question: dont understand these requests:
 //    echo 13) show configured deck different representation
 //      echo kienboec
 //      curl -X GET http://localhost:10001/deck?format=plain --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken"
