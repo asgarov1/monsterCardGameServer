@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class PackageControllerTest {
 
+    static String packageId = "845f0dc7-37d0-426e-994e-99999ac83c08";
     String createPackagesRequest = "POST /packages HTTP/1.1\n" +
             "Content-Type: application/json\n" +
             "User-Agent: PostmanRuntime/7.26.8\n" +
@@ -28,7 +29,7 @@ class PackageControllerTest {
             "Accept-Encoding: gzip, deflate, br\n" +
             "Connection: keep-alive\n" +
             "Content-Length: 441\n" +
-            "[{\"Id\":\"845f0dc7-37d0-426e-994e-43fc3ac83c08\", \"Name\":\"WaterGoblin\", \"Damage\": 10.0},{\"Id\":\"99f8f8dc-e25e-4a95-aa2c-782823f36e2a\", \"Name\":\"Dragon\", \"Damage\": 50.0},{\"Id\":\"e85e3976-7c86-4d06-9a80-641c2019a79f\", \"Name\":\"WaterSpell\", \"Weakness\": 45.0, \"Damage\": 20.0},{\"Id\":\"1cb6ab86-bdb2-47e5-b6e4-68c5ab389334\", \"Name\":\"Ork\", \"Damage\": 45.0},{\"Id\":\"dfdd758f-649c-40f9-ba3a-8657f4b3439f\", \"Name\":\"FireSpell\", \"Weakness\": 45.0, \"Damage\": 25.0}]";
+            "[{\"Id\":\"" + packageId + "\", \"Name\":\"WaterGoblin\", \"Damage\": 10.0},{\"Id\":\"99f8f8dc-e25e-4a95-aa2c-782823f36e2a\", \"Name\":\"Dragon\", \"Damage\": 50.0},{\"Id\":\"e85e3976-7c86-4d06-9a80-641c2019a79f\", \"Name\":\"WaterSpell\", \"Weakness\": 45.0, \"Damage\": 20.0},{\"Id\":\"1cb6ab86-bdb2-47e5-b6e4-68c5ab389334\", \"Name\":\"Ork\", \"Damage\": 45.0},{\"Id\":\"dfdd758f-649c-40f9-ba3a-8657f4b3439f\", \"Name\":\"FireSpell\", \"Weakness\": 45.0, \"Damage\": 25.0}]";
 
     Request httpRequest;
 
@@ -44,7 +45,7 @@ class PackageControllerTest {
 
     @AfterAll
     static void cleanUp() {
-        String bundle_id = new BundleCardDAO().findByField("card_id", "845f0dc7-37d0-426e-994e-43fc3ac83c08").getBundleId();
+        String bundle_id = new BundleCardDAO().findByField("card_id", packageId).getBundleId();
         new BundleService().deleteWithCards(bundle_id);
     }
 

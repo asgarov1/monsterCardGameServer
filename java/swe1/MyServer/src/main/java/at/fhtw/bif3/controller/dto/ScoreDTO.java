@@ -6,7 +6,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class ScoreDTO {
-    private int place;
-    private String username;
-    private int elo;
+    private final int place;
+    private final String username;
+    private final int elo;
 }

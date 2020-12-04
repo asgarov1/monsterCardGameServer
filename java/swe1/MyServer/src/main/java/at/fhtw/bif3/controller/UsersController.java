@@ -2,6 +2,7 @@ package at.fhtw.bif3.controller;
 
 import at.fhtw.bif3.controller.context.SessionContext;
 import at.fhtw.bif3.dao.exception.DAOException;
+import at.fhtw.bif3.dao.exception.EntityNotFoundException;
 import at.fhtw.bif3.domain.User;
 import at.fhtw.bif3.http.request.HttpMethod;
 import at.fhtw.bif3.http.request.Request;
@@ -12,8 +13,10 @@ import at.fhtw.bif3.util.StringUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import static at.fhtw.bif3.http.Header.AUTHORIZATION;
 import static at.fhtw.bif3.http.response.ContentType.APPLICATION_JSON;
-import static at.fhtw.bif3.util.StringUtil.*;
+import static at.fhtw.bif3.util.StringUtil.extractPassword;
+import static at.fhtw.bif3.util.StringUtil.extractUsername;
 
 public class UsersController implements Controller {
     public static final String USERS_ENDPOINT = "/users";
@@ -33,25 +36,24 @@ public class UsersController implements Controller {
     }
 
     private HttpResponse handleGet(Request request) {
-        String token = StringUtil.extractToken(request.getHeaders().get("Authorization"));
+        String token = StringUtil.extractToken(request.getHeaders().get(AUTHORIZATION.getName()));
         if (SessionContext.tokenNotPresent(token)) {
             return forbidden();
         }
 
-        String username = extractUsernameFromToken(token);
         String[] segments = request.getUrl().getSegments();
-        if(segments.length > 2){
+        if (segments.length != 2) {
             return notFound();
         }
 
-        if (segments.length == 2 && segments[1].equals(username)) {
+        try {
             return HttpResponse.builder()
                     .status(HttpStatus.OK)
                     .contentType(APPLICATION_JSON)
-                    .content(new Gson().toJson(userService.findByUsername(username))).build();
+                    .content(new Gson().toJson(userService.findByUsername(segments[1]))).build();
+        } catch (EntityNotFoundException e){
+            return badRequest("No user with username " + segments[1] + " found!");
         }
-
-        return forbidden();
     }
 
     private HttpResponse handlePost(Request request) {
@@ -62,38 +64,41 @@ public class UsersController implements Controller {
     }
 
     private HttpResponse handlePut(Request request) {
-        String token = StringUtil.extractToken(request.getHeaders().get("Authorization"));
+        String token = StringUtil.extractToken(request.getHeaders().get(AUTHORIZATION.getName()));
         if (SessionContext.tokenNotPresent(token)) {
             return forbidden();
         }
 
         String[] segments = request.getUrl().getSegments();
         var username = SessionContext.getUsernameForToken(token);
-        if (segments.length == 2 && segments[1].equals(username)) {
-            User user = new GsonBuilder().create().fromJson(request.getContentString(), User.class);
-            applyUpdatedAttributes(user, username);
-            return noContent();
+        if (segments.length != 2){
+            return notFound();
+
         }
-        return notFound();
+        if (!segments[1].equals(username)) {
+            return forbidden();
+        }
+        User user = new GsonBuilder().create().fromJson(request.getContentString(), User.class);
+        applyUpdatedAttributes(user, username);
+        return noContent();
     }
 
     private void applyUpdatedAttributes(User user, String username) {
-        UserService userService = new UserService();
         var existingUser = userService.findByUsername(username);
 
-        if(user.getUsername() != null) {
+        if (user.getUsername() != null) {
             existingUser.setUsername(user.getUsername());
         }
-        if(user.getPassword() != null) {
+        if (user.getPassword() != null) {
             existingUser.setPassword(user.getPassword());
         }
-        if(user.getName() != null) {
+        if (user.getName() != null) {
             existingUser.setName(user.getName());
         }
-        if(user.getBio() != null) {
+        if (user.getBio() != null) {
             existingUser.setBio(user.getBio());
         }
-        if(user.getImage() != null) {
+        if (user.getImage() != null) {
             existingUser.setImage(user.getImage());
         }
 

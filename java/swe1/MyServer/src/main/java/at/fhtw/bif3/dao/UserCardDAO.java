@@ -12,8 +12,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.Arrays.stream;
-
 public class UserCardDAO extends AbstractDAO<PlayerCard, String> {
 
     @Getter
@@ -56,7 +54,7 @@ public class UserCardDAO extends AbstractDAO<PlayerCard, String> {
         return playerCard;
     }
 
-    public List<PlayerCard> findAllByUserId(String id) throws DAOException{
+    public List<PlayerCard> findAllByUserId(String id) throws DAOException {
         String query = "select * from " + getTableName() + " where player_id  = ?;";
 
         List<PlayerCard> palyerCards = new ArrayList<>();

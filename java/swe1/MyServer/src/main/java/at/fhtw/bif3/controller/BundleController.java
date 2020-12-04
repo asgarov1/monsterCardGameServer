@@ -60,7 +60,7 @@ public class BundleController implements Controller {
         card.setElementType(ElementType.assignByName(cardDTO.getName()));
         card.setDamage(cardDTO.getDamage());
 
-        if(cardDTO.getWeakness() != null){
+        if(cardDTO.getWeakness() != null && card instanceof SpellCard){
             ((SpellCard) card).setWeakness(cardDTO.getWeakness());
         }
 

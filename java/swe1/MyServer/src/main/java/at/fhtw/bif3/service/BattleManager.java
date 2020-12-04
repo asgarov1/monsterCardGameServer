@@ -32,14 +32,12 @@ public class BattleManager {
     }
 
     @SneakyThrows
-    public boolean putUserToBattle(User user) {
+    public void putUserToBattle(User user) {
         usersWaitingForBattle.add(user);
         while (usersWhoFinishedBattle.stream().noneMatch(user::equals)) {
             sleep(100);
         }
-        //TODO change to countdownlatch
         usersWhoFinishedBattle.remove(user);
-        return true;
     }
 
     @SneakyThrows

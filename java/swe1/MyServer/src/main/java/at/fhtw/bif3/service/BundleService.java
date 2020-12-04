@@ -36,26 +36,14 @@ public class BundleService extends AbstractService<Bundle, String> {
         bundle.getCards()
                 .stream()
                 .map(card -> new BundleCard(bundle.getId(), card.getId()))
-                .forEach(object -> {
-                    try {
-                        bundleCardDAO.create(object);
-                    } catch (DAOException e) {
-                        e.printStackTrace();
-                    }
-                });
+                .forEach(bundleCardDAO::create);
     }
 
     public void deleteWithCards(String bundle_id) {
         Bundle bundle = findById(bundle_id);
         var cardService = new CardService();
         bundle.getCards()
-                .forEach(card -> {
-                    try {
-                        cardService.delete(card.getId());
-                    } catch (DAOException e) {
-                        e.printStackTrace();
-                    }
-                });
+                .forEach(cardService::delete);
         super.delete(bundle_id);
     }
 }

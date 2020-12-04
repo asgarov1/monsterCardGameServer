@@ -52,7 +52,7 @@ public class CardDAO extends AbstractDAO<Card, String> {
             card.setId(resultSet.getString("id"));
             card.setName(resultSet.getString("name"));
             card.setDamage(resultSet.getDouble("damage"));
-            if(card instanceof SpellCard) {
+            if (card instanceof SpellCard) {
                 ((SpellCard) card).setWeakness(resultSet.getDouble("weakness"));
             }
             card.setElementType(ElementType.assignByName(resultSet.getString("element_type")));

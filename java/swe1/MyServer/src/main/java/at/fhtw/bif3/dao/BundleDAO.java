@@ -44,10 +44,4 @@ public class BundleDAO extends AbstractDAO<Bundle, String> {
         }
         return bundle;
     }
-
-    @Override
-    public void update(Bundle bundle) {
-        //only one field so nothing to update
-    }
 }
-

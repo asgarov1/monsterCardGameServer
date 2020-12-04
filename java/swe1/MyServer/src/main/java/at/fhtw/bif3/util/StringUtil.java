@@ -13,7 +13,6 @@ public class StringUtil {
     }
 
     public static String extractToken(String authorizationHeader) {
-        //Basic kienboec-mtcgToken
         return authorizationHeader.replace("Basic ", "");
     }
 

@@ -8,6 +8,6 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 public class StatsDTO {
-    private int numberOfGamesPlayed;
-    private int elo;
+    private final int numberOfGamesPlayed;
+    private final int elo;
 }

@@ -12,7 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static at.fhtw.bif3.http.request.HttpHeader.*;
-import static java.lang.System.console;
+import static java.lang.Integer.parseInt;
+import static java.lang.System.in;
 import static java.lang.System.lineSeparator;
 
 @Getter
@@ -21,28 +22,37 @@ public class HttpRequest implements Request {
     private final String receivedRequest;
 
     private HttpRequest(InputStream inputStream) throws IOException {
-        BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
-        StringBuilder requestBuilder = new StringBuilder();
-        String line;
-        while ((line = in.readLine()) != null && !line.isEmpty()) {
-            requestBuilder.append(line).append(lineSeparator());
-        }
-        if (requestBuilder.toString().contains(CONTENT_LENGTH.getName())) {
-            String contentLengthLine = requestBuilder.substring(requestBuilder.indexOf(CONTENT_LENGTH.getName()));
-            int start = contentLengthLine.indexOf(": ") + ": ".length();
-            int end = contentLengthLine.indexOf("\r");
-            int numberOfCharacters = Integer.parseInt(contentLengthLine.substring(start, end));
-            for (int i = 0; i < numberOfCharacters; i++) {
-                int read = in.read();
-                requestBuilder.append((char) read);
-            }
-        }
-//TODO split in methods
-        this.receivedRequest = requestBuilder.toString();
+        receivedRequest = readRequest(inputStream);
     }
 
     public static HttpRequest valueOf(InputStream inputStream) throws IOException {
         return new HttpRequest(inputStream);
+    }
+
+    private String readRequest(InputStream inputStream) throws IOException {
+        try {
+            BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
+            var requestBuilder = new StringBuilder();
+            String line;
+            while ((line = in.readLine()) != null && !line.isEmpty()) {
+                requestBuilder.append(line).append(lineSeparator());
+            }
+            if (requestBuilder.toString().contains(CONTENT_LENGTH.getName())) {
+                for (int i = 0; i < extractContentLength(requestBuilder); i++) {
+                    requestBuilder.append((char) in.read());
+                }
+            }
+            return requestBuilder.toString();
+        } finally {
+            in.close();
+        }
+    }
+
+    private int extractContentLength(StringBuilder request) {
+        String contentLengthLine = request.substring(request.indexOf(CONTENT_LENGTH.getName()));
+        int start = contentLengthLine.indexOf(": ") + ": ".length();
+        int end = contentLengthLine.indexOf("\r");
+        return parseInt(contentLengthLine.substring(start, end));
     }
 
     private ByteArrayInputStream getInputStream() {
@@ -87,7 +97,7 @@ public class HttpRequest implements Request {
 
     @Override
     public int getContentLength() {
-        return getHeaders().containsKey(CONTENT_LENGTH.getName()) ? Integer.parseInt(getHeaders().get(CONTENT_LENGTH.getName())) : 0;
+        return getHeaders().containsKey(CONTENT_LENGTH.getName()) ? parseInt(getHeaders().get(CONTENT_LENGTH.getName())) : 0;
     }
 
     @Override
@@ -112,7 +122,7 @@ public class HttpRequest implements Request {
     }
 
     private String getLastLine() {
-        return receivedRequest.split("\n")[receivedRequest.split("\n").length-1];
+        return receivedRequest.split("\n")[receivedRequest.split("\n").length - 1];
     }
 
     @Override

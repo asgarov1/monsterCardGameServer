@@ -11,6 +11,7 @@ import at.fhtw.bif3.service.UserService;
 import at.fhtw.bif3.util.StringUtil;
 import com.google.gson.Gson;
 
+import static at.fhtw.bif3.http.request.HttpMethod.GET;
 import static at.fhtw.bif3.http.response.ContentType.APPLICATION_JSON;
 import static at.fhtw.bif3.util.StringUtil.extractUsernameFromToken;
 
@@ -22,10 +23,9 @@ public class StatsController implements Controller {
 
     @Override
     public HttpResponse handleRequest(Request request) {
-        if (request.getMethod().equals(HttpMethod.GET.name()) && request.getUrl().getPath().equals(STATS_ENDPOINT)) {
+        if (request.getMethod().equals(GET.name()) && request.getUrl().getPath().equals(STATS_ENDPOINT)) {
             return handleGet(request);
         }
-
         return notFound();
     }
 
@@ -38,8 +38,9 @@ public class StatsController implements Controller {
         String username = extractUsernameFromToken(token);
         User user = userService.findByUsername(username);
         return HttpResponse.builder()
-                    .status(HttpStatus.OK)
-                    .contentType(APPLICATION_JSON)
-                    .content(new Gson().toJson(new StatsDTO(user.getGamesPlayed(), user.getElo()))).build();
+                .status(HttpStatus.OK)
+                .contentType(APPLICATION_JSON)
+                .content(new Gson().toJson(new StatsDTO(user.getGamesPlayed(), user.getElo())))
+                .build();
     }
 }

@@ -10,7 +10,7 @@ _If docker doesn't run check that port 5432 is available_
 ##Protocol
 
 **Total time spent: 20 hours**<br/>
-**Test coverage: 85%**
+**Test coverage: 87%**
 
 There are 3 main layers: controller, persistence (dao) and service
 
@@ -31,5 +31,5 @@ and since the service layer delegates everything to DAO layer, that covers both.
 
 Http and Service layers are tested with unit tests, controller is covered with integration tests.
 
-funny issues - couple of small changes that had to be done: `user` is a reserved table in postgres so i had to use `player` 
-as an entity name, and `package` is a keyword in Java so I used `bundle`
+funny issues - couple of small changes that had to be done: `user` is a reserved table in postgres so i had to use `player`,
+ and `package` is a keyword in Java so I used `bundle`

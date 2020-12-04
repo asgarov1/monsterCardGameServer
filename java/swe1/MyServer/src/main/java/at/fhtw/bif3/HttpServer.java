@@ -13,7 +13,6 @@ public class HttpServer {
     @SneakyThrows
     public static void main(String[] args) {
         int port = parseInt(getProperties().getProperty("port"));
-
         ServerSocket server = new ServerSocket(port);
         while (true) {
             new Thread(new FrontDispatcher(server.accept())).start();

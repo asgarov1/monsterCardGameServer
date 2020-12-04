@@ -35,15 +35,12 @@ public class SessionsController implements Controller {
 
     private HttpResponse handleSessionsPost(Request request) {
         var username = extractUsername(request.getContentString());
-
         if (SessionContext.isUserLoggedIn(username)) {
             return badRequest();
         }
-
         if (!credentialsAreCorrect(username, extractPassword(request.getContentString()))) {
             return unauthorized();
         }
-
         SessionContext.loginUser(username);
         return noContent();
     }

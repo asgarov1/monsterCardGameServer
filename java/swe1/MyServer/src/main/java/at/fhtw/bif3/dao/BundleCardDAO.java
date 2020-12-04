@@ -6,11 +6,12 @@ import at.fhtw.bif3.dao.exception.DAOException;
 import at.fhtw.bif3.domain.card.Card;
 import lombok.Getter;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.util.Arrays.stream;
 
 public class BundleCardDAO extends AbstractDAO<BundleCard, String> {
 
@@ -54,7 +55,7 @@ public class BundleCardDAO extends AbstractDAO<BundleCard, String> {
         return findAllByQuery(id, query);
     }
 
-    protected List<Card> findAllByQuery(String id, String query) throws DAOException{
+    protected List<Card> findAllByQuery(String id, String query) throws DAOException {
         List<Card> cards = new ArrayList<>();
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
