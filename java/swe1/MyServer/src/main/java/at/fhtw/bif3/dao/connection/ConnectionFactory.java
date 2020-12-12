@@ -9,8 +9,8 @@ import static at.fhtw.bif3.util.PropertiesReader.getProperties;
 public class ConnectionFactory {
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(
-                getProperties("db.properties").getProperty("url"),
-                getProperties("db.properties").getProperty("username"),
-                getProperties("db.properties").getProperty("password"));
+                System.getenv("url"),
+                System.getenv("username"),
+                System.getenv("password"));
     }
 }

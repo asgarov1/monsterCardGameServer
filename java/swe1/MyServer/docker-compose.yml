@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  server:
+    image: "asgarov1/monster-game-server"
+    depends_on:
+      - db
+    ports:
+      - 10001:10001
+    environment:
+      url: jdbc:postgresql://db:5432/monstercardgame
+      username: admin
+      password: admin
+    networks:
+      - backend
+
+  db:
+    image: "asgarov1/monster-game-db"
+    ports:
+      - 5432:5432
+    networks:
+      - backend
+
+networks:
+  backend:
