@@ -53,9 +53,10 @@ public interface Controller {
         return httpResponse;
     }
 
-    default HttpResponse unauthorized() {
+    default HttpResponse unauthorized(String message) {
         HttpResponse httpResponse = new HttpResponse();
         httpResponse.setStatusCode(UNAUTHORIZED.getCode());
+        httpResponse.setContent(message);
         return httpResponse;
     }
 }

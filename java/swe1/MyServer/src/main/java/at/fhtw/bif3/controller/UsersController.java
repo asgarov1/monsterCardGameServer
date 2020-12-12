@@ -111,7 +111,7 @@ public class UsersController implements Controller {
         try {
             userService.create(new User(username, username, password));
         } catch (DAOException e) {
-            return badRequest();
+            return badRequest("Couldn't create user " + username);
         }
         return created();
     }

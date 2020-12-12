@@ -51,7 +51,13 @@ public class HttpRequest implements Request {
     private int extractContentLength(StringBuilder request) {
         String contentLengthLine = request.substring(request.indexOf(CONTENT_LENGTH.getName()));
         int start = contentLengthLine.indexOf(": ") + ": ".length();
-        int end = contentLengthLine.indexOf("\r");
+        String substring = contentLengthLine.substring(start);
+        int end = 0;
+        for (int i = 0; i < substring.length(); i++) {
+            if(!Character.isDigit(substring.charAt(i))){
+                end = start + i; break;
+            }
+        }
         return parseInt(contentLengthLine.substring(start, end));
     }
 
